@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import journals from "./journals.json";
-import "./styles/JournalsHome.css";
+import "./styles/journalsHome.css";
 
 const JournalsHome = () => {
   const { slug } = useParams();
