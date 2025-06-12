@@ -1,0 +1,20 @@
+.success-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  background-color: #e6f4ea; /* light green */
+  color: #2e7d32; /* dark green text */
+  font-weight: 500;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 6px rgba(0, 128, 0, 0.1);
+  max-width: fit-content;
+  margin: 2rem auto;
+}
+
+.success-icon {
+  color: #2e7d32;
+  font-size: 1.5rem;
+}

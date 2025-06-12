@@ -1,0 +1,175 @@
+[
+  {
+    "slug": "domain-health-journal",
+    "title": "Domain Health Journal",
+    "description": "The Domain Health Journal is a peer-reviewed publication that provides a platform for innovative research, critical reviews, and insightful commentary in all areas of health sciences. The journal focuses on studies that advance our understanding of medical science, clinical practices, and public health interventions. It welcomes contributions from medical professionals, researchers, and scholars that address pressing health challenges and propose data-driven solutions. By promoting interdisciplinary research and high academic standards, the journal seeks to inform policy, improve patient care, and contribute meaningfully to the global health discourse.",
+
+    "editorialBoard": [
+      {
+        "role": "Editor-in-Chief",
+        "name": "Prof (Mrs) Ese Anibor",
+        "address": [
+          "Department of Human Anatomy and Cell Biology",
+          "Faculty of Basic Medical Sciences",
+          "College of Health Sciences",
+          "Delta State University",
+          "Abraka, Delta State, Nigeria"
+        ]
+      },
+      {
+        "role": "Associate Editor",
+        "name": "Dr (Mrs) Nuvie Oyeyemi",
+        "address": [
+          "Department of Obstetrics and Gynaecology",
+          "Federal Medical Centre",
+          "Yenagoa, Bayelsa State, Nigeria"
+        ]
+      },
+      {
+        "role": "Editorial Board Member",
+        "name": "Dr Akpobome Biakolo",
+        "address": [
+          "Department of Obstetrics and Gynaecology",
+          "Federal Medical Centre",
+          "Yenagoa, Bayelsa State, Nigeria"
+        ]
+      },
+      {
+        "role": "Editorial Assistant",
+        "name": "Nelson Ogboru Ejumedia",
+        "address": [
+          "Department of Human Anatomy and Cell Biology",
+          "Faculty of Basic Medical Sciences",
+          "College of Health Sciences",
+          "Delta State University",
+          "Abraka, Delta State, Nigeria"
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "domain-journal-of-science-and-technology",
+    "title": "Domain Journal of Science and Technology",
+    "description": "The Domain Multidisciplinary Journal offers an inclusive platform for scholarly works that transcend traditional disciplinary boundaries. This journal fosters a collaborative academic environment by encouraging research that integrates concepts, theories, and methodologies from multiple fields of study. From social sciences and humanities to science, technology, and education, the journal invites submissions that demonstrate rigorous scholarship and address contemporary global issues. Its goal is to promote the cross-pollination of ideas and support a holistic understanding of complex challenges by providing a publication avenue for diverse intellectual perspectives.",
+
+    "editorialBoard": [
+      {
+        "role": "Editor-in-Chief",
+        "name": "Prof (Mrs) Ese Anibor",
+        "address": [
+          "Department of Human Anatomy and Cell Biology",
+          "Faculty of Basic Medical Sciences",
+          "College of Health Sciences",
+          "Delta State University",
+          "Abraka, Delta State, Nigeria"
+        ]
+      },
+      {
+        "role": "Associate Editor",
+        "name": "Engr. Dr. (Mrs.) Ochuko Mary Ojo",
+        "address": [
+          "Department of Civil and Environmental Engineering",
+          "Federal University of Technology",
+          "Akure, Ondo State, Nigeria"
+        ]
+      },
+      {
+        "role": "Editorial Board Member",
+        "name": "Engr. Boghene Bernard Biakolo",
+        "address": [
+          "Baker Hughes Drilling Services",
+          "Building No. 13, 14, 15 & 16",
+          "East Ahmadi, Kuwait"
+        ]
+      },
+      {
+        "role": "Editorial Assistant",
+        "name": "Nelson Ogboru Ejumedia",
+        "address": [
+          "Department of Human Anatomy and Cell Biology",
+          "Faculty of Basic Medical Sciences",
+          "College of Health Sciences",
+          "Delta State University",
+          "Abraka, Delta State, Nigeria"
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "domain-multidisciplinary-journal",
+    "title": "Domain Multidisciplinary Journal",
+    "description": "The Domain Journal of Biological Sciences is committed to publishing impactful, peer-reviewed research that deepens our understanding of living systems. Covering a wide range of biological topics—including genetics, microbiology, physiology, biotechnology, ecology, and evolutionary biology—the journal serves as a vital resource for students, researchers, and professionals. Its editorial scope embraces both basic and applied research, promoting the translation of biological knowledge into innovations that can address global challenges in health, agriculture, and environmental conservation. The journal strives to maintain high scientific and ethical standards, ensuring that each contribution adds value to the field of biology.",
+
+    "editorialBoard": [
+      {
+        "role": "Editor-in-Chief",
+        "name": "Prof (Mrs) Ese Anibor",
+        "address": [
+          "Department of Human Anatomy and Cell Biology",
+          "Faculty of Basic Medical Sciences",
+          "College of Health Sciences",
+          "Delta State University",
+          "Abraka, Delta State, Nigeria"
+        ]
+      },
+      {
+        "role": "Associate Editor",
+        "name": "Engr. Boghene Bernard Biakolo",
+        "address": [
+          "Baker Hughes Drilling Services",
+          "Building No. 13, 14, 15 & 16",
+          "East Ahmadi, Kuwait"
+        ]
+      },
+      {
+        "role": "Editorial Board Member",
+        "name": "Engr. Akpewe Biakolo",
+        "address": [
+          "By Ekwulobia Urban Mass Transit Park, Umunze",
+          "Orumba South LGA, Anambra State, Nigeria"
+        ]
+      },
+      {
+        "role": "Editorial Assistant",
+        "name": "Nelson Ogboru Ejumedia",
+        "address": [
+          "Department of Human Anatomy and Cell Biology",
+          "Faculty of Basic Medical Sciences",
+          "College of Health Sciences",
+          "Delta State University",
+          "Abraka, Delta State, Nigeria"
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "domain-journal-of-biological-sciences",
+    "title": "Domain Journal of Biological Sciences",
+    "description": "The Domain Journal of Biological Sciences is committed to publishing impactful, peer-reviewed research that deepens our understanding of living systems. Covering a wide range of biological topics—including genetics, microbiology, physiology, biotechnology, ecology, and evolutionary biology—the journal serves as a vital resource for students, researchers, and professionals. Its editorial scope embraces both basic and applied research, promoting the translation of biological knowledge into innovations that can address global challenges in health, agriculture, and environmental conservation. The journal strives to maintain high scientific and ethical standards, ensuring that each contribution adds value to the field of biology.",
+
+    "editorialBoard": [
+      {
+        "role": "Editor-in-Chief",
+        "name": "Prof (Mrs) Ese Anibor",
+        "address": [
+          "Department of Human Anatomy and Cell Biology",
+          "Faculty of Basic Medical Sciences",
+          "College of Health Sciences",
+          "Delta State University",
+          "Abraka, Delta State, Nigeria"
+        ]
+      },
+      {
+        "role": "Editorial Assistant",
+        "name": "Nelson Ogboru Ejumedia",
+        "address": [
+          "Department of Human Anatomy and Cell Biology",
+          "Faculty of Basic Medical Sciences",
+          "College of Health Sciences",
+          "Delta State University",
+          "Abraka, Delta State, Nigeria"
+        ]
+      }
+    ]
+  }
+]

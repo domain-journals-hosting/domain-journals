@@ -1,0 +1,25 @@
+.contact-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #e6f4ea; /* light green background */
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 128, 0, 0.1); /* soft green shadow */
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.contact-container h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #2e7d32; /* deep green */
+}
+
+.contact-card p {
+  font-size: 1.1rem;
+  margin: 0.75rem 0;
+  color: #2f4f2f; /* dark olive green */
+}
+
+.contact-card strong {
+  color: #006400; /* dark green */
+}

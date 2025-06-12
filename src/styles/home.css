@@ -1,0 +1,89 @@
+home-wrapper {
+  padding: 1.5rem;
+  background-color: #f1f8f4;
+  font-family: sans-serif;
+  color: #1b5e20;
+}
+
+.home-wrapper h1 {
+  font-size: 2rem;
+  color: #2e7d32;
+  margin-bottom: 1rem;
+}
+
+.home-wrapper ol {
+  padding-left: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.home-wrapper li {
+  margin-bottom: 0.5rem;
+}
+
+.home-wrapper button {
+  background-color: #66bb6a;
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 2rem;
+}
+
+.home-wrapper button:hover {
+  background-color: #4caf50;
+}
+
+.home-wrapper article {
+  background-color: #e8f5e9;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.home-wrapper article img {
+  float: left;
+  margin-right: 1rem;
+}
+
+.home-wrapper article p {
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.home-wrapper section {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.card {
+  background-color: #c8e6c9;
+  padding: 1rem;
+  margin: 0 20px;
+  margin-bottom: 20px;
+  border-radius: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 128, 0, 0.1);
+}
+
+.card h2 {
+  color: #2e7d32;
+  margin-bottom: 0.5rem;
+}
+
+.card p {
+  color: #1b5e20;
+}
+
+.card p:last-child {
+  cursor: pointer;
+  color: #1b5e20;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 500;
+}
+
+.card p:last-child:hover {
+  text-decoration: underline;
+}

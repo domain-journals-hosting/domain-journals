@@ -1,0 +1,50 @@
+.form-wrapper {
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+form {
+  width: 100%;
+  padding: 20px;
+  max-width: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-direction: column;
+  color: darkgreen;
+}
+
+form label,
+form p {
+  font-size: larger;
+  align-self: flex-start;
+}
+
+form input,
+form textarea,
+form select {
+  padding: 10px;
+  border: 1px solid green;
+  border-radius: 10px;
+  outline: none;
+  width: 100%;
+}
+
+form button {
+  background-color: #155718;
+  color: white;
+  border: none;
+  padding: 1rem 1.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 2rem;
+}
+
+form button:hover {
+  opacity: 0.8;
+}

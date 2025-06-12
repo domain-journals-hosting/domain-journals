@@ -1,0 +1,40 @@
+.journal-container {
+  padding: 2rem;
+  margin: auto;
+  font-family: sans-serif;
+}
+
+.journal-title {
+  font-size: 2rem;
+  color: #004d00;
+  margin-bottom: 0.5rem;
+}
+
+.journal-description {
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+.editor-card {
+  border: 1px solid #cce0cc;
+  background-color: #f6fff6;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+}
+
+.editor-card h3 {
+  color: #006600;
+  margin-bottom: 0.3rem;
+}
+
+.editor-card strong {
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.editor-card p {
+  margin: 0.1rem 0;
+  color: #444;
+}
