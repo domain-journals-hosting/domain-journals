@@ -5,17 +5,32 @@ import logo from "./assets/logo.jpg";
 import { useNavigate } from "react-router-dom";
 import Contact from "./Contact";
 const Home = () => {
+  const slug = (title) =>
+    title
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-");
   const navigate = useNavigate();
   return (
     <div className="home-wrapper">
-      <h1>Domain journals</h1>
-      <ol>
-        {journals.map((journal, index) => (
-          <li key={index}>{journal}</li>
-        ))}
-      </ol>
-
-      <button onClick={() => navigate("/submit")}>Submit a manuscript?</button>
+      <div className="domain-list">
+        <h1>Domain journals</h1>
+        <ol>
+          {journals.map((journal, index) => (
+            <li
+              key={index}
+              onClick={() => navigate(`/journals/${slug(journal)}`)}
+            >
+              {journal}
+            </li>
+          ))}
+        </ol>
+        <button onClick={() => navigate("/submit")}>
+          Submit a manuscript?
+        </button>
+      </div>
 
       <article>
         <h2>Authors reviews</h2>

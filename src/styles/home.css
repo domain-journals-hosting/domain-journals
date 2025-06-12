@@ -5,6 +5,18 @@ home-wrapper {
   color: #1b5e20;
 }
 
+.domain-list {
+  width: 100%;
+  padding: 20px;
+  margin: 0 auto;
+}
+
+.domain-list ol li {
+  font-size: large;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .home-wrapper h1 {
   font-size: 2rem;
   color: #2e7d32;

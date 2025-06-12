@@ -5,6 +5,7 @@
 }
 
 .journal-container {
+  padding: 2rem;
   width: 100%;
   display: grid;
   gap: 1rem;

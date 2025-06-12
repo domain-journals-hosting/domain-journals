@@ -8,7 +8,7 @@ const JournalsHome = () => {
   const journal = journals.find((journal) => journal.slug === slug);
 
   return (
-    <div className="journal-container">
+    <div className="journal-container-home">
       <h1 className="journal-title">{journal.title}</h1>
       <p className="journal-description">{journal.description}</p>
     </div>
