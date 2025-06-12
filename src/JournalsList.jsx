@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import journals from "./journals.json"; // an array with the list of all of the journal names
 import logo from "./assets/logo.jpg";
-import "./styles/JournalsList.css";
+import "./styles/journalsList.css";
 const JournalsList = () => {
   const journal = (journalObject) => (
     <div className="journal" key={journalObject.slug}>
