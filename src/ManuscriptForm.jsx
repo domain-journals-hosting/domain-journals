@@ -191,7 +191,7 @@ const ManuscriptForm = () => {
           ))}
         </select>
         {errMsg && <p style={{ color: "red" }}>{errMsg}</p>}
-        <button type="submit">
+        <button type="submit" disabled={loading}>
           {loading ? "Sending manuscript..." : "Send Manuscript"}
         </button>
       </form>

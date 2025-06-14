@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import journals from "./journals.json";
+import JournalHeader from "./JournalHeader";
 const EditorialBoard = () => {
   const { slug } = useParams();
   const journal = journals.find((journal) => journal.slug === slug);
@@ -20,7 +21,12 @@ const EditorialBoard = () => {
       ))}
     </div>
   );
-  return <div>{editorialSection}</div>;
+  return (
+    <>
+      <JournalHeader slug={slug} />
+      <div>{editorialSection}</div>
+    </>
+  );
 };
 
 export default EditorialBoard;
