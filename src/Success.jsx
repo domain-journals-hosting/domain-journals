@@ -5,8 +5,7 @@ const Success = () => {
   return (
     <div className="success-box">
       <FaCheckCircle className="success-icon" />
-      <p>Submission successful, you should receive a confirmation email soon</p>
-
+      <p>Action successful</p>
       <a href="/" className="home-link">
         Go back home
       </a>

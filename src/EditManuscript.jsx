@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import journals from "./journals";
 import "./styles/form.css";
 import axios from "./api/axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const slug = (title) =>
   title
@@ -12,22 +12,35 @@ const slug = (title) =>
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-");
 
-const ManuscriptForm = () => {
+const EditManuscript = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [journalSlug, setJournalSlug] = useState(slug(journals[0]));
   const [title, setTitle] = useState("");
   const [abstract, setAbstract] = useState("");
-  const [file, setFile] = useState(null);
+  const [existingFileUrl, setExistingFileUrl] = useState("");
+  const [newFile, setNewFile] = useState(null);
   const [countries, setCountries] = useState([]);
   const [country, setCountry] = useState("");
   const [errMsg, setErrMsg] = useState(null);
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setErrMsg(null);
-  }, [name, email, title, abstract, country]);
+    axios.get(`/manuscript/${id}`).then((res) => {
+      const m = res.data;
+      setName(m.name);
+      setEmail(m.email);
+      setJournalSlug(m.journal);
+      setTitle(m.title);
+      setAbstract(m.abstract);
+      setExistingFileUrl(m.file);
+      setCountry(m.country);
+    });
+  }, [id]);
+
   useEffect(() => {
     fetch("https://restcountries.com/v3.1/all?fields=name")
       .then((res) => res.json())
@@ -52,31 +65,28 @@ const ManuscriptForm = () => {
   }, []);
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
     setLoading(true);
     setErrMsg(null);
-    let fileUrl = "";
-    e.preventDefault();
-    if (!file) return setErrMsg("Please select a file");
-    const formData = new FormData();
 
-    formData.append("file", file);
-    for (let pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
+    let fileUrl = existingFileUrl;
+
+    // Upload new file only if changed
+    if (newFile) {
+      const formData = new FormData();
+      formData.append("file", newFile);
+      try {
+        const res = await axios.post("/file", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        fileUrl = res.data.url;
+      } catch (err) {
+        setErrMsg("File upload failed, please try again.");
+        setLoading(false);
+        return;
+      }
     }
-    try {
-      const res = await axios.post("/file", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log(res.data.url);
-      fileUrl = res.data.url;
-    } catch (err) {
-      setErrMsg("File upload failed, please try again");
-      setLoading(false);
-      console.error("upload failed", err);
-      return;
-    }
+
     const manuscript = {
       name,
       email,
@@ -86,40 +96,26 @@ const ManuscriptForm = () => {
       file: fileUrl,
       country,
     };
-    let attempts = 0;
-    const maxAttempts = 5;
 
-    const trySubmit = async () => {
-      while (attempts < maxAttempts) {
-        try {
-          const res = await axios.post("/manuscript", manuscript);
-          console.log(res.data);
-          navigate("/success");
-          return;
-        } catch (error) {
-          setLoading(false);
-          attempts++;
-          console.error(`Attempt ${attempts} failed`, error);
-          if (attempts === maxAttempts) {
-            setErrMsg("Could not submit info, please try again later.");
-          }
-        }
-      }
-    };
-
-    trySubmit();
+    try {
+      await axios.patch(`/manuscript/${id}`, manuscript);
+      navigate("/success");
+    } catch (err) {
+      setErrMsg("Update failed. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="form-wrapper">
-      <h1>Submit a Manuscript</h1>
+      <h1>Edit Manuscript</h1>
       <form onSubmit={handleSubmit}>
         <label htmlFor="name">Name:</label>
         <input
           required
           id="name"
           type="text"
-          placeholder="Enter your name"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
@@ -129,11 +125,9 @@ const ManuscriptForm = () => {
           required
           id="email"
           type="email"
-          placeholder="Enter email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <p>We'll never share your email with anyone else</p>
 
         <label htmlFor="journal">Journal:</label>
         <select
@@ -142,8 +136,8 @@ const ManuscriptForm = () => {
           value={journalSlug}
           onChange={(e) => setJournalSlug(e.target.value)}
         >
-          {journals.map((j, index) => (
-            <option key={index} value={slug(j)}>
+          {journals.map((j, i) => (
+            <option key={i} value={slug(j)}>
               {j}
             </option>
           ))}
@@ -167,14 +161,42 @@ const ManuscriptForm = () => {
           onChange={(e) => setAbstract(e.target.value)}
         ></textarea>
 
-        <label htmlFor="file">Attach your file:</label>
+        {existingFileUrl && (
+          <>
+            <label>Current File:</label>
+            <div style={{ marginBottom: "10px" }}>
+              <a
+                href={`https://docs.google.com/viewer?url=${encodeURIComponent(
+                  existingFileUrl
+                )}&embedded=true`}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ marginRight: "10px" }}
+              >
+                View File
+              </a>
+              <a
+                href={existingFileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                download
+              >
+                Download File
+              </a>
+            </div>
+          </>
+        )}
+
+        <label htmlFor="file">Upload new file (optional):</label>
         <input
-          required
           id="file"
           type="file"
           accept=".docx, .doc, .pdf"
-          onChange={(e) => setFile(e.target.files[0])}
+          onChange={(e) => setNewFile(e.target.files[0])}
         />
+        <p style={{ fontSize: "0.9rem", marginTop: "5px" }}>
+          (Leave blank if you don't want to replace the current file)
+        </p>
 
         <label htmlFor="country">Country:</label>
         <select
@@ -190,13 +212,15 @@ const ManuscriptForm = () => {
             </option>
           ))}
         </select>
+
         {errMsg && <p style={{ color: "red" }}>{errMsg}</p>}
-        <button type="submit" disabled={loading}>
-          {loading ? "Sending manuscript..." : "Send Manuscript"}
+
+        <button type="submit">
+          {loading ? "Updating..." : "Update Manuscript"}
         </button>
       </form>
     </div>
   );
 };
 
-export default ManuscriptForm;
+export default EditManuscript;

@@ -1,0 +1,62 @@
+.archive {
+  padding: 2rem;
+  width: 100%;
+  max-width: 600px;
+  margin: auto;
+  font-family: sans-serif;
+  background-color: #f0fff4;
+}
+
+.archive-group {
+  background: #e6f4ea;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 80, 40, 0.08);
+}
+
+.archive-group h2 {
+  font-size: 1.5rem;
+  color: #256029;
+  margin-bottom: 1rem;
+}
+
+.archive-group li {
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #b7dfc2;
+  padding-bottom: 1rem;
+}
+
+.archive-group h3 {
+  font-size: 1.1rem;
+  color: #1b4332;
+  margin: 0;
+}
+
+.archive-group p {
+  font-size: 0.9rem;
+  color: #3c6e47;
+}
+
+.archive-group .actions {
+  margin-top: 0.5rem;
+}
+
+.archive-group .actions a button {
+  margin-right: 10px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background-color: #2f855a;
+  color: white;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.archive-group .actions a:last-child button {
+  background-color: #276749;
+}
+
+.archive-group .actions a button:hover {
+  background-color: #22543d;
+}

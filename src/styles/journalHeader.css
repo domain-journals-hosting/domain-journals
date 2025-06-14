@@ -1,0 +1,20 @@
+.journal-header ul {
+  list-style: none;
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: row;
+  border-bottom: 1px solid greenyellow;
+  background-color: rgb(101, 199, 101);
+}
+
+.journal-header ul li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.journal-header ul li a {
+  text-decoration: none;
+  border: none;
+}
