@@ -1,0 +1,372 @@
+[
+  {
+    "slug": "domain-health-journal",
+    "title": "Domain Health Journal",
+    "image": "health",
+    "description": "Domain Health Journal, a  Peer-reviewed, Open-access Journal  publishes high quality manuscripts (original research papers, review articles, short communications and case studies) under various fields of Health Science including Dentistry, Medicine, Public Health, Human Anatomy, Biology, Nursing, Human Physiology, Medical Biochemistry, Pharmacy, Pharmacology etc.. All are cordially invited to submit precious research work falling within the scope of the Domain  Health Journal for publication in the upcoming issue of this journal. \nDomain  Health Journal features fast peer review process and easy publication with nominal article processing charges, just #30,000 (50 USD for foreign authors)",
+
+    "editorialBoard": [
+      {
+        "role": "Editor-in-Chief",
+        "name": "Prof (Mrs) Ese Anibor",
+        "address": [
+          "Department of Human Anatomy and Cell Biology",
+          "Faculty of Basic Medical Sciences",
+          "College of Health Sciences",
+          "Delta State University",
+          "Abraka, Delta State, Nigeria"
+        ]
+      },
+      {
+        "role": "Associate Editor",
+        "name": "Dr (Mrs) Nuvie Oyeyemi",
+        "address": [
+          "Department of Obstetrics and Gynaecology",
+          "Federal Medical Centre",
+          "Yenagoa, Bayelsa State, Nigeria"
+        ]
+      },
+      {
+        "role": "Editorial Board Member",
+        "name": "Dr Akpobome Biakolo",
+        "address": [
+          "Department of Obstetrics and Gynaecology",
+          "Federal Medical Centre",
+          "Yenagoa, Bayelsa State, Nigeria"
+        ]
+      },
+      {
+        "role": "Editorial Assistant",
+        "name": "Nelson Ogboru Ejumedia",
+        "address": [
+          "Department of Human Anatomy and Cell Biology",
+          "Faculty of Basic Medical Sciences",
+          "College of Health Sciences",
+          "Delta State University",
+          "Abraka, Delta State, Nigeria"
+        ]
+      }
+    ],
+    "authorGuidelines": "Domain Health Journal is the publication of the Domain Publishers in Delta State, Nigeria and publishes peer reviewed, scientific articles relevant to the needs of dental, medical and other health professionals in Nigeria and other parts of the world. Domain Health Journal is published biannually with effect from 2025 and the contributions that are accepted for publications include clinical papers, research papers, review papers, technical notes (surgical techniques, technical innovations), case reports and letters to the Editor. Author(s) sending an article for submission should do so on the ground that the document has been scrutinised and corroborated by all the authors and that all authors agreed to the submission of the article to the Journal. All the authors must have made an effective input to the idea and design and/or analysis and interpretation of the data and/or the writing of the manuscript. All the authors must scrutinize the contents of the manuscript and certify the final version presented for publication. Contribution only in the form of financial support or the gathering of data should not authenticate authorship.",
+    "ethicalConsiderations": "Any manuscript concerned with human subjects, medical records, or human tissue that is submitted to Domain Health Journal should comply with the principles stated in the Declaration of Helsinki Ethical Principles for Medical Research Involving Human Subjects, adopted by the 18th World Medical Assembly, Helsinki, Finland, June 1964, and as amended by the 64th World Medical Assembly, Fontaleza, Brazil, October 2013. \nThe manuscript should contain a report that the research has been permitted by the appropriate Research and Ethical Committee related to the institution(s) where the work was done, and that participants gave informed consent to the work. Domain Health Journal requires institutional Ethics Committee approval for all human studies. For retrospective studies of records either a statement of endorsement or a statement of exemption from the Committee is pertinent. This statement should be provided upon submission of the manuscript. Studies involving experiments with animals must state that their care was in accordance with institution guidelines.",
+    "patientConfidentiality": "Written consents of the use of patients' images in form of photographs, videos or any other form of description must be obtained from the patient (or parent, guardian or next of kin where applicable ) before submission of the manuscript. This should be provided to the Editorial Office on request. Even where consent has been given, identifying details should be omitted if they are not essential. If consent for publication has not been taken, private information on the patient included in any part of the paper (including all illustrations and videos) must be removed before submission.",
+    "formatOfJournal": "The format of Domain Health Journal follows the uniform requirements for manuscripts submitted to Biomedical Journals. These should be accompanied by a covering letter signed by all the authors and stating that the manuscript is not being considered for publication elsewhere and should be sent to the Editor in-Chief of Domain Health Journal. All manuscripts submitted to Domain Health Journal should be typed, double-spaced, on one side of A4 paper leaving at least 2.5cm margins all round. Pages should be numbered on the lower center part beginning with the title page. Each manuscript component should begin on a new page in the following sequence: include Title Page, Abstract, Main Text, Acknowledgements, References, Tables, Figure Legends and Figures As appropriate.",
+    "titlePage": {
+      "text": "This should contain the following information in the following order:",
+      "list": [
+        "the article title",
+        "authors' full names with degrees or titles",
+        "authors' institutional affiliations including city and country and e-mail addresses and",
+        " name, address, telephone, fax and e-mail addresses of the author responsible for correspondence."
+      ]
+    },
+    "abstract": "Abstract of original research should be structured with objectives, materials and methods, results and conclusions briefly stated and not more than 400 words. Abstracts of case reports should not be structured but should briefly describe the case(s) reported, highlighting the unique features, treatment method employed, and conclusions drawn. The abstract page should bear 4-5 key words and a short running title of no more than 40 characters. ",
+    "mainText": "This should include Introduction, Methods, Results, Discussion, Conclusion, Acknowledgements and References.",
+    "introduction": " Should be brief and end with a statement of the objective of the study. A review article should be a major didactic article that clarifies and summarizes the exhaustive review of the literature.",
+    "methods": "Methods should be described clearly and concisely with emphasis on the method, including selection of observational and experimental subjects, apparatus and procedures in sufficient detail to allow the research to be replicated. ",
+    "results": "Results should be presented in a logical sequence in the text of the manuscript. Repetition of data in the text and in the tables should be avoided. Emphasis should only be on important observations.",
+    "discussion": "Repetition of results should be avoided. Rather, there should be analytical discussion of the implications of the results and other observations as related to the study.",
+    "conclusion": "This should be an objective summary of the most important findings in response to the specific research question or hypothesis. A good conclusion states the principle topic, key arguments and counterpoint, and might suggest future research.",
+
+    "acknowledgements": "Authors are responsible for obtaining permission and approval from any one acknowledged by name, as readers may infer his/her endorsement of the data and conclusion. Only persons who have made contributions to the study and/or to the preparation of the manuscript should be acknowledged. Contributors to the article other than the authors credited should be specified. The source of funding for the study and any potential conflict of interests should be stated appropriately. Suppliers of materials/equipment should be mentioned and their address (town, state/county, country) included",
+    "references": {
+      "style": "The Harvard referencing style should be used. References should be arranged alphabetically according to the first letter of the surname of the first author. At the end of the manuscript, the full list of references should give the names and initials of all authors unless there are more than six; in which case, only the first six should be given followed by 'et al'. The authors’ names are followed by the title of the article; the title of the journal abbreviated according to the style of the Index Medicus and Index to Dental Literature; the year of publication; the volume number, issue number if any, and the first and last page numbers in full. Titles of books should be followed by the place of publication, the publisher, and the year.",
+      "an article": "Anibor E, Okobiah R. Photometric analysis of the facial angle of the Igbos in Nigeria. Afr J Cell Pathol. 2014; 2(1):1-6.",
+      "a book": "Mason R A. A Guide to Dental Radiography. 3rd ed, pp 34–37. London: John Wright, 1988.",
+      "a book chapter": "Weinstein L, Swartz MN. Pathogenic properties of invading microorganisms. In: Sodeman WA Jr, Sodeman WA eds. Pathologic physiology: mechanism of disease. 457–472. Philadelphia, WB Saunders Co. 1974.",
+      "a dissertation": "Cains RB. Infrared spectroscopic studies of solid oxygen. Beckley, California, University of California 1965.",
+      "a report": "Guidelines for self-care in oral health. Copenhagen: World Health Organisation 1988, publication no. ICP/ORH 113."
+    },
+    "tablesAndFigures": {
+      "Tables": "Tables should be consecutively numbered in Arabic numerals as cited in the text. Each table must have a brief, explanatory title placed above it. Tables should only be used to highlight key points; dual representation as both table and figure is discouraged. They should be double spaced on separate pages and include only horizontal rules. Tables must not be submitted as photographs. Any relevant footnotes should be placed below the table. Authors should verify that all units are included and that each table is cited appropriately in the text.",
+
+      "Figures": "All illustrations—including graphs, drawings, and photographs—are considered figures and should be numbered sequentially using Arabic numerals following the tables. In-text references should use 'Fig.' or 'Figs.' accordingly. Figures should complement the text and be limited to essential visuals. They must remain clear when reduced in size. Preferred figure widths after reduction are: 54 mm (single column), 113 mm (double column), and 171 mm (full page).",
+
+      "Line Illustrations": "Line illustrations must present crisp black images on a plain white background. Acceptable sizes include 127 x 178 mm (5 x 7 in) or up to 203 x 254 mm (8 x 10 in). Lettering should be properly scaled for size reduction. All line drawings must be professionally created. Half-tone illustrations must display high contrast.",
+
+      "Photographs and Radiographs": "Photomicrographs must clearly indicate magnification and specify any staining techniques used. Radiographs must be sharp, and areas of interest should be clearly marked using arrows or other symbols.",
+
+      "Preparation of Electronic Figures for Publication": "While lower-quality images may be acceptable during peer review, final publication requires high-resolution images to avoid blurry or unclear prints. Only EPS (for line art) or TIFF (for halftones and photographs) formats are acceptable. Do not use Microsoft Word or PowerPoint graphics. Scanning resolution (at final image size) must meet these minimums: line art: over 600 dpi; halftones (including gel photographs): over 300 dpi; figures containing both line and halftone elements: over 600 dpi.",
+
+      "Permissions": "Authors must obtain written permission from original authors and publishers for any reused material, including text, images, and illustrations. Proof of permission must be submitted with the manuscript. The journal bears no responsibility for copyright violations.",
+
+      "Submission of Manuscript": "Manuscripts may be submitted online or via email at domainhj@gmail.com. Submissions must be in Word (.doc) format, not .docx. The file should include the full manuscript—title page, abstract, main text, references, tables, and figure legends—but not embedded figures. Refer to all figures in the text as 'Figure 1', 'Figure 2', etc., matching the filenames of the separately uploaded figures. Ensure the document follows the formatting outlined in the Author Guidelines."
+    },
+    "reviewProcess": "Fast peer review process will be done by experienced reviewers within a month of submission of manuscript",
+    "galleryProof": "Gallery proofs will be sent to the corresponding author for read-through. The corresponding author should ensure speedy return to the publisher. ",
+    "correspondences": "All correspondences advertising and submission of manuscripts should be addressed to: Prof (Mrs) E. Anibor, Editor-in-Chief, Domain Health Journal, Department of Human Anatomy and Cell Biology, Faculty of Basic Medical Sciences, College of Health Sciences, Delta State University, PMB 1, Abraka, Nigeria. E-mail: domainhj@gmail.com. Phone number: +2349156263372."
+  },
+
+  {
+    "slug": "domain-journal-of-science-and-technology",
+    "title": "Domain Journal of Science and Technology",
+    "image": "science",
+    "description": "Domain  Multidisciplinary Journal, a  Peer-reviewed, Open-access Journal publishes high quality manuscripts (original research papers, review articles, short communications and case studies) under various fields of multiple disciplines such as the Health Sciences, Science, Technology, Social Sciences, Arts etc.. \nAll are cordially invited to submit precious research work falling within the scope of the Domain  Multidisciplinary Journal for publication in the upcoming issue of this journal. \nDomain  Multidisciplinary Journal featuresfast peer review process and easy publication with nominal article processing charges, just #30,000 (50 USD for foreign authors).",
+
+    "editorialBoard": [
+      {
+        "role": "Editor-in-Chief",
+        "name": "Prof (Mrs) Ese Anibor",
+        "address": [
+          "Department of Human Anatomy and Cell Biology",
+          "Faculty of Basic Medical Sciences",
+          "College of Health Sciences",
+          "Delta State University",
+          "Abraka, Delta State, Nigeria"
+        ]
+      },
+      {
+        "role": "Associate Editor",
+        "name": "Engr. Dr. (Mrs.) Ochuko Mary Ojo",
+        "address": [
+          "Department of Civil and Environmental Engineering",
+          "Federal University of Technology",
+          "Akure, Ondo State, Nigeria"
+        ]
+      },
+      {
+        "role": "Editorial Board Member",
+        "name": "Engr. Boghene Bernard Biakolo",
+        "address": [
+          "Baker Hughes Drilling Services",
+          "Building No. 13, 14, 15 & 16",
+          "East Ahmadi, Kuwait"
+        ]
+      },
+      {
+        "role": "Editorial Assistant",
+        "name": "Nelson Ogboru Ejumedia",
+        "address": [
+          "Department of Human Anatomy and Cell Biology",
+          "Faculty of Basic Medical Sciences",
+          "College of Health Sciences",
+          "Delta State University",
+          "Abraka, Delta State, Nigeria"
+        ]
+      }
+    ],
+    "authorGuidelines": "Domain Journal of Science and Technology is a peer-reviewed scientific journal published by Domain Publishers, Delta State, Nigeria. It publishes high-quality research in diverse fields of science and technology including Physics, Chemistry, Mathematics, Computer Science, Information Technology, Engineering, Environmental Science, Materials Science, Agricultural Technology, and related disciplines. The journal is published biannually starting from 2025 and accepts a wide range of scholarly contributions such as original research papers, review articles, technical notes, case reports, and letters to the editor. Authors submitting a manuscript must ensure that it has been thoroughly reviewed and approved by all co-authors. Each listed author must have made a significant contribution to the study's conception, design, execution, data analysis, interpretation, or manuscript preparation. All authors must approve the final version of the manuscript before submission. Contributions limited to funding acquisition or data collection alone do not meet the criteria for authorship.",
+    "ethicalConsiderations": "Any manuscript concerned with human subjects, medical records, or human tissue that is submitted to Domain Health Journal should comply with the principles stated in the Declaration of Helsinki Ethical Principles for Medical Research Involving Human Subjects, adopted by the 18th World Medical Assembly, Helsinki, Finland, June 1964, and as amended by the 64th World Medical Assembly, Fontaleza, Brazil, October 2013. \nThe manuscript should contain a report that the research has been permitted by the appropriate Research and Ethical Committee related to the institution(s) where the work was done, and that participants gave informed consent to the work. Domain Health Journal requires institutional Ethics Committee approval for all human studies. For retrospective studies of records either a statement of endorsement or a statement of exemption from the Committee is pertinent. This statement should be provided upon submission of the manuscript. Studies involving experiments with animals must state that their care was in accordance with institution guidelines.",
+    "patientConfidentiality": "Written consents of the use of patients' images in form of photographs, videos or any other form of description must be obtained from the patient (or parent, guardian or next of kin where applicable ) before submission of the manuscript. This should be provided to the Editorial Office on request. Even where consent has been given, identifying details should be omitted if they are not essential. If consent for publication has not been taken, private information on the patient included in any part of the paper (including all illustrations and videos) must be removed before submission.",
+    "formatOfJournal": "The format of Domain Journal of Biological Science follows the uniform requirements for manuscripts submitted to Biomedical Journals. These should be accompanied by a covering letter signed by all the authors and stating that the manuscript is not being considered for publication elsewhere and should be sent to the Editor in-Chief of Domain Health Journal. All manuscripts submitted to Domain Health Journal should be typed, double-spaced, on one side of A4 paper leaving at least 2.5cm margins all round. Pages should be numbered on the lower center part beginning with the title page. Each manuscript component should begin on a new page in the following sequence: include Title Page, Abstract, Main Text, Acknowledgements, References, Tables, Figure Legends and Figures As appropriate.",
+    "titlePage": {
+      "text": "This should contain the following information in the following order:",
+      "list": [
+        "the article title",
+        "authors' full names with degrees or titles",
+        "authors' institutional affiliations including city and country and e-mail addresses and",
+        " name, address, telephone, fax and e-mail addresses of the author responsible for correspondence."
+      ]
+    },
+    "abstract": "Abstract of original research should be structured with objectives, materials and methods, results and conclusions briefly stated and not more than 400 words. Abstracts of case reports should not be structured but should briefly describe the case(s) reported, highlighting the unique features, treatment method employed, and conclusions drawn. The abstract page should bear 4-5 key words and a short running title of no more than 40 characters. ",
+    "mainText": "This should include Introduction, Methods, Results, Discussion, Conclusion, Acknowledgements and References.",
+    "introduction": " Should be brief and end with a statement of the objective of the study. A review article should be a major didactic article that clarifies and summarizes the exhaustive review of the literature.",
+    "methods": "Methods should be described clearly and concisely with emphasis on the method, including selection of observational and experimental subjects, apparatus and procedures in sufficient detail to allow the research to be replicated. ",
+    "results": "Results should be presented in a logical sequence in the text of the manuscript. Repetition of data in the text and in the tables should be avoided. Emphasis should only be on important observations.",
+    "discussion": "Repetition of results should be avoided. Rather, there should be analytical discussion of the implications of the results and other observations as related to the study.",
+    "conclusion": "This should be an objective summary of the most important findings in response to the specific research question or hypothesis. A good conclusion states the principle topic, key arguments and counterpoint, and might suggest future research.",
+
+    "acknowledgements": "Authors are responsible for obtaining permission and approval from any one acknowledged by name, as readers may infer his/her endorsement of the data and conclusion. Only persons who have made contributions to the study and/or to the preparation of the manuscript should be acknowledged. Contributors to the article other than the authors credited should be specified. The source of funding for the study and any potential conflict of interests should be stated appropriately. Suppliers of materials/equipment should be mentioned and their address (town, state/county, country) included",
+    "references": {
+      "style": "The Harvard referencing style should be used. References should be arranged alphabetically according to the first letter of the surname of the first author. At the end of the manuscript, the full list of references should give the names and initials of all authors unless there are more than six; in which case, only the first six should be given followed by 'et al'. The authors’ names are followed by the title of the article; the title of the journal abbreviated according to the style of the Index Medicus and Index to Dental Literature; the year of publication; the volume number, issue number if any, and the first and last page numbers in full. Titles of books should be followed by the place of publication, the publisher, and the year.",
+      "an article": "Anibor E, Okobiah R. Photometric analysis of the facial angle of the Igbos in Nigeria. Afr J Cell Pathol. 2014; 2(1):1-6.",
+      "a book": "Mason R A. A Guide to Dental Radiography. 3rd ed, pp 34–37. London: John Wright, 1988.",
+      "a book chapter": "Weinstein L, Swartz MN. Pathogenic properties of invading microorganisms. In: Sodeman WA Jr, Sodeman WA eds. Pathologic physiology: mechanism of disease. 457–472. Philadelphia, WB Saunders Co. 1974.",
+      "a dissertation": "Cains RB. Infrared spectroscopic studies of solid oxygen. Beckley, California, University of California 1965.",
+      "a report": "Guidelines for self-care in oral health. Copenhagen: World Health Organisation 1988, publication no. ICP/ORH 113."
+    },
+    "tablesAndFigures": {
+      "Tables": "Tables should be consecutively numbered in Arabic numerals as cited in the text. Each table must have a brief, explanatory title placed above it. Tables should only be used to highlight key points; dual representation as both table and figure is discouraged. They should be double spaced on separate pages and include only horizontal rules. Tables must not be submitted as photographs. Any relevant footnotes should be placed below the table. Authors should verify that all units are included and that each table is cited appropriately in the text.",
+
+      "Figures": "All illustrations—including graphs, drawings, and photographs—are considered figures and should be numbered sequentially using Arabic numerals following the tables. In-text references should use 'Fig.' or 'Figs.' accordingly. Figures should complement the text and be limited to essential visuals. They must remain clear when reduced in size. Preferred figure widths after reduction are: 54 mm (single column), 113 mm (double column), and 171 mm (full page).",
+
+      "Line Illustrations": "Line illustrations must present crisp black images on a plain white background. Acceptable sizes include 127 x 178 mm (5 x 7 in) or up to 203 x 254 mm (8 x 10 in). Lettering should be properly scaled for size reduction. All line drawings must be professionally created. Half-tone illustrations must display high contrast.",
+
+      "Photographs and Radiographs": "Photomicrographs must clearly indicate magnification and specify any staining techniques used. Radiographs must be sharp, and areas of interest should be clearly marked using arrows or other symbols.",
+
+      "Preparation of Electronic Figures for Publication": "While lower-quality images may be acceptable during peer review, final publication requires high-resolution images to avoid blurry or unclear prints. Only EPS (for line art) or TIFF (for halftones and photographs) formats are acceptable. Do not use Microsoft Word or PowerPoint graphics. Scanning resolution (at final image size) must meet these minimums: line art: over 600 dpi; halftones (including gel photographs): over 300 dpi; figures containing both line and halftone elements: over 600 dpi.",
+
+      "Permissions": "Authors must obtain written permission from original authors and publishers for any reused material, including text, images, and illustrations. Proof of permission must be submitted with the manuscript. The journal bears no responsibility for copyright violations.",
+
+      "Submission of Manuscript": "Manuscripts may be submitted online or via email at domainhj@gmail.com. Submissions must be in Word (.doc) format, not .docx. The file should include the full manuscript—title page, abstract, main text, references, tables, and figure legends—but not embedded figures. Refer to all figures in the text as 'Figure 1', 'Figure 2', etc., matching the filenames of the separately uploaded figures. Ensure the document follows the formatting outlined in the Author Guidelines."
+    },
+    "reviewProcess": "Fast peer review process will be done by experienced reviewers within a month of submission of manuscript",
+    "galleryProof": "Gallery proofs will be sent to the corresponding author for read-through. The corresponding author should ensure speedy return to the publisher. ",
+    "correspondences": "All correspondences advertising and submission of manuscripts should be addressed to: Prof (Mrs) E. Anibor, Editor-in-Chief, Domain Health Journal, Department of Human Anatomy and Cell Biology, Faculty of Basic Medical Sciences, College of Health Sciences, Delta State University, PMB 1, Abraka, Nigeria. E-mail: domainhj@gmail.com. Phone number: +2349156263372."
+  },
+  {
+    "slug": "domain-multidisciplinary-journal",
+    "title": "Domain Multidisciplinary Journal",
+    "image": "multidisciplinary",
+    "description": "Domain  Multidisciplinary Journal, a  Peer-reviewed, Open-access Journal publishes high quality manuscripts (original research papers, review articles, short communications and case studies) under various fields of multiple disciplines such as the Health Sciences, Science, Technology, Social Sciences, Arts etc.. \nAll are cordially invited to submit precious research work falling within the scope of the Domain  Multidisciplinary Journal for publication in the upcoming issue of this journal. \nDomain  Multidisciplinary Journal featuresfast peer review process and easy publication withnominal article processing charges, just #30,000 (50 USD for foreign authors).",
+
+    "editorialBoard": [
+      {
+        "role": "Editor-in-Chief",
+        "name": "Prof (Mrs) Ese Anibor",
+        "address": [
+          "Department of Human Anatomy and Cell Biology",
+          "Faculty of Basic Medical Sciences",
+          "College of Health Sciences",
+          "Delta State University",
+          "Abraka, Delta State, Nigeria"
+        ]
+      },
+      {
+        "role": "Associate Editor",
+        "name": "Engr. Boghene Bernard Biakolo",
+        "address": [
+          "Baker Hughes Drilling Services",
+          "Building No. 13, 14, 15 & 16",
+          "East Ahmadi, Kuwait"
+        ]
+      },
+      {
+        "role": "Editorial Board Member",
+        "name": "Engr. Akpewe Biakolo",
+        "address": [
+          "By Ekwulobia Urban Mass Transit Park, Umunze",
+          "Orumba South LGA, Anambra State, Nigeria"
+        ]
+      },
+      {
+        "role": "Editorial Assistant",
+        "name": "Nelson Ogboru Ejumedia",
+        "address": [
+          "Department of Human Anatomy and Cell Biology",
+          "Faculty of Basic Medical Sciences",
+          "College of Health Sciences",
+          "Delta State University",
+          "Abraka, Delta State, Nigeria"
+        ]
+      }
+    ],
+    "authorGuidelines": "Domain Multidisciplinary Journal is the publication of the domain Publishers in Delta State, Nigeria and publishes peer reviewed, scientific articles relevant to the needs of various fields of diverse disciplines in Health Sciences, Science, Technology, Social Sciences, Arts etc. Domain Multidisciplinary Journal is published biannually with effect from 2025 and the contributions that are accepted for publications include clinical papers, research papers, review papers, technical notes (surgical techniques, technical innovations), case reports and letters to theEditor. Author(s) sending an article for submission should do soon the ground that the document has been scrutinised and corroborated by all the authors and that all authors agreed to the submission of the article to the Journal. All the authors must have made an effective input to the idea and design and/or analysis and interpretation of the data and/or the writing of the manuscript. All the authors must scrutinize the contents of the manuscript and certify the final version presented for publication. Contribution only in the form of financial support or the gathering of data should not authenticate authorship.",
+    "ethicalConsiderations": "Any manuscript concerned with human subjects, medical records, or human tissue that is submitted to Domain Multidisciplinary Journal should comply with the principles stated in the Declaration of Helsinki Ethical Principles forMedical Research Involving Human Subjects, adopted by the 18th World Medical Assembly, Helsinki, Finland, June 1964,and as amended by the 64th World Medical Assembly,Fontaleza, Brazil, October 2013.\nThe manuscript should contain a report that the research has been permitted by the appropriate Research and EthicalCommittee related to the institution(s) where the work was done,and that participants gave informed consent to the work. DomainJournal of Biological Sciences requires institutional EthicsCommittee approval for all human studies. For retrospective studies of records either a statement of endorsement or a statement of exemption from the Committee is pertinent. This Statement should be provided upon submission of the manuscript. Studies involving experiments with animals must state that their care was in accordance with institutional guidelines.",
+    "patientConfidentiality": "Written consents of the use of patients images in form of photographs, videos or any other form of description must be obtained from the patient (or parent, guardian or next of kin where applicable ) before submission of the manuscript. This Should be provided to the Editorial Office on request. Even Where consent has been given, identifying details should be omitted if they are not essential. If consent for publication has not been taken, private information on the patient included in any part of the paper (including all illustrations and videos) must be removed before submission.",
+    "formatOfJournal": "The format of Domain Multidisciplinary Journal follows the uniform requirements for manuscripts submitted to BiomedicalJournals. These should be accompanied by a covering letter signed by all the authors and stating that the manuscript is not being considered for publication elsewhere and should be sent to the Editor in-Chief of Domain Multidisciplinary Journal. Allmanuscripts submitted to Domain Multidisciplinary Journal should be typed, double-spaced, on one side of A4 paper leaving at least 2.5cm margins all round. Pages should be numbered on the lower center part beginning with the title page. Eachmanuscript component should begin on a new page in the following sequence: include Title Page, Abstract, Main Text, Acknowledgements, References, Tables, Figure Legends andFigures as appropriate.",
+    "titlePage": {
+      "text": "This should contain the following information in the following order:",
+      "list": [
+        "the article title",
+        "authors' full names with degrees or titles",
+        "authors' institutional affiliations including city and country and e-mail addresses and",
+        " name, address, telephone, fax and e-mail addresses of the author responsible for correspondence."
+      ]
+    },
+    "abstract": "Abstract of original research should be structured with objectives, materials and methods, results and conclusions briefly stated and not more than 400 words. Abstracts of case reports should not be structured but should briefly describe the case(s) reported, highlighting the unique features, treatment method employed, and conclusions drawn. The abstract page should bear 4-5 key words and a short running title of no more than 40 characters. ",
+    "mainText": "This should include Introduction, Methods, Results, Discussion, Conclusion, Acknowledgements and References.",
+    "introduction": " Should be brief and end with a statement of the objective of the study. A review article should be a major didactic article that clarifies and summarizes the exhaustive review of the literature.",
+    "methods": "Methods should be described clearly and concisely with emphasis on the method, including selection of observational and experimental subjects, apparatus and procedures in sufficient detail to allow the research to be replicated. ",
+    "results": "Results should be presented in a logical sequence in the text of the manuscript. Repetition of data in the text and in the tables should be avoided. Emphasis should only be on important observations.",
+    "discussion": "Repetition of results should be avoided. Rather, there should be analytical discussion of the implications of the results and other observations as related to the study.",
+    "conclusion": "This should be an objective summary of the most important findings in response to the specific research question or hypothesis. A good conclusion states the principle topic, key arguments and counterpoint, and might suggest future research.",
+
+    "acknowledgements": "Authors are responsible for obtaining permission and approval from any one acknowledged by name, as readers may infer his/her endorsement of the data and conclusion. Only persons who have made contributions to the study and/or to the preparation of the manuscript should be acknowledged. Contributors to the article other than the authors credited should be specified. The source of funding for the study and any potential conflict of interests should be stated appropriately. Suppliers of materials/equipment should be mentioned and their address (town, state/county, country) included",
+    "references": {
+      "style": "The Harvard referencing style should be used. References should be arranged alphabetically according to the first letter of the surname of the first author. At the end of the manuscript, the full list of references should give the names and initials of all authors unless there are more than six; in which case, only the first six should be given followed by 'et al'. The authors’ names are followed by the title of the article; the title of the journal abbreviated according to the style of the Index Medicus and Index to Dental Literature; the year of publication; the volume number, issue number if any, and the first and last page numbers in full. Titles of books should be followed by the place of publication, the publisher, and the year.",
+      "an article": "Anibor E, Okobiah R. Photometric analysis of the facial angle of the Igbos in Nigeria. Afr J Cell Pathol. 2014; 2(1):1-6.",
+      "a book": "Mason R A. A Guide to Dental Radiography. 3rd ed, pp 34–37. London: John Wright, 1988.",
+      "a book chapter": "Weinstein L, Swartz MN. Pathogenic properties of invading microorganisms. In: Sodeman WA Jr, Sodeman WA eds. Pathologic physiology: mechanism of disease. 457–472. Philadelphia, WB Saunders Co. 1974.",
+      "a dissertation": "Cains RB. Infrared spectroscopic studies of solid oxygen. Beckley, California, University of California 1965.",
+      "a report": "Guidelines for self-care in oral health. Copenhagen: World Health Organisation 1988, publication no. ICP/ORH 113."
+    },
+    "tablesAndFigures": {
+      "Tables": "Tables should be consecutively numbered in Arabic numerals as cited in the text. Each table must have a brief, explanatory title placed above it. Tables should only be used to highlight key points; dual representation as both table and figure is discouraged. They should be double spaced on separate pages and include only horizontal rules. Tables must not be submitted as photographs. Any relevant footnotes should be placed below the table. Authors should verify that all units are included and that each table is cited appropriately in the text.",
+
+      "Figures": "All illustrations—including graphs, drawings, and photographs—are considered figures and should be numbered sequentially using Arabic numerals following the tables. In-text references should use 'Fig.' or 'Figs.' accordingly. Figures should complement the text and be limited to essential visuals. They must remain clear when reduced in size. Preferred figure widths after reduction are: 54 mm (single column), 113 mm (double column), and 171 mm (full page).",
+
+      "Line Illustrations": "Line illustrations must present crisp black images on a plain white background. Acceptable sizes include 127 x 178 mm (5 x 7 in) or up to 203 x 254 mm (8 x 10 in). Lettering should be properly scaled for size reduction. All line drawings must be professionally created. Half-tone illustrations must display high contrast.",
+
+      "Photographs and Radiographs": "Photomicrographs must clearly indicate magnification and specify any staining techniques used. Radiographs must be sharp, and areas of interest should be clearly marked using arrows or other symbols.",
+
+      "Preparation of Electronic Figures for Publication": "While lower-quality images may be acceptable during peer review, final publication requires high-resolution images to avoid blurry or unclear prints. Only EPS (for line art) or TIFF (for halftones and photographs) formats are acceptable. Do not use Microsoft Word or PowerPoint graphics. Scanning resolution (at final image size) must meet these minimums: line art: over 600 dpi; halftones (including gel photographs): over 300 dpi; figures containing both line and halftone elements: over 600 dpi.",
+
+      "Permissions": "Authors must obtain written permission from original authors and publishers for any reused material, including text, images, and illustrations. Proof of permission must be submitted with the manuscript. The journal bears no responsibility for copyright violations.",
+
+      "Submission of Manuscript": "Manuscripts may be submitted online or via email at domainhj@gmail.com. Submissions must be in Word (.doc) format, not .docx. The file should include the full manuscript—title page, abstract, main text, references, tables, and figure legends—but not embedded figures. Refer to all figures in the text as 'Figure 1', 'Figure 2', etc., matching the filenames of the separately uploaded figures. Ensure the document follows the formatting outlined in the Author Guidelines."
+    },
+    "reviewProcess": "Fast peer review process will be done by experienced reviewers within a month of submission of manuscript",
+    "galleryProof": "Gallery proofs will be sent to the corresponding author for read-through. The corresponding author should ensure speedy return to the publisher. ",
+    "correspondences": "All correspondences advertising and submission of manuscripts should be addressed to: Prof (Mrs) E. Anibor, Editor-in-Chief, Domain Health Journal, Department of Human Anatomy and Cell Biology, Faculty of Basic Medical Sciences, College of Health Sciences, Delta State University, PMB 1, Abraka, Nigeria. E-mail: domainhj@gmail.com. Phone number: +2349156263372."
+  },
+  {
+    "slug": "domain-journal-of-biological-sciences",
+    "title": "Domain Journal of Biological Sciences",
+    "image": "biological",
+    "description": "Domain Journal of Biological Sciences, a  Peer-reviewed, Open-access Journal  publishes high quality manuscripts (original research papers, review articles, short communications and case studies) under various fields of Biological Sciences  including Genetics,  Microbiology, Biochemistry, Biotechnology, Agriculture, Botany, Zoology, Dentistry, Medicine, Public Health, Human Anatomy, Biology, Nursing, Human Physiology, Medical Biochemistry, Pharmacy, Pharmacology etc...\n All are cordially invited to submit precious research work falling within the scope of the Domain  Journal of Biological Sciences for publication in the upcoming issue of this journal. \nDomain Journal of Biological Sciences features fast peer review process and easy publication with nominal article processing charges, just #30,000 (50 USD for foreign authors).",
+
+    "editorialBoard": [
+      {
+        "role": "Editor-in-Chief",
+        "name": "Prof (Mrs) Ese Anibor",
+        "address": [
+          "Department of Human Anatomy and Cell Biology",
+          "Faculty of Basic Medical Sciences",
+          "College of Health Sciences",
+          "Delta State University",
+          "Abraka, Delta State, Nigeria"
+        ]
+      },
+      {
+        "role": "Editorial Assistant",
+        "name": "Nelson Ogboru Ejumedia",
+        "address": [
+          "Department of Human Anatomy and Cell Biology",
+          "Faculty of Basic Medical Sciences",
+          "College of Health Sciences",
+          "Delta State University",
+          "Abraka, Delta State, Nigeria"
+        ]
+      }
+    ],
+    "authorGuidelines": "Domain Journal of Biological Sciences is the publication of the domain Publishers in Delta State, Nigeria and publishes peer reviewed, scientific articles relevant to the needs of various fields of Biological Sciences  including Genetics,  Microbiology, Biochemistry, Biotechnology, Agriculture, Botany, Zoology, Dentistry, Medicine, Public Health, Human Anatomy, Biology, Nursing, Human Physiology, Medical Biochemistry, Pharmacy, Pharmacology etc. Domain Journal of Biological Sciences is published biannually with effect from 2025 and the contributions that are accepted for publications include clinical papers, research papers, review papers, technical notes (surgical techniques, technical innovations), case reports and letters to theEditor. Author(s) sending an article for submission should do stand the ground that the document has been scrutinised and corroborated by all the authors and that all authors agreed to the submission of the article to the Journal. All the authors must have made an effective input to the idea and design and/or analysis and interpretation of the data and/or the writing of the manuscript. All the authors must scrutinize the contents of the manuscript and certify the final version presented for publication. Contribution only in the form of financial support or the gathering of data should not authenticate authorship.",
+    "ethicalConsiderations": "Any manuscript concerned with human subjects, medical records, or human tissue that is submitted to Domain Health Journal should comply with the principles stated in the Declaration of Helsinki Ethical Principles for Medical Research Involving Human Subjects, adopted by the 18th World Medical Assembly, Helsinki, Finland, June 1964, and as amended by the 64th World Medical Assembly, Fontaleza, Brazil, October 2013. \nThe manuscript should contain a report that the research has been permitted by the appropriate Research and Ethical Committee related to the institution(s) where the work was done, and that participants gave informed consent to the work. Domain Health Journal requires institutional Ethics Committee approval for all human studies. For retrospective studies of records either a statement of endorsement or a statement of exemption from the Committee is pertinent. This statement should be provided upon submission of the manuscript. Studies involving experiments with animals must state that their care was in accordance with institution guidelines.",
+    "patientConfidentiality": "Written consents of the use of patients' images in form of photographs, videos or any other form of description must be obtained from the patient (or parent, guardian or next of kin where applicable ) before submission of the manuscript. This should be provided to the Editorial Office on request. Even where consent has been given, identifying details should be omitted if they are not essential. If consent for publication has not been taken, private information on the patient included in any part of the paper (including all illustrations and videos) must be removed before submission.",
+    "formatOfJournal": "The format of Domain Journal of Biological Science follows the uniform requirements for manuscripts submitted to Biomedical Journals. These should be accompanied by a covering letter signed by all the authors and stating that the manuscript is not being considered for publication elsewhere and should be sent to the Editor in-Chief of Domain Health Journal. All manuscripts submitted to Domain Health Journal should be typed, double-spaced, on one side of A4 paper leaving at least 2.5cm margins all round. Pages should be numbered on the lower center part beginning with the title page. Each manuscript component should begin on a new page in the following sequence: include Title Page, Abstract, Main Text, Acknowledgements, References, Tables, Figure Legends and Figures As appropriate.",
+    "titlePage": {
+      "text": "This should contain the following information in the following order:",
+      "list": [
+        "the article title",
+        "authors' full names with degrees or titles",
+        "authors' institutional affiliations including city and country and e-mail addresses and",
+        " name, address, telephone, fax and e-mail addresses of the author responsible for correspondence."
+      ]
+    },
+    "abstract": "Abstract of original research should be structured with objectives, materials and methods, results and conclusions briefly stated and not more than 400 words. Abstracts of case reports should not be structured but should briefly describe the case(s) reported, highlighting the unique features, treatment method employed, and conclusions drawn. The abstract page should bear 4-5 key words and a short running title of no more than 40 characters. ",
+    "mainText": "This should include Introduction, Methods, Results, Discussion, Conclusion, Acknowledgements and References.",
+    "introduction": " Should be brief and end with a statement of the objective of the study. A review article should be a major didactic article that clarifies and summarizes the exhaustive review of the literature.",
+    "methods": "Methods should be described clearly and concisely with emphasis on the method, including selection of observational and experimental subjects, apparatus and procedures in sufficient detail to allow the research to be replicated. ",
+    "results": "Results should be presented in a logical sequence in the text of the manuscript. Repetition of data in the text and in the tables should be avoided. Emphasis should only be on important observations.",
+    "discussion": "Repetition of results should be avoided. Rather, there should be analytical discussion of the implications of the results and other observations as related to the study.",
+    "conclusion": "This should be an objective summary of the most important findings in response to the specific research question or hypothesis. A good conclusion states the principle topic, key arguments and counterpoint, and might suggest future research.",
+
+    "acknowledgements": "Authors are responsible for obtaining permission and approval from any one acknowledged by name, as readers may infer his/her endorsement of the data and conclusion. Only persons who have made contributions to the study and/or to the preparation of the manuscript should be acknowledged. Contributors to the article other than the authors credited should be specified. The source of funding for the study and any potential conflict of interests should be stated appropriately. Suppliers of materials/equipment should be mentioned and their address (town, state/county, country) included",
+    "references": {
+      "style": "The Harvard referencing style should be used. References should be arranged alphabetically according to the first letter of the surname of the first author. At the end of the manuscript, the full list of references should give the names and initials of all authors unless there are more than six; in which case, only the first six should be given followed by 'et al'. The authors’ names are followed by the title of the article; the title of the journal abbreviated according to the style of the Index Medicus and Index to Dental Literature; the year of publication; the volume number, issue number if any, and the first and last page numbers in full. Titles of books should be followed by the place of publication, the publisher, and the year.",
+      "an article": "Anibor E, Okobiah R. Photometric analysis of the facial angle of the Igbos in Nigeria. Afr J Cell Pathol. 2014; 2(1):1-6.",
+      "a book": "Mason R A. A Guide to Dental Radiography. 3rd ed, pp 34–37. London: John Wright, 1988.",
+      "a book chapter": "Weinstein L, Swartz MN. Pathogenic properties of invading microorganisms. In: Sodeman WA Jr, Sodeman WA eds. Pathologic physiology: mechanism of disease. 457–472. Philadelphia, WB Saunders Co. 1974.",
+      "a dissertation": "Cains RB. Infrared spectroscopic studies of solid oxygen. Beckley, California, University of California 1965.",
+      "a report": "Guidelines for self-care in oral health. Copenhagen: World Health Organisation 1988, publication no. ICP/ORH 113."
+    },
+    "tablesAndFigures": {
+      "Tables": "Tables should be consecutively numbered in Arabic numerals as cited in the text. Each table must have a brief, explanatory title placed above it. Tables should only be used to highlight key points; dual representation as both table and figure is discouraged. They should be double spaced on separate pages and include only horizontal rules. Tables must not be submitted as photographs. Any relevant footnotes should be placed below the table. Authors should verify that all units are included and that each table is cited appropriately in the text.",
+
+      "Figures": "All illustrations—including graphs, drawings, and photographs—are considered figures and should be numbered sequentially using Arabic numerals following the tables. In-text references should use 'Fig.' or 'Figs.' accordingly. Figures should complement the text and be limited to essential visuals. They must remain clear when reduced in size. Preferred figure widths after reduction are: 54 mm (single column), 113 mm (double column), and 171 mm (full page).",
+
+      "Line Illustrations": "Line illustrations must present crisp black images on a plain white background. Acceptable sizes include 127 x 178 mm (5 x 7 in) or up to 203 x 254 mm (8 x 10 in). Lettering should be properly scaled for size reduction. All line drawings must be professionally created. Half-tone illustrations must display high contrast.",
+
+      "Photographs and Radiographs": "Photomicrographs must clearly indicate magnification and specify any staining techniques used. Radiographs must be sharp, and areas of interest should be clearly marked using arrows or other symbols.",
+
+      "Preparation of Electronic Figures for Publication": "While lower-quality images may be acceptable during peer review, final publication requires high-resolution images to avoid blurry or unclear prints. Only EPS (for line art) or TIFF (for halftones and photographs) formats are acceptable. Do not use Microsoft Word or PowerPoint graphics. Scanning resolution (at final image size) must meet these minimums: line art: over 600 dpi; halftones (including gel photographs): over 300 dpi; figures containing both line and halftone elements: over 600 dpi.",
+
+      "Permissions": "Authors must obtain written permission from original authors and publishers for any reused material, including text, images, and illustrations. Proof of permission must be submitted with the manuscript. The journal bears no responsibility for copyright violations.",
+
+      "Submission of Manuscript": "Manuscripts may be submitted online or via email at domainhj@gmail.com. Submissions must be in Word (.doc) format, not .docx. The file should include the full manuscript—title page, abstract, main text, references, tables, and figure legends—but not embedded figures. Refer to all figures in the text as 'Figure 1', 'Figure 2', etc., matching the filenames of the separately uploaded figures. Ensure the document follows the formatting outlined in the Author Guidelines."
+    },
+    "reviewProcess": "Fast peer review process will be done by experienced reviewers within a month of submission of manuscript",
+    "galleryProof": "Gallery proofs will be sent to the corresponding author for read-through. The corresponding author should ensure speedy return to the publisher. ",
+    "correspondences": "All correspondences advertising and submission of manuscripts should be addressed to: Prof (Mrs) E. Anibor, Editor-in-Chief, Domain Health Journal, Department of Human Anatomy and Cell Biology, Faculty of Basic Medical Sciences, College of Health Sciences, Delta State University, PMB 1, Abraka, Nigeria. E-mail: domainhj@gmail.com. Phone number: +2349156263372."
+  }
+]

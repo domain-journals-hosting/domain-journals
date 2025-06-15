@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import journals from "./journals.json";
-import "./styles/journalsHome.css";
+import journals from "../data/journals.json";
+import "../styles/journalsHome.css";
 import JournalHeader from "./JournalHeader";
 
 const JournalsHome = () => {

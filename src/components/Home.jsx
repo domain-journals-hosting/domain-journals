@@ -1,7 +1,7 @@
-import journals from "./journals";
+import journals from "../data/journals";
 import { FaArrowRight } from "react-icons/fa";
-import "./styles/home.css";
-import logo from "./assets/logo.jpg";
+import "../styles/home.css";
+import logo from "../assets/logo.jpg";
 import { useNavigate } from "react-router-dom";
 import Contact from "./Contact";
 const Home = () => {

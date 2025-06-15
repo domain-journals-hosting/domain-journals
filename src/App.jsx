@@ -1,20 +1,21 @@
 import { Route, Routes, useLocation } from "react-router-dom";
-import Home from "./Home";
-import Nav from "./Nav";
-import JournalsList from "./JournalsList";
-import ManuscriptForm from "./ManuscriptForm";
-import Contact from "./Contact";
-import PublicationEthics from "./PublicationEthics";
-import ReviewProcess from "./ReviewProcess";
-import Support from "./Support";
-import JournalsHome from "./JournalsHome";
-import { CurrentIssue } from "./CurrentIssue";
-import EditorialBoard from "./EditorialBoard";
-import Missing from "./Missing";
-import Success from "./Success";
-import EditManuscript from "./EditManuscript";
-import DeleteManuscript from "./DeleteManuscript";
-import Archive from "./Archive";
+import Home from "./components/Home";
+import Nav from "./components/Nav";
+import JournalsList from "./journal/JournalsList";
+import ManuscriptForm from "./manuscript/ManuscriptForm";
+import Contact from "./components/Contact";
+import PublicationEthics from "./components/PublicationEthics";
+import ReviewProcess from "./components/ReviewProcess";
+import Support from "./components/Support";
+import JournalsHome from "./journal/JournalsHome";
+import { CurrentIssue } from "./journal/CurrentIssue";
+import EditorialBoard from "./journal/EditorialBoard";
+import Missing from "./components/Missing";
+import Success from "./components/Success";
+import EditManuscript from "./manuscript/EditManuscript";
+import DeleteManuscript from "./manuscript/DeleteManuscript";
+import Archive from "./journal/Archive";
+import Guidelines from "./journal/Guidelines";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           path="/journals/:slug/editorial-board"
           element={<EditorialBoard />}
         />
+        <Route path="/journals/:slug/guidelines" element={<Guidelines />} />
         <Route path="/journals/:slug/archive" element={<Archive />} />
         <Route path="/submit" element={<ManuscriptForm />} />
         <Route path="/contact" element={<Contact />} />
