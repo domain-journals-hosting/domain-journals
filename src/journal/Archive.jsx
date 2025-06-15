@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "./api/axios";
-import "./styles/archive.css";
+import axios from "../api/axios";
+import "../styles/archive.css";
 import JournalHeader from "./JournalHeader";
 
 const Archive = () => {
@@ -60,43 +60,44 @@ const Archive = () => {
     fetchManuscripts();
   }, [slug]);
 
-  if (loading) return <p>Loading archive...</p>;
-  if (err) return <p style={{ color: "red" }}>{err}</p>;
-
   return (
     <>
       <JournalHeader slug={slug} />
       <div className="archive">
         <h1>Journal Archive</h1>
-        {grouped.map(({ group, items }) => (
-          <div key={group} className="archive-group">
-            <h2>{group}</h2>
-            <ul>
-              {items.map((m) => (
-                <li key={m._id}>
-                  <h3>{m.title}</h3>
-                  <p>
-                    <strong>Author:</strong> {m.name}
-                  </p>
-                  <div className="actions">
-                    <a
-                      href={`https://docs.google.com/viewer?url=${encodeURIComponent(
-                        m.file
-                      )}&embedded=true`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <button>View</button>
-                    </a>
-                    <a href={m.file} download>
-                      <button>Download</button>
-                    </a>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+        {loading && <p>Loading...</p>}
+        {err && <p className="error">{err}</p>}
+        {!loading &&
+          !err &&
+          grouped.map(({ group, items }) => (
+            <div key={group} className="archive-group">
+              <h2>{group}</h2>
+              <ul>
+                {items.map((m) => (
+                  <li key={m._id}>
+                    <h3>{m.title}</h3>
+                    <p>
+                      <strong>Author:</strong> {m.name}
+                    </p>
+                    <div className="actions">
+                      <a
+                        href={`https://docs.google.com/viewer?url=${encodeURIComponent(
+                          m.file
+                        )}&embedded=true`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <button>View</button>
+                      </a>
+                      <a href={m.file} download>
+                        <button>Download</button>
+                      </a>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
       </div>
     </>
   );

@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import journals from "./journals.json";
+import journals from "../data/journals.json";
 import JournalHeader from "./JournalHeader";
 const EditorialBoard = () => {
   const { slug } = useParams();

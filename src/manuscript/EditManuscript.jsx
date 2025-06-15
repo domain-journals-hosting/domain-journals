@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import journals from "./journals";
-import "./styles/form.css";
-import axios from "./api/axios";
+import journals from "../data/journals";
+import "../styles/form.css";
+import axios from "../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
 
 const slug = (title) =>

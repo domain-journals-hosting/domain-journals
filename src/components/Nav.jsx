@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { FaBars } from "react-icons/fa";
-import logo from "./assets/logo.jpg";
+import logo from "../assets/logo.jpg";
 import { Link } from "react-router-dom";
-import "./styles/nav.css";
-import useScreenSize from "./useScreenSize";
+import "../styles/nav.css";
+import useScreenSize from "../hooks/useScreenSize";
 
 const Nav = () => {
   const isMobile = useScreenSize();

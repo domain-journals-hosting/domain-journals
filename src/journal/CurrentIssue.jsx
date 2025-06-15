@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "./api/axios";
-import "./styles/currentIssue.css";
+import axios from "../api/axios";
+import "../styles/currentIssue.css";
 import JournalHeader from "./JournalHeader";
 export const CurrentIssue = () => {
   const { slug } = useParams();
@@ -30,15 +30,16 @@ export const CurrentIssue = () => {
     fetchAccepted();
   }, [slug]);
 
-  if (loading) return <p>Loading current issue...</p>;
-  if (err) return <p style={{ color: "red" }}>{err}</p>;
   console.log(manuscripts);
   return (
     <>
       <JournalHeader slug={slug} />
       <div className="current-issue">
-        <h2>Current Issue</h2>
-        {manuscripts.length === 0 ? (
+        <h1>Current Issue</h1>
+        <br />
+        {loading && <p>Loading...</p>}
+        {err && <p className="errors">{err}</p>}
+        {!loading && !err && manuscripts.length === 0 ? (
           <p>No manuscripts in this issue yet.</p>
         ) : (
           <ul className="manuscript-list">

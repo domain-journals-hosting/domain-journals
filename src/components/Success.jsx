@@ -1,5 +1,5 @@
 import { FaCheckCircle } from "react-icons/fa";
-import "./styles/success.css";
+import "../styles/success.css";
 
 const Success = () => {
   return (
