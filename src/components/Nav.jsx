@@ -71,7 +71,7 @@ const Nav = () => {
             </Link>
           )}
 
-          {!user && (
+          {!user && !admin.user && (
             <Link to="/signup">
               <li>Sign up</li>
             </Link>
