@@ -16,6 +16,18 @@ import EditManuscript from "./manuscript/EditManuscript";
 import DeleteManuscript from "./manuscript/DeleteManuscript";
 import Archive from "./journal/Archive";
 import Guidelines from "./journal/Guidelines";
+import RequireAuth from "./components/requireAuth";
+import Signup from "./components/Signup";
+import AuthorProfile from "./components/AuthorProfile";
+import Login from "./components/Login";
+import AdminLogin from "./admins/Login";
+import ResetPassword from "./components/ResetPassword";
+import ForgotPw from "./components/ForgotPw";
+import InviteUser from "./admins/InviteUser";
+import CompleteInvite from "./admins/CompleteInvite";
+import Dashboard from "./admins/Dashboard";
+import RequireUserAuth from "./admins/RequireUserAuth";
+import Unauthorized from "./components/Unauthorized";
 
 function App() {
   return (
@@ -23,8 +35,8 @@ function App() {
       <Nav />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="/journals" element={<JournalsList />} />
-
         <Route path="/journals/:slug" element={<JournalsHome />} />
         <Route
           path="/journals/:slug/current-issue"
@@ -34,9 +46,25 @@ function App() {
           path="/journals/:slug/editorial-board"
           element={<EditorialBoard />}
         />
+        <Route element={<RequireUserAuth allowedRoles={["editor", "admin"]} />}>
+          <Route path="/admin/dashboard" element={<Dashboard />} />
+        </Route>
+        <Route element={<RequireUserAuth allowedRoles={["admin"]} />}>
+          <Route path="/admin/invite" element={<InviteUser />} />
+        </Route>
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/invite/:token" element={<CompleteInvite />} />
+
+        <Route element={<RequireAuth />}>
+          <Route path="/submit" element={<ManuscriptForm />} />
+          <Route path="/author" element={<AuthorProfile />} />
+        </Route>
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/forgot" element={<ForgotPw />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/reset" element={<ResetPassword />} />
         <Route path="/journals/:slug/guidelines" element={<Guidelines />} />
         <Route path="/journals/:slug/archive" element={<Archive />} />
-        <Route path="/submit" element={<ManuscriptForm />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/publication-ethics" element={<PublicationEthics />} />
         <Route path="/review-process" element={<ReviewProcess />} />
