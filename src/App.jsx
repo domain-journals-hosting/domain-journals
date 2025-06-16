@@ -16,7 +16,7 @@ import EditManuscript from "./manuscript/EditManuscript";
 import DeleteManuscript from "./manuscript/DeleteManuscript";
 import Archive from "./journal/Archive";
 import Guidelines from "./journal/Guidelines";
-import RequireAuth from "./components/requireAuth";
+import RequireAuth from "./components/RequireAuth";
 import Signup from "./components/Signup";
 import AuthorProfile from "./components/AuthorProfile";
 import Login from "./components/Login";
