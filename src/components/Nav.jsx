@@ -4,10 +4,14 @@ import logo from "../assets/logo.jpg";
 import { Link } from "react-router-dom";
 import "../styles/nav.css";
 import useScreenSize from "../hooks/useScreenSize";
+import { useAuth } from "../hooks/useAuthor";
+import { useUser } from "../hooks/useUser";
 
 const Nav = () => {
   const isMobile = useScreenSize();
   const [isOpened, setIsOpened] = useState(false);
+  const { user } = useAuth();
+  const admin = useUser();
   const toggleMenu = () => setIsOpened((prev) => !prev);
   return (
     <>
@@ -27,6 +31,22 @@ const Nav = () => {
             <Link to="/contact">
               <li>Contact us</li>
             </Link>
+            {admin.user && (
+              <Link to="/admin/dashboard">
+                <li>Dashboard</li>
+              </Link>
+            )}
+
+            {!user && !admin.user && (
+              <Link to="/signup">
+                <li>Sign up</li>
+              </Link>
+            )}
+            {user && (
+              <Link to={`/author`}>
+                <li>View profile</li>
+              </Link>
+            )}
           </nav>
         )}
         {isMobile && <FaBars onClick={toggleMenu} />}
@@ -45,6 +65,22 @@ const Nav = () => {
           <Link to="/contact">
             <li>Contact us</li>
           </Link>
+          {admin.user && (
+            <Link to="/admin/dashboard">
+              <li>Dashboard</li>
+            </Link>
+          )}
+
+          {!user && (
+            <Link to="/signup">
+              <li>Sign up</li>
+            </Link>
+          )}
+          {user && (
+            <Link to={`/author`}>
+              <li>View profile</li>
+            </Link>
+          )}
         </nav>
       )}
     </>
