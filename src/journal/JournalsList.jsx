@@ -1,18 +1,18 @@
 import { Link } from "react-router-dom";
 import journals from "../data/journals.json";
 import "../styles/journalsList.css";
-import healthImage from "../assets/health.jpg";
-import biologicalImage from "../assets/biological.jpg";
-import multidisciplinaryImage from "../assets/multidisciplinary.jpg";
+import health from "../assets/health.jpg";
+import biological from "../assets/biological.jpg";
+import multidisciplinary from "../assets/multidisciplinary.jpg";
 import scienceImage from "../assets/science.jpg";
 const JournalsList = () => {
   const source = (string) =>
     string === "health"
-      ? healthImage
+      ? health
       : string === "biological"
-      ? biologicalImage
+      ? biological
       : string === "multidisciplinary"
-      ? multidisciplinaryImage
+      ? multidisciplinary
       : scienceImage;
   const journal = (journalObject) => (
     <div className="journal" key={journalObject.slug}>
