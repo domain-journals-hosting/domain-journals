@@ -6,7 +6,7 @@ const Pay = () => {
   console.log("Here");
   const handlePayment = async () => {
     try {
-      const response = await axios.post(`/pay/verify/${manuscriptId}`);
+      const response = await axios.post(`/pay/manuscript/${manuscriptId}`);
       if (response?.data?.url) {
         window.location.href = response.data.url;
       } else {
