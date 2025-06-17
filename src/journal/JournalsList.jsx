@@ -1,10 +1,22 @@
 import { Link } from "react-router-dom";
-import journals from "../data/journals.json"; // an array with the list of all of the journal names
+import journals from "../data/journals.json";
 import "../styles/journalsList.css";
+import healthImage from "../assets/health.jpg";
+import biologicalImage from "../assets/biological.jpg";
+import multidisciplinaryImage from "../assets/multidisciplinary.jpg";
+import scienceImage from "../assets/science.jpg";
 const JournalsList = () => {
+  const source = (string) =>
+    string === "health"
+      ? healthImage
+      : string === "biological"
+      ? biologicalImage
+      : string === "multidisciplinary"
+      ? multidisciplinaryImage
+      : scienceImage;
   const journal = (journalObject) => (
     <div className="journal" key={journalObject.slug}>
-      <img src={`/src/assets/${journalObject.image}.jpg`} width={100} />
+      <img src={source(journalObject.image)} width={100} />
       <h2>{journalObject.title}</h2>
       <div className="container">
         <p>{journalObject.description.substring(0, 300)}...</p>{" "}
