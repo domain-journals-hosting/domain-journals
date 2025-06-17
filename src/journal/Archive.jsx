@@ -67,6 +67,7 @@ const Archive = () => {
         <h1>Journal Archive</h1>
         {loading && <p>Loading...</p>}
         {err && <p className="error">{err}</p>}
+        {!grouped.length && <p>No items here</p>}
         {!loading &&
           !err &&
           grouped.map(({ group, items }) => (
@@ -89,7 +90,7 @@ const Archive = () => {
                       >
                         <button>View</button>
                       </a>
-                      <a href={m.file} download>
+                      <a href={`${m.file}`} download>
                         <button>Download</button>
                       </a>
                     </div>

@@ -58,8 +58,21 @@ const ManuscriptForm = () => {
     e.preventDefault();
     if (!file) return setErrMsg("Please select a file");
     const formData = new FormData();
+    const allowedTypes = [
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+      setErrMsg("Only .doc, .docx, or  files are allowed.");
+      setLoading(false);
+      return;
+    }
 
     formData.append("file", file);
+    const ext = file.name.split(".").pop();
+    formData.append("extension", ext);
     for (let pair of formData.entries()) {
       console.log(pair[0], pair[1]);
     }
@@ -167,12 +180,12 @@ const ManuscriptForm = () => {
           onChange={(e) => setAbstract(e.target.value)}
         ></textarea>
 
-        <label htmlFor="file">Attach your file:</label>
+        <label htmlFor="file">Please attach your file as pdf:</label>
         <input
           required
           id="file"
           type="file"
-          accept=".docx, .doc, .pdf"
+          accept=".pdf, .doc"
           onChange={(e) => setFile(e.target.files[0])}
         />
 
