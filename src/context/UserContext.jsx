@@ -28,6 +28,7 @@ export const UserProvider = ({ children }) => {
         console.log(err.message);
         setUser(null);
       } finally {
+        console.log("Setting checked");
         setChecked(true);
       }
     };

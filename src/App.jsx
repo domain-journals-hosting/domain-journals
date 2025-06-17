@@ -29,6 +29,7 @@ import Dashboard from "./admins/Dashboard";
 import RequireUserAuth from "./admins/RequireUserAuth";
 import Unauthorized from "./components/Unauthorized";
 import ReviewManuscripts from "./admins/ReviewManuscripts";
+import TrackManuscript from "./manuscript/TrackManuscript";
 
 function App() {
   return (
@@ -74,6 +75,7 @@ function App() {
         <Route path="/success" element={<Success />} />
         <Route path="/edit/:id" element={<EditManuscript />} />
         <Route path="/delete/:id" element={<DeleteManuscript />} />
+        <Route path="/status/:id" element={<TrackManuscript />} />
         <Route path="/*" element={<Missing />} />
       </Routes>
     </div>
