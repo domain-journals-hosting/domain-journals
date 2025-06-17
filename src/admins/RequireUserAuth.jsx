@@ -4,16 +4,18 @@ import { useUser } from "../hooks/useUser";
 const RequireUserAuth = ({ allowedRoles }) => {
   const { user, checked, error } = useUser();
   const location = useLocation();
-  console.log(user?.name, checked, error);
-  return !checked ? (
-    <p>Loading...</p>
-  ) : user?.name && allowedRoles.includes(user.role) ? (
-    <Outlet />
-  ) : user?.name ? (
-    <Navigate to="/unauthorized" state={{ from: location }} replace />
-  ) : (
-    <Navigate to="/admin/login" state={{ from: location }} replace />
-  );
+
+  if (!checked) return <p>Loading...</p>;
+
+  if (!user?.name) {
+    return <Navigate to="/admin/login" state={{ from: location }} replace />;
+  }
+
+  if (!allowedRoles.includes(user.role)) {
+    return <Navigate to="/unauthorized" state={{ from: location }} replace />;
+  }
+
+  return <Outlet />;
 };
 
 export default RequireUserAuth;
