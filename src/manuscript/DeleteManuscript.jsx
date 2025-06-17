@@ -1,13 +1,14 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "../api/axios";
 const DeleteManuscript = () => {
-  const { id } = useParams();
+  const { token } = useParams();
   const navigate = useNavigate();
   const [status, setStatus] = useState("waiting");
-
+  const hasRun = useRef(false);
   useEffect(() => {
     const confirmAndDelete = async () => {
+      if (hasRun?.current === true) return;
       const confirmed = window.confirm(
         "Are you sure you want to delete this manuscript?"
       );
@@ -15,9 +16,9 @@ const DeleteManuscript = () => {
         navigate(-1);
         return;
       }
-
+      hasRun.current = true;
       try {
-        await axios.delete(`/manuscript/${id}`);
+        await axios.delete(`/manuscript/${token}`);
         setStatus("deleted");
         setTimeout(() => navigate("/"), 2000);
       } catch (err) {
@@ -27,7 +28,7 @@ const DeleteManuscript = () => {
     };
 
     confirmAndDelete();
-  }, [id, navigate]);
+  }, [token, navigate]);
 
   return (
     <div>

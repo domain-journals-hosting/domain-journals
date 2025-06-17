@@ -13,7 +13,7 @@ const slug = (title) =>
     .replace(/-+/g, "-");
 
 const EditManuscript = () => {
-  const { id } = useParams();
+  const { token } = useParams();
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
@@ -29,17 +29,24 @@ const EditManuscript = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    axios.get(`/manuscript/${id}`).then((res) => {
-      const m = res.data;
-      setName(m.name);
-      setEmail(m.email);
-      setJournalSlug(m.journal);
-      setTitle(m.title);
-      setAbstract(m.abstract);
-      setExistingFileUrl(m.file);
-      setCountry(m.country);
-    });
-  }, [id]);
+    (async () => {
+      try {
+        const res = await axios.get(`/manuscript/verify/${token}`);
+        const m = res.data;
+        setName(m.name);
+        setEmail(m.email);
+        setJournalSlug(m.journal);
+        setTitle(m.title);
+        setAbstract(m.abstract);
+        setExistingFileUrl(m.file);
+        setCountry(m.country);
+      } catch (err) {
+        setErrMsg(err.response.data.error);
+        alert(`There was an error: ${err.response.data.error}`);
+        navigate(-1);
+      }
+    })();
+  }, [token, navigate]);
 
   useEffect(() => {
     fetch("https://restcountries.com/v3.1/all?fields=name")
@@ -71,7 +78,6 @@ const EditManuscript = () => {
 
     let fileUrl = existingFileUrl;
 
-    // Upload new file only if changed
     if (newFile) {
       const formData = new FormData();
       formData.append("file", newFile);
@@ -98,7 +104,7 @@ const EditManuscript = () => {
     };
 
     try {
-      await axios.patch(`/manuscript/${id}`, manuscript);
+      await axios.patch(`/manuscript/${token}`, manuscript);
       navigate("/success");
     } catch (err) {
       setErrMsg("Update failed. Please try again later.");
