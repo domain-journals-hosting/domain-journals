@@ -1,11 +1,14 @@
 import { Link, useLocation } from "react-router-dom";
 import "../styles/journalHeader.css";
 import useScreenSize from "../hooks/useScreenSize";
+import { FaFileAlt } from "react-icons/fa";
+import { useState } from "react";
 
 const JournalHeader = ({ slug }) => {
   const isMobile = useScreenSize(400);
+  const [isOpened, setIsOpened] = useState(false);
   const location = useLocation();
-
+  const toggleMenu = () => setIsOpened((prev) => !prev);
   const links = [
     { label: "Journal Home", to: `/journals/${slug}` },
     { label: "Editorial board", to: `/journals/${slug}/editorial-board` },
@@ -15,8 +18,8 @@ const JournalHeader = ({ slug }) => {
   ];
 
   return (
-    !isMobile && (
-      <nav className="journal-header">
+    <nav className="journal-header">
+      {!isMobile && (
         <ul>
           {links.map(({ label, to }) => (
             <li key={to}>
@@ -29,8 +32,23 @@ const JournalHeader = ({ slug }) => {
             </li>
           ))}
         </ul>
-      </nav>
-    )
+      )}
+      {isMobile && <FaFileAlt onClick={toggleMenu} />}
+      {isMobile && isOpened && (
+        <ul style={{ display: "flex", flexDirection: "column" }}>
+          {links.map(({ label, to }) => (
+            <li key={to}>
+              <Link
+                to={to}
+                className={location.pathname === to ? "active" : ""}
+              >
+                {label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+    </nav>
   );
 };
 

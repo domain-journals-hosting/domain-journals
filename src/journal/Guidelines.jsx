@@ -32,7 +32,7 @@ const Guidelines = () => {
   }
   console.log(tableHTML);
   return (
-    <div style={{ padding: "20px" }}>
+    <div>
       <JournalHeader slug={slug} />
       <h1>
         <u>Guidelines</u>

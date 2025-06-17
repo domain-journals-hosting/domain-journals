@@ -191,7 +191,7 @@ const EditManuscript = () => {
         <input
           id="file"
           type="file"
-          accept=".docx, .doc, .pdf"
+          accept=".docx, .doc, "
           onChange={(e) => setNewFile(e.target.files[0])}
         />
         <p style={{ fontSize: "0.9rem", marginTop: "5px" }}>

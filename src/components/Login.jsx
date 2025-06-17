@@ -1,9 +1,13 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 import { useAuth } from "../hooks/useAuthor";
 
 const Login = () => {
+  const location = useLocation();
+  const from = location.state?.from.pathname || "/";
+  console.log(from);
+
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -23,7 +27,7 @@ const Login = () => {
         withCredentials: true,
       });
       login(res.data.author);
-      navigate("/author");
+      navigate(from, { replace: true });
     } catch (err) {
       const message = err.response?.data?.error || "Login failed";
       setError(message);

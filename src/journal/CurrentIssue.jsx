@@ -59,7 +59,7 @@ export const CurrentIssue = () => {
                   >
                     <button>View</button>
                   </a>
-                  <a href={m.file} download>
+                  <a href={`${m.file}`} download>
                     <button>Download</button>
                   </a>
                 </div>

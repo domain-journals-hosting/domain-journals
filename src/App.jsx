@@ -28,6 +28,7 @@ import CompleteInvite from "./admins/CompleteInvite";
 import Dashboard from "./admins/Dashboard";
 import RequireUserAuth from "./admins/RequireUserAuth";
 import Unauthorized from "./components/Unauthorized";
+import ReviewManuscripts from "./admins/ReviewManuscripts";
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
         />
         <Route element={<RequireUserAuth allowedRoles={["editor", "admin"]} />}>
           <Route path="/admin/dashboard" element={<Dashboard />} />
+          <Route path="/admin/review" element={<ReviewManuscripts />} />
         </Route>
         <Route element={<RequireUserAuth allowedRoles={["admin"]} />}>
           <Route path="/admin/invite" element={<InviteUser />} />
