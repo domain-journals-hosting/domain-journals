@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
-import axios from "../api/axios"; // adjust path if different
+import axios from "../api/axios";
 
 const PaymentSuccess = () => {
   const location = useLocation();
