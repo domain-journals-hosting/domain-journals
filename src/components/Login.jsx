@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 import { useAuth } from "../hooks/useAuthor";
 
@@ -60,9 +60,35 @@ const Login = () => {
 
       <button type="submit">Login</button>
       <p>
-        Don't have an account?<Link to="/signup">Create one</Link>
+        Don’t have an account?{" "}
+        <button
+          type="button"
+          onClick={() => navigate("/signup", { state: { from } })}
+          style={{
+            background: "none",
+            border: "none",
+            color: "blue",
+            cursor: "pointer",
+            padding: 0,
+          }}
+        >
+          Create one
+        </button>
       </p>
-      <Link to="/forgot">Forgotten password?</Link>
+
+      <button
+        type="button"
+        onClick={() => navigate("/forgot", { state: { from } })}
+        style={{
+          background: "none",
+          border: "none",
+          color: "blue",
+          cursor: "pointer",
+          padding: 0,
+        }}
+      >
+        Forgotten password?
+      </button>
     </form>
   );
 };

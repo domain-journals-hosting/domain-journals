@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "../api/axios";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Signup = () => {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
@@ -72,7 +72,21 @@ const Signup = () => {
         <button type="submit">Create Account</button>
 
         <p>
-          Already have an account? <Link to="/login">Login</Link>
+          Already have an account?{" "}
+          <button
+            type="button"
+            onClick={() => navigate("/login", { state: { from } })}
+            style={{
+              background: "none",
+              border: "none",
+              color: "blue",
+              cursor: "pointer",
+              padding: 0,
+              font: "inherit",
+            }}
+          >
+            Login
+          </button>
         </p>
       </form>
     </div>
