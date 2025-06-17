@@ -18,17 +18,11 @@ const Dashboard = () => {
       const formData = new FormData();
       formData.append("avatar", file);
 
-      const uploadRes = await axios.post("/file/adminAvatar", formData, {
-        withCredentials: true,
-      });
+      const uploadRes = await axios.post("/file/adminAvatar", formData, {});
 
       const avatarUrl = uploadRes.data.url;
 
-      await axios.patch(
-        "/admin/avatar",
-        { userId: user._id, avatarUrl },
-        { withCredentials: true }
-      );
+      await axios.patch("/admin/avatar", { userId: user._id, avatarUrl });
 
       setUser({ ...user, profilePicture: avatarUrl });
     } catch (err) {

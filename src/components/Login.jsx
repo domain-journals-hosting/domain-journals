@@ -60,7 +60,6 @@ const Login = () => {
 
       <button type="submit">Login</button>
       <p>
-        {" "}
         Don't have an account?<Link to="/signup">Create one</Link>
       </p>
       <Link to="/forgot">Forgotten password?</Link>

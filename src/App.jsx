@@ -75,8 +75,8 @@ function App() {
         <Route path="/review-process" element={<ReviewProcess />} />
         <Route path="/support" element={<Support />} />
         <Route path="/success" element={<Success />} />
-        <Route path="/edit/:id" element={<EditManuscript />} />
-        <Route path="/delete/:id" element={<DeleteManuscript />} />
+        <Route path="/edit/:token" element={<EditManuscript />} />
+        <Route path="/delete/:token" element={<DeleteManuscript />} />
         <Route path="/status/:id" element={<TrackManuscript />} />
         <Route path="/pay/:manuscriptId" element={<Pay />} />
         <Route path="/payment-success" element={<PaymentSuccess />} />
