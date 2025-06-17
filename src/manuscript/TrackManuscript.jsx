@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "../api/axios";
 import { useParams } from "react-router-dom";
 import "../styles/form.css";
+import ManuscriptStatusTracker from "./Tracker";
 
 const TrackStatus = () => {
   const { id } = useParams();
@@ -18,14 +19,7 @@ const TrackStatus = () => {
       });
   }, [id]);
 
-  return (
-    <div className="form-wrapper">
-      <h1>Track Manuscript Status</h1>
-      <div style={{ marginTop: "20px", fontSize: "1.2rem" }}>
-        <strong>Status:</strong> {status}
-      </div>
-    </div>
-  );
+  return <ManuscriptStatusTracker currentStatus={status} />;
 };
 
 export default TrackStatus;

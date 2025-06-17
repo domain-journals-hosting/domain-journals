@@ -1,8 +1,10 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
+import { useEffect } from "react";
 
 const RequireUserAuth = ({ allowedRoles }) => {
-  const { user, checked, error } = useUser();
+  const { user, checked } = useUser();
+
   const location = useLocation();
 
   if (!checked) return <p>Loading...</p>;

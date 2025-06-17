@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "../api/axios";
+import ReviewActions from "./ReviewActions";
 
 const ReviewManuscripts = () => {
   const [manuscripts, setManuscripts] = useState([]);
@@ -14,7 +15,7 @@ const ReviewManuscripts = () => {
         });
         setManuscripts(data);
       } catch (err) {
-        setError("Failed to load manuscripts");
+        setError("Failed to load manuscripts, please try refreshimg");
         console.error(err);
       } finally {
         setLoading(false);
@@ -35,7 +36,7 @@ const ReviewManuscripts = () => {
       ) : (
         <ul>
           {manuscripts.map((m) => (
-            <li key={m._id} style={{ padding: "10px" }}>
+            <li key={m._id} style={{ padding: "15px" }}>
               <h3>{m.title}</h3>
 
               <p>
@@ -64,6 +65,7 @@ const ReviewManuscripts = () => {
                 <a href={`${m.file}`} download>
                   <button>Download</button>
                 </a>
+                <ReviewActions id={m._id} />
               </div>
             </li>
           ))}
