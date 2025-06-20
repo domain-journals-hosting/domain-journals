@@ -24,7 +24,7 @@ export const UserProvider = ({ children }) => {
         setUser(response.data);
         console.log(response);
       } catch (err) {
-        setError(err.message);
+        setError(err?.response?.data?.error || "Something went wrong");
         console.log(err.message);
         setUser(null);
       } finally {
