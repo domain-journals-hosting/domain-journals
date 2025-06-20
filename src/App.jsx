@@ -36,6 +36,7 @@ import NewIssue from "./admins/NewIssue";
 import UsersList from "./admins/UsersList";
 import AdminForgotPW from "./admins/AdminForgotPW";
 import ResetAdminPW from "./admins/ResetAdminPW";
+import NewReview from "./components/NewReview";
 
 function App() {
   return (
@@ -75,6 +76,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgot" element={<ForgotPw />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/review" element={<NewReview />} />
         <Route path="/reset" element={<ResetPassword />} />
         <Route path="/journals/:slug/guidelines" element={<Guidelines />} />
         <Route path="/journals/:slug/archive" element={<Archive />} />

@@ -1,6 +1,8 @@
 import React from "react";
 
 const UserExcerpt = ({ user }) => {
+  console.log(user);
+
   const formattedDate = new Date(user.createdAt).toLocaleDateString();
 
   return (
