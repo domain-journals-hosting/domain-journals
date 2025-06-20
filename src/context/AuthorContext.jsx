@@ -14,6 +14,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     setChecked(true);
+    
   };
   useEffect(() => {
     const checkUser = async () => {
