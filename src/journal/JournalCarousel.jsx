@@ -35,44 +35,30 @@ const JournalCarousel = ({ journals }) => {
   };
 
   if (!journals.length) return null;
-
   const currentJournal = journals[currentIndex];
 
   return (
     <>
       <div className="journal-carousel">
-        <button
-          aria-label="Previous journal"
-          className="carousel-arrow left"
-          onClick={prevJournal}
-        >
+        <button className="carousel-arrow left" onClick={prevJournal}>
           &#8592;
         </button>
 
         <div
-          className="journal-card"
+          className="journal-frame"
           onClick={() => navigate(`/journals/${slug(currentJournal.title)}`)}
           role="button"
           tabIndex={0}
-          onKeyPress={(e) => {
-            if (e.key === "Enter")
-              navigate(`/journals/${slug(currentJournal.title)}`);
-          }}
         >
+          <h2>{currentJournal.title}</h2>
           <img
             src={imageMap[currentJournal.image]}
             alt={`${currentJournal.title} logo`}
-            className="journal-image"
+            className="journal-full-image"
           />
-          <h3>{currentJournal.title}</h3>
-          <p>{currentJournal.description.substring(0, 300) + "..."}</p>
         </div>
 
-        <button
-          aria-label="Next journal"
-          className="carousel-arrow right"
-          onClick={nextJournal}
-        >
+        <button className="carousel-arrow right" onClick={nextJournal}>
           &#8594;
         </button>
       </div>
@@ -85,10 +71,6 @@ const JournalCarousel = ({ journals }) => {
             onClick={() => setCurrentIndex(idx)}
             role="button"
             tabIndex={0}
-            onKeyPress={(e) => {
-              if (e.key === "Enter") setCurrentIndex(idx);
-            }}
-            aria-label={`Go to journal ${idx + 1}`}
           />
         ))}
       </div>

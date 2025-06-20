@@ -53,6 +53,9 @@ const Nav = () => {
       </div>
       {isOpened && isMobile && (
         <nav>
+          {JSON.stringify(user)}
+          {JSON.stringify(admin)}
+
           <Link to="/">
             <li>Home</li>
           </Link>
