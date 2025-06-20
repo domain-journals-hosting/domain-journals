@@ -32,6 +32,10 @@ import ReviewManuscripts from "./admins/ReviewManuscripts";
 import TrackManuscript from "./manuscript/TrackManuscript";
 import Pay from "./manuscript/Pay";
 import PaymentSuccess from "./components/PaymentSuccess";
+import NewIssue from "./admins/NewIssue";
+import UsersList from "./admins/UsersList";
+import AdminForgotPW from "./admins/AdminForgotPW";
+import ResetAdminPW from "./admins/ResetAdminPW";
 
 function App() {
   return (
@@ -53,13 +57,17 @@ function App() {
         <Route element={<RequireUserAuth allowedRoles={["editor", "admin"]} />}>
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/review" element={<ReviewManuscripts />} />
-        </Route>
+        </Route>{" "}
+        <Route path="/admin/forgot" element={<AdminForgotPW />} />
+        <Route path="/admin/reset" element={<ResetAdminPW />} />
         <Route element={<RequireUserAuth allowedRoles={["admin"]} />}>
           <Route path="/admin/invite" element={<InviteUser />} />
+          <Route path="/admin/all" element={<UsersList />} />
+
+          <Route path="/admin/issue" element={<NewIssue />} />
         </Route>
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/invite/:token" element={<CompleteInvite />} />
-
         <Route element={<RequireAuth />}>
           <Route path="/submit" element={<ManuscriptForm />} />
           <Route path="/author" element={<AuthorProfile />} />

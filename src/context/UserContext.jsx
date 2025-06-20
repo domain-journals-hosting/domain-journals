@@ -37,6 +37,7 @@ export const UserProvider = ({ children }) => {
 
   const sendResetMail = async (email = user.email) => {
     try {
+      console.log(email);
       const response = await axios.post("/admin/reset", {
         email,
       });
@@ -44,6 +45,7 @@ export const UserProvider = ({ children }) => {
       setUser((prev) => ({ ...prev, _id: response.data.userId }));
       return response.data;
     } catch (error) {
+      console.log(error?.response?.data);
       throw error.response?.data || { error: "Something went wrong" };
     }
   };
