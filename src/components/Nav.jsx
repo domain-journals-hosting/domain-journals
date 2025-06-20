@@ -16,7 +16,7 @@ const Nav = () => {
   return (
     <>
       <div className="nav-wrapper">
-        <img src={logo} alt="Domain journals" width={100} />
+        <h2>Domain journals</h2>
         {!isMobile && (
           <nav className="big-screen">
             <Link to="/">

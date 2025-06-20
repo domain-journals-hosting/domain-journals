@@ -3,6 +3,7 @@ import axios from "../api/axios";
 import { slug } from "../data/journals";
 import ReviewActions from "./ReviewActions";
 import journals from "../data/journals";
+import "../styles/reviewManuscripts.css";
 
 const STATUS_TABS = [
   { label: "Under Review", value: "under-review", color: "#FFA500" },
@@ -13,8 +14,6 @@ const STATUS_TABS = [
 
 const ReviewManuscripts = () => {
   const [selectedValues, setSelectedValues] = useState({});
-  console.log(selectedValues);
-
   const [manuscripts, setManuscripts] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [activeTab, setActiveTab] = useState("under-review");
@@ -31,9 +30,8 @@ const ReviewManuscripts = () => {
         status: m.status || "under-review",
       }));
       setManuscripts(manuscriptsWithStatus);
-      console.log(manuscriptsWithStatus);
-      manuscriptsWithStatus.map((m) => {
-        console.log(m);
+
+      manuscriptsWithStatus.forEach((m) => {
         setSelectedValues((prev) => ({
           ...prev,
           [m._id]: {
@@ -50,6 +48,7 @@ const ReviewManuscripts = () => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchManuscripts();
   }, []);
@@ -63,15 +62,16 @@ const ReviewManuscripts = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div style={styles.container}>
+    <div className="review-container">
       <h2>Review Manuscripts</h2>
-      <div style={styles.tabs}>
+
+      <div className="review-tabs">
         {STATUS_TABS.map((tab) => (
           <button
             key={tab.value}
             onClick={() => setActiveTab(tab.value)}
+            className="review-tab"
             style={{
-              ...styles.tab,
               backgroundColor: activeTab === tab.value ? tab.color : "#f0f0f0",
               color: activeTab === tab.value ? "white" : "#333",
             }}
@@ -84,108 +84,107 @@ const ReviewManuscripts = () => {
       {filtered.length === 0 ? (
         <p>No manuscripts in this category.</p>
       ) : (
-        <ul style={styles.list}>
-          {filtered.map((m) => {
-            return (
-              <li key={m._id} style={styles.card}>
-                <h3>{m.title}</h3>
-                <p>
-                  <strong>Author:</strong> {m.name}
-                </p>
-                {m.status === "paid" ? (
-                  <>
-                    <label style={styles.label}>Journal</label>
-                    <select
-                      style={styles.select}
-                      value={selectedValues[m._id]?.journal || m.journal}
-                      onChange={(e) =>
-                        setSelectedValues((prev) => ({
-                          ...prev,
-                          [m._id]: {
-                            ...prev[m._id],
-                            journal: e.target.value,
-                          },
-                        }))
-                      }
-                    >
-                      {journals.map((j) => (
-                        <option key={slug(j)} value={slug(j)}>
-                          {j}
-                        </option>
-                      ))}
-                    </select>
+        <ul className="review-list">
+          {filtered.map((m) => (
+            <li key={m._id} className="review-card">
+              <h3>{m.title}</h3>
+              <p>
+                <strong>Author:</strong> {m.name}
+              </p>
 
-                    <label style={styles.label}>Issue</label>
-                    <select
-                      style={styles.select}
-                      value={selectedValues[m._id]?.issue || m.issue}
-                      onChange={(e) =>
-                        setSelectedValues((prev) => ({
-                          ...prev,
-                          [m._id]: {
-                            ...prev[m._id],
-                            issue: Number(e.target.value),
-                          },
-                        }))
-                      }
-                    >
-                      {Array.from(
-                        { length: m.issue },
-                        (_, i) => m.issue - i
-                      ).map((n) => (
+              {m.status === "paid" ? (
+                <>
+                  <label className="review-label">Journal</label>
+                  <select
+                    className="review-select"
+                    value={selectedValues[m._id]?.journal || m.journal}
+                    onChange={(e) =>
+                      setSelectedValues((prev) => ({
+                        ...prev,
+                        [m._id]: {
+                          ...prev[m._id],
+                          journal: e.target.value,
+                        },
+                      }))
+                    }
+                  >
+                    {journals.map((j) => (
+                      <option key={slug(j)} value={slug(j)}>
+                        {j}
+                      </option>
+                    ))}
+                  </select>
+
+                  <label className="review-label">Issue</label>
+                  <select
+                    className="review-select"
+                    value={selectedValues[m._id]?.issue || m.issue}
+                    onChange={(e) =>
+                      setSelectedValues((prev) => ({
+                        ...prev,
+                        [m._id]: {
+                          ...prev[m._id],
+                          issue: Number(e.target.value),
+                        },
+                      }))
+                    }
+                  >
+                    {Array.from({ length: m.issue }, (_, i) => m.issue - i).map(
+                      (n) => (
                         <option key={n} value={n}>
                           {n}
                         </option>
-                      ))}
-                    </select>
-                  </>
-                ) : (
-                  <>
-                    <p>
-                      <strong>Journal: </strong> {m.journal}
-                    </p>
-                    <p>
-                      <strong>Volume:</strong> {m.volume}
-                    </p>
-                    <p>
-                      <strong>Issue:</strong> {m.issue}
-                    </p>
-                  </>
-                )}
+                      )
+                    )}
+                  </select>
+                </>
+              ) : (
+                <>
+                  <p>
+                    <strong>Journal:</strong> {m.journal}
+                  </p>
+                  <p>
+                    <strong>Volume:</strong> {m.volume}
+                  </p>
+                  <p>
+                    <strong>Issue:</strong> {m.issue}
+                  </p>
+                </>
+              )}
 
-                <p>
-                  <strong>Abstract:</strong> {m.abstract}
-                </p>
+              <p>
+                <strong>Abstract:</strong> {m.abstract}
+              </p>
 
-                <div className="actions" style={styles.actions}>
-                  <a
-                    href={`https://docs.google.com/viewer?url=${encodeURIComponent(
-                      m.file
-                    )}&embedded=true`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <button style={styles.actionButton}>View</button>
-                  </a>
-                  <a
-                    href={m.file}
-                    download={
-                      m.file.endsWith(".doc") ? undefined : "Manuscript.pdf"
-                    }
-                  >
-                    <button style={styles.actionButton}>Download</button>
-                  </a>
-                  <ReviewActions
-                    id={m._id}
-                    status={m.status || "under-review"}
-                    onUpdate={fetchManuscripts}
-                    issue={selectedValues[m._id]?.issue || m.issue}
-                    journal={selectedValues[m._id]?.journal || m.journal}
-                  />
-                </div>
-              </li>
-            );
-          })}
+              <div className="review-actions">
+                <a
+                  href={`https://docs.google.com/viewer?url=${encodeURIComponent(
+                    m.file
+                  )}&embedded=true`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <button className="review-action-btn">View</button>
+                </a>
+                <a
+                  href={m.file}
+                  download={
+                    m.file.endsWith(".doc") ? undefined : "Manuscript.pdf"
+                  }
+                >
+                  <button className="review-action-btn">Download</button>
+                </a>
+
+                <ReviewActions
+                  id={m._id}
+                  status={m.status || "under-review"}
+                  onUpdate={fetchManuscripts}
+                  issue={selectedValues[m._id]?.issue || m.issue}
+                  journal={selectedValues[m._id]?.journal || m.journal}
+                />
+              </div>
+            </li>
+          ))}
         </ul>
       )}
     </div>
@@ -193,66 +192,3 @@ const ReviewManuscripts = () => {
 };
 
 export default ReviewManuscripts;
-
-const styles = {
-  container: {
-    padding: "20px",
-  },
-  tabs: {
-    display: "flex",
-    gap: "10px",
-    marginBottom: "20px",
-    flexWrap: "wrap",
-  },
-  tab: {
-    border: "none",
-    borderRadius: "20px",
-    padding: "10px 15px",
-    cursor: "pointer",
-    fontWeight: "bold",
-    transition: "background-color 0.3s ease",
-  },
-  list: {
-    listStyle: "none",
-    padding: 0,
-  },
-  card: {
-    background: "#fff",
-    padding: "20px",
-    marginBottom: "15px",
-    borderRadius: "10px",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-  },
-  actions: {
-    display: "flex",
-    gap: "10px",
-    marginTop: "10px",
-    flexWrap: "wrap",
-    alignItems: "center",
-  },
-  actionButton: {
-    backgroundColor: "#007bff",
-    border: "none",
-    padding: "8px 16px",
-    borderRadius: "6px",
-    color: "white",
-    cursor: "pointer",
-    fontSize: "14px",
-    transition: "background-color 0.2s ease",
-  },
-  label: {
-    display: "block",
-    marginTop: "10px",
-    marginBottom: "6px",
-    fontWeight: "600",
-    fontSize: "14px",
-  },
-  select: {
-    padding: "8px 12px",
-    borderRadius: "6px",
-    border: "1px solid #ccc",
-    minWidth: "180px",
-    marginBottom: "10px",
-    fontSize: "14px",
-  },
-};
