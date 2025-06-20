@@ -1,16 +1,10 @@
 import { useState, useEffect } from "react";
-import journals from "../data/journals";
+import journals, {slug} from "../data/journals";
 import "../styles/form.css";
 import axios from "../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
 
-const slug = (title) =>
-  title
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-");
+
 
 const EditManuscript = () => {
   const { token } = useParams();

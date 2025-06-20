@@ -9,14 +9,15 @@ const TrackStatus = () => {
   const [status, setStatus] = useState("Under Review");
 
   useEffect(() => {
-    axios
-      .get(`/manuscript/${id}`)
-      .then((res) => {
-        setStatus(res.data.status || "Under Review");
-      })
-      .catch(() => {
+    const getManuscriptStatus = async () => {
+      try {
+        const response = await axios.get(`manuscript/${id}`);
+        setStatus(response?.data?.status || "Under Review");
+      } catch (error) {
         setStatus("Under Review");
-      });
+      }
+    };
+    getManuscriptStatus();
   }, [id]);
 
   return <ManuscriptStatusTracker currentStatus={status} />;

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuthor";
 import axios from "../api/axios";
+import { useUser } from "../hooks/useUser";
 
-const ResetPassword = () => {
-  const { user, logout } = useAuth();
+const ResetAdminPW = () => {
+  const { user, logout } = useUser();
   const id = user?._id;
   const navigate = useNavigate();
 
@@ -25,7 +25,7 @@ const ResetPassword = () => {
     setError("");
     try {
       setLoading(true);
-      const res = await axios.post("/author/verify", { id, resetKey });
+      const res = await axios.post("/admin/verify", { id, resetKey });
       setMessage(res.data.message);
       setStep("reset");
     } catch (err) {
@@ -46,7 +46,7 @@ const ResetPassword = () => {
     try {
       setLoading(true);
       const res = await axios.post(
-        "/author/resetPw",
+        "/admin/resetPw",
         { userId: id, resetKey, newPassword },
         { withCredentials: true }
       );
@@ -108,7 +108,7 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export default ResetAdminPW;
 
 const styles = {
   container: {

@@ -9,7 +9,8 @@ const ForgotPw = () => {
   const { sendResetMail, setUser } = useAuth();
   const navigate = useNavigate();
 
-  const handleReset = async () => {
+  const handleReset = async (e) => {
+    e.preventDefault();
     try {
       setLoading(true);
       const response = await sendResetMail(email);
@@ -24,23 +25,45 @@ const ForgotPw = () => {
     }
   };
 
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+    if (successMsg) setSuccessMsg("");
+  };
+
   return (
-    <div>
+    <div style={{ maxWidth: 400, margin: "50px auto", textAlign: "center" }}>
       <h2>Forgot Password</h2>
-      <label htmlFor="email">Enter your email</label> <br />
-      <input
-        type="email"
-        placeholder="Enter your email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        disabled={loading}
-        required
-      />
-      <br />
-      <button onClick={handleReset} disabled={loading || !email}>
-        {loading ? "Sending..." : "Send Reset Code"}
-      </button>
-      {successMsg && <p>{successMsg}</p>}
+      <form onSubmit={handleReset}>
+        <label htmlFor="email">Enter your email</label>
+        <br />
+        <input
+          id="email"
+          type="email"
+          placeholder="Enter your email"
+          value={email}
+          onChange={handleEmailChange}
+          disabled={loading}
+          required
+          style={{
+            padding: 10,
+            width: "100%",
+            margin: "10px 0",
+            fontSize: "1rem",
+          }}
+        />
+        <button
+          type="submit"
+          disabled={loading || !email}
+          style={{
+            padding: "10px 20px",
+            fontSize: "1rem",
+            cursor: loading || !email ? "not-allowed" : "pointer",
+          }}
+        >
+          {loading ? "Sending..." : "Send Reset Code"}
+        </button>
+      </form>
+      {successMsg && <p style={{ marginTop: 15 }}>{successMsg}</p>}
     </div>
   );
 };

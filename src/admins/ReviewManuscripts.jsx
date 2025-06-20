@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "../api/axios";
+import { slug } from "../data/journals";
 import ReviewActions from "./ReviewActions";
 import journals from "../data/journals";
 
@@ -19,13 +20,7 @@ const ReviewManuscripts = () => {
   const [activeTab, setActiveTab] = useState("under-review");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const slug = (title) =>
-    title
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9\s-]/g, "")
-      .replace(/\s+/g, "-")
-      .replace(/-+/g, "-");
+
   const fetchManuscripts = async () => {
     try {
       const { data } = await axios.get("/manuscript", {
@@ -99,8 +94,9 @@ const ReviewManuscripts = () => {
                 </p>
                 {m.status === "paid" ? (
                   <>
-                    <label>Journal</label>
+                    <label style={styles.label}>Journal</label>
                     <select
+                      style={styles.select}
                       value={selectedValues[m._id]?.journal || m.journal}
                       onChange={(e) =>
                         setSelectedValues((prev) => ({
@@ -119,8 +115,9 @@ const ReviewManuscripts = () => {
                       ))}
                     </select>
 
-                    <label>Issue</label>
+                    <label style={styles.label}>Issue</label>
                     <select
+                      style={styles.select}
                       value={selectedValues[m._id]?.issue || m.issue}
                       onChange={(e) =>
                         setSelectedValues((prev) => ({
@@ -145,6 +142,9 @@ const ReviewManuscripts = () => {
                 ) : (
                   <>
                     <p>
+                      <strong>Journal: </strong> {m.journal}
+                    </p>
+                    <p>
                       <strong>Volume:</strong> {m.volume}
                     </p>
                     <p>
@@ -165,10 +165,15 @@ const ReviewManuscripts = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <button>View</button>
+                    <button style={styles.actionButton}>View</button>
                   </a>
-                  <a href={m.file} download>
-                    <button>Download</button>
+                  <a
+                    href={m.file}
+                    download={
+                      m.file.endsWith(".doc") ? undefined : "Manuscript.pdf"
+                    }
+                  >
+                    <button style={styles.actionButton}>Download</button>
                   </a>
                   <ReviewActions
                     id={m._id}
@@ -205,7 +210,7 @@ const styles = {
     padding: "10px 15px",
     cursor: "pointer",
     fontWeight: "bold",
-    transition: "0.3s",
+    transition: "background-color 0.3s ease",
   },
   list: {
     listStyle: "none",
@@ -223,6 +228,24 @@ const styles = {
     gap: "10px",
     marginTop: "10px",
     flexWrap: "wrap",
+    alignItems: "center",
+  },
+  actionButton: {
+    backgroundColor: "#007bff",
+    border: "none",
+    padding: "8px 16px",
+    borderRadius: "6px",
+    color: "white",
+    cursor: "pointer",
+    fontSize: "14px",
+    transition: "background-color 0.2s ease",
+  },
+  label: {
+    display: "block",
+    marginTop: "10px",
+    marginBottom: "6px",
+    fontWeight: "600",
+    fontSize: "14px",
   },
   select: {
     padding: "8px 12px",
@@ -230,5 +253,6 @@ const styles = {
     border: "1px solid #ccc",
     minWidth: "180px",
     marginBottom: "10px",
+    fontSize: "14px",
   },
 };

@@ -11,6 +11,9 @@ const ManuscriptStatusTracker = ({ currentStatus }) => {
 
   return (
     <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+      <p>
+        These statuses are only valid until your manuscript has been uploaded
+      </p>
       {statusOrder.map((status, index) => {
         const isActive = currentStatus === status;
         const isDone =
