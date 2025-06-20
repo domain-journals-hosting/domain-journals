@@ -42,6 +42,11 @@ const Nav = () => {
                 <li>Sign up</li>
               </Link>
             )}
+            {!user && !admin.user && (
+              <Link to="/login">
+                <li>Log in</li>
+              </Link>
+            )}
             {user && (
               <Link to={`/author`}>
                 <li>View profile</li>
@@ -53,9 +58,6 @@ const Nav = () => {
       </div>
       {isOpened && isMobile && (
         <nav>
-          {JSON.stringify(user)}
-          {JSON.stringify(admin)}
-
           <Link to="/">
             <li>Home</li>
           </Link>
@@ -77,6 +79,11 @@ const Nav = () => {
           {!user && !admin.user && (
             <Link to="/signup">
               <li>Sign up</li>
+            </Link>
+          )}
+          {!user && !admin.user && (
+            <Link to="/login">
+              <li>Log in</li>
             </Link>
           )}
           {user && (
