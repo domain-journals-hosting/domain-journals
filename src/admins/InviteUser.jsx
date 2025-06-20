@@ -19,6 +19,8 @@ const InviteUser = () => {
       const res = await axios.post("/admin", payload, {
         withCredentials: true,
       });
+      console.log(res.data);
+
       setMessage("Invite sent successfully!");
       setErr("");
     } catch (err) {
@@ -59,7 +61,10 @@ const InviteUser = () => {
           <select
             value={access}
             id="access"
-            onChange={(e) => setAccess(e.target.value)}
+            onChange={(e) => {
+              console.log(access);
+              setAccess(e.target.value);
+            }}
             style={styles.select}
           >
             {journals.map((journal) => (
