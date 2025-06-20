@@ -54,7 +54,6 @@ const Home = () => {
     );
   };
 
-  // Get visible reviews slice (looping)
   const visibleReviews = [];
   for (let i = 0; i < MAX_VISIBLE; i++) {
     visibleReviews.push(
@@ -62,7 +61,6 @@ const Home = () => {
     );
   }
 
-  // Helper to truncate long text
   const truncate = (str, n) =>
     str.length > n ? str.substr(0, n - 1) + "…" : str;
 
@@ -113,7 +111,7 @@ const Home = () => {
                 key={review.id}
                 className="review-card"
                 style={{
-                  flex: "0 0 30%",
+                  flex: "0 0 100%",
                   background: "#f9f9f9",
                   padding: 15,
                   borderRadius: 8,
