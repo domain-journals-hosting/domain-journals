@@ -72,11 +72,11 @@ function App() {
         <Route element={<RequireAuth />}>
           <Route path="/submit" element={<ManuscriptForm />} />
           <Route path="/author" element={<AuthorProfile />} />
+          <Route path="/review" element={<NewReview />} />
         </Route>
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgot" element={<ForgotPw />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/review" element={<NewReview />} />
         <Route path="/reset" element={<ResetPassword />} />
         <Route path="/journals/:slug/guidelines" element={<Guidelines />} />
         <Route path="/journals/:slug/archive" element={<Archive />} />
