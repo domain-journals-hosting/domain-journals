@@ -37,6 +37,8 @@ import UsersList from "./admins/UsersList";
 import AdminForgotPW from "./admins/AdminForgotPW";
 import ResetAdminPW from "./admins/ResetAdminPW";
 import NewReview from "./components/NewReview";
+import Messages from "./admins/Messages";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -58,13 +60,13 @@ function App() {
         <Route element={<RequireUserAuth allowedRoles={["editor", "admin"]} />}>
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/review" element={<ReviewManuscripts />} />
-        </Route>{" "}
+          <Route path="/admin/message" element={<Messages />} />
+        </Route>
         <Route path="/admin/forgot" element={<AdminForgotPW />} />
         <Route path="/admin/reset" element={<ResetAdminPW />} />
         <Route element={<RequireUserAuth allowedRoles={["admin"]} />}>
           <Route path="/admin/invite" element={<InviteUser />} />
           <Route path="/admin/all" element={<UsersList />} />
-
           <Route path="/admin/issue" element={<NewIssue />} />
         </Route>
         <Route path="/admin/login" element={<AdminLogin />} />
@@ -92,6 +94,8 @@ function App() {
         <Route path="/payment-success" element={<PaymentSuccess />} />
         <Route path="/*" element={<Missing />} />
       </Routes>
+
+      <Footer />
     </div>
   );
 }

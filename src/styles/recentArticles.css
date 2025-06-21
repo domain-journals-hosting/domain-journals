@@ -1,0 +1,60 @@
+.recent-articles {
+  background-color: #f1f8e9;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  margin: 2rem auto;
+  max-width: 800px;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  color: #093238;
+  margin-bottom: 1.5rem;
+}
+
+.status-msg {
+  text-align: center;
+  color: gray;
+  font-style: italic;
+}
+
+.articles-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.article-card {
+  background: white;
+  padding: 1.2rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.article-title {
+  color: #093238;
+  margin-bottom: 0.5rem;
+}
+
+.article-actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  background-color: #659377;
+  border: none;
+  padding: 0.5rem 1rem;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #567d68;
+}

@@ -1,11 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
 import "../styles/journalHeader.css";
 import useScreenSize from "../hooks/useScreenSize";
-import { FaFileAlt } from "react-icons/fa";
+import { FaBars, FaTimes } from "react-icons/fa";
 import { useState } from "react";
+import BreadCrumbs from "../components/BreadCrumbs";
 
 const JournalHeader = ({ slug }) => {
-  const isMobile = useScreenSize(400);
+  const isMobile = useScreenSize();
   const [isOpened, setIsOpened] = useState(false);
   const location = useLocation();
   const toggleMenu = () => setIsOpened((prev) => !prev);
@@ -33,21 +34,39 @@ const JournalHeader = ({ slug }) => {
           ))}
         </ul>
       )}
-      {isMobile && <FaFileAlt onClick={toggleMenu} />}
-      {isMobile && isOpened && (
-        <ul style={{ display: "flex", flexDirection: "column" }}>
-          {links.map(({ label, to }) => (
-            <li key={to}>
-              <Link
-                to={to}
-                className={location.pathname === to ? "active" : ""}
-              >
-                {label}
-              </Link>
-            </li>
-          ))}
-        </ul>
+
+      {isMobile && (
+        <>
+          {isOpened ? (
+            <FaTimes onClick={toggleMenu} className="journal-toggle-icon" />
+          ) : (
+            <FaBars onClick={toggleMenu} className="journal-toggle-icon" />
+          )}
+
+          {isOpened && (
+            <>
+              <div className="journal-overlay" onClick={toggleMenu} />
+              <div className="journal-drawer">
+                <ul>
+                  {links.map(({ label, to }) => (
+                    <li key={to}>
+                      <Link
+                        to={to}
+                        className={location.pathname === to ? "active" : ""}
+                        onClick={toggleMenu}
+                      >
+                        {label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </>
+          )}
+        </>
       )}
+
+      <BreadCrumbs slug={slug} />
     </nav>
   );
 };

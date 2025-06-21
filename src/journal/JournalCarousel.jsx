@@ -7,6 +7,7 @@ import healthImg from "../assets/health.jpg";
 import biologicalImg from "../assets/biological.jpg";
 import multidisciplinaryImg from "../assets/multidisciplinary.jpg";
 import scienceImg from "../assets/science.jpg";
+import useScreenSize from "../hooks/useScreenSize";
 
 const imageMap = {
   health: healthImg,
@@ -16,13 +17,14 @@ const imageMap = {
 };
 
 const JournalCarousel = ({ journals }) => {
+  const isMobile = useScreenSize(600);
   const [currentIndex, setCurrentIndex] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % journals.length);
-    }, 4000);
+    }, 4000); 
     return () => clearInterval(interval);
   }, [journals.length]);
 
@@ -40,9 +42,11 @@ const JournalCarousel = ({ journals }) => {
   return (
     <>
       <div className="journal-carousel">
-        <button className="carousel-arrow left" onClick={prevJournal}>
-          &#8592;
-        </button>
+        {!isMobile && (
+          <button className="carousel-arrow left" onClick={prevJournal}>
+            &#8592;
+          </button>
+        )}
 
         <div
           className="journal-frame"
@@ -58,9 +62,11 @@ const JournalCarousel = ({ journals }) => {
           />
         </div>
 
-        <button className="carousel-arrow right" onClick={nextJournal}>
-          &#8594;
-        </button>
+        {!isMobile && (
+          <button className="carousel-arrow right" onClick={nextJournal}>
+            &#8594;
+          </button>
+        )}
       </div>
 
       <div className="carousel-dots">

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "../api/axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import "../styles/signup.css";
 
 const Signup = () => {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
@@ -38,37 +39,28 @@ const Signup = () => {
   return (
     <div className="signup-container">
       <h2>Sign up as an author</h2>
-      {errorMsg && <p style={{ color: "red" }}>{errorMsg}</p>}
+      {errorMsg && <p style={{ color: "crimson" }}>{errorMsg}</p>}
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Name:</label>
-          <input
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <label>Name:</label>
+        <input name="name" value={form.name} onChange={handleChange} required />
+
+        <label>Email:</label>
+        <input
+          type="email"
+          name="email"
+          value={form.email}
+          onChange={handleChange}
+          required
+        />
+
+        <label>Password:</label>
+        <input
+          type="password"
+          name="password"
+          value={form.password}
+          onChange={handleChange}
+          required
+        />
         <button type="submit">Create Account</button>
 
         <p>

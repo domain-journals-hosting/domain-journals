@@ -30,13 +30,6 @@ export const CurrentIssue = () => {
     fetchAccepted();
   }, [slug]);
 
-  console.log(manuscripts);
-  const getFileName = (url) => {
-    const parts = url.split("/");
-    const last = parts[parts.length - 1] || "";
-    return last.split(".")[0];
-  };
-
   return (
     <>
       <JournalHeader slug={slug} />
@@ -65,17 +58,7 @@ export const CurrentIssue = () => {
                   >
                     <button>View</button>
                   </a>
-                  <a
-                    href={
-                      m.file.endsWith(".doc") || m.file.endsWith(".docx")
-                        ? m.file
-                        : m.file.replace(
-                            "/upload/",
-                            `/upload/fl_attachment:${getFileName(m.file)}.pdf/`
-                          )
-                    }
-                    download
-                  >
+                  <a href={m.file} download>
                     <button>Download</button>
                   </a>
                 </div>
