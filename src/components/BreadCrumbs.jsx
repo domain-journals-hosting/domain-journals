@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { FaHome, FaChevronRight } from "react-icons/fa";
-import "../styles/breadcrumbs.css";
+import "../styles/breadCrumbs.css";
 
 const BreadCrumbs = ({ slug }) => {
   const reverseSlug = (slug) =>
