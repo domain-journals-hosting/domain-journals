@@ -2,10 +2,12 @@ import journals from "../data/journals.json";
 import { FaArrowRight, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import "../styles/home.css";
 import logo from "../assets/logo.jpg";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Contact from "./Contact";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import JournalCarousel from "../journal/JournalCarousel";
+import useScreenSize from "../hooks/useScreenSize";
+import RecentArticles from "./RecentArticles";
 
 const reviewsFromBackend = [
   {
@@ -38,6 +40,7 @@ const reviewsFromBackend = [
 const MAX_VISIBLE = 3;
 
 const Home = () => {
+  const isMobile = useScreenSize();
   const navigate = useNavigate();
 
   const [startIndex, setStartIndex] = useState(0);
@@ -64,35 +67,48 @@ const Home = () => {
   const truncate = (str, n) =>
     str.length > n ? str.substr(0, n - 1) + "…" : str;
 
+  useEffect(() => {
+    const interval = setInterval(handleNext, 4000);
+    return () => clearInterval(interval);
+  }, []);
   return (
     <div className="home-wrapper">
       <JournalCarousel journals={journals} />
 
       <article>
-        <p>Become an author</p>
-        <button onClick={() => navigate("/submit")}>
+        <h3>
+          <Link to={"/signup"}>Become an author?</Link>
+        </h3>
+
+        <h3>Contribute to the advancement of knowledge</h3>
+        <button
+          style={{ margin: "20px", padding: "20px", borderRadius: "25px" }}
+          onClick={() => navigate("/submit")}
+        >
           Submit a manuscript?
         </button>
         <h2>Authors reviews</h2>
         <div className="reviews-carousel" style={{ position: "relative" }}>
-          <button
-            onClick={handlePrev}
-            aria-label="Previous reviews"
-            style={{
-              position: "absolute",
-              left: 0,
-              top: "50%",
-              transform: "translateY(-50%)",
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              fontSize: "1.5rem",
-              color: "#333",
-              padding: 0,
-            }}
-          >
-            <FaChevronLeft />
-          </button>
+          {!isMobile && (
+            <button
+              onClick={handlePrev}
+              aria-label="Previous reviews"
+              style={{
+                position: "absolute",
+                left: 0,
+                top: "50%",
+                transform: "translateY(-50%)",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontSize: "1.5rem",
+                color: "#333",
+                padding: 0,
+              }}
+            >
+              <FaChevronLeft />
+            </button>
+          )}
 
           <div
             className="reviews-list"
@@ -142,24 +158,26 @@ const Home = () => {
             ))}
           </div>
 
-          <button
-            onClick={handleNext}
-            aria-label="Next reviews"
-            style={{
-              position: "absolute",
-              right: 0,
-              top: "50%",
-              transform: "translateY(-50%)",
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              fontSize: "1.5rem",
-              color: "#333",
-              padding: 0,
-            }}
-          >
-            <FaChevronRight />
-          </button>
+          {!isMobile && (
+            <button
+              onClick={handleNext}
+              aria-label="Next reviews"
+              style={{
+                position: "absolute",
+                right: 0,
+                top: "50%",
+                transform: "translateY(-50%)",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontSize: "1.5rem",
+                color: "#333",
+                padding: 0,
+              }}
+            >
+              <FaChevronRight />
+            </button>
+          )}
         </div>
       </article>
 
@@ -203,7 +221,7 @@ const Home = () => {
           </p>
         </div>
       </section>
-
+      <RecentArticles />
       <Contact />
     </div>
   );

@@ -1,0 +1,70 @@
+.messages-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 20px;
+  font-family: sans-serif;
+}
+
+.messages-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.messages-status {
+  text-align: center;
+  color: gray;
+  margin-top: 40px;
+}
+
+.messages-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.message-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  background-color: #fafafa;
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.message-name {
+  font-weight: bold;
+}
+
+.message-status {
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-weight: bold;
+}
+
+.message-status.read {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.message-status.unread {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.message-email {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #555;
+}
+
+.message-body {
+  color: #333;
+  line-height: 1.5;
+}

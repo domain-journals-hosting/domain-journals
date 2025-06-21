@@ -1,0 +1,29 @@
+.footer {
+  background-color: #f1f8e9; /* light background */
+  padding: 2rem 1rem;
+  text-align: center;
+  color: #093238; /* dark text */
+}
+
+.footer-heading {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #093238;
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  font-size: 1.5rem;
+}
+
+.social-links a {
+  color: #093238;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.social-links a:hover {
+  color: #1e9965; /* bullet green */
+  transform: scale(1.2);
+}

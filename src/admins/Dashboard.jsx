@@ -97,6 +97,11 @@ const Dashboard = () => {
             See All Users
           </Link>
         </li>
+        <li>
+          <Link to="/admin/message" style={styles.link}>
+            See all messages
+          </Link>
+        </li>
       </ul>
 
       <button onClick={handleLogout} style={styles.logoutButton}>

@@ -5,15 +5,15 @@ import health from "../assets/health.jpg";
 import biological from "../assets/biological.jpg";
 import multidisciplinary from "../assets/multidisciplinary.jpg";
 import scienceImage from "../assets/science.jpg";
+const source = (string) =>
+  string === "health"
+    ? health
+    : string === "biological"
+    ? biological
+    : string === "multidisciplinary"
+    ? multidisciplinary
+    : scienceImage;
 const JournalsList = () => {
-  const source = (string) =>
-    string === "health"
-      ? health
-      : string === "biological"
-      ? biological
-      : string === "multidisciplinary"
-      ? multidisciplinary
-      : scienceImage;
   const journal = (journalObject) => (
     <div className="journal" key={journalObject.slug}>
       <img src={source(journalObject.image)} width={100} />
