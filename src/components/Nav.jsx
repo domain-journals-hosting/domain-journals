@@ -29,7 +29,7 @@ const Nav = () => {
   return (
     <>
       <div className="nav-wrapper">
-        <h2>Domain journals</h2>
+        <h2>Domain Journals</h2>
         {!isMobile && (
           <nav className="big-screen">
             <Link to="/">
