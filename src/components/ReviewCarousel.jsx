@@ -158,7 +158,7 @@ const ReviewCarousel = () => {
                 background: "#f9f9f9",
                 borderRadius: 10,
                 boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-                padding: "100px 20px 20px",
+                padding: "50px 20px 20px",
                 clipPath: "polygon(0 0, 100% 0, 100% 100%, 25% 100%, 0% 75%)",
                 display: "flex",
                 flexDirection: "column",
