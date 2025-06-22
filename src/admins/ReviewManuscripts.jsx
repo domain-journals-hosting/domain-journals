@@ -175,13 +175,15 @@ const ReviewManuscripts = () => {
                   <button className="review-action-btn">Download</button>
                 </a>
 
-                <ReviewActions
-                  id={m._id}
-                  status={m.status || "under-review"}
-                  onUpdate={fetchManuscripts}
-                  issue={selectedValues[m._id]?.issue || m.issue}
-                  journal={selectedValues[m._id]?.journal || m.journal}
-                />
+                <div style={{ width: "100%" }}>
+                  <ReviewActions
+                    id={m._id}
+                    status={m.status || "under-review"}
+                    onUpdate={fetchManuscripts}
+                    issue={selectedValues[m._id]?.issue || m.issue}
+                    journal={selectedValues[m._id]?.journal || m.journal}
+                  />
+                </div>
               </div>
             </li>
           ))}
