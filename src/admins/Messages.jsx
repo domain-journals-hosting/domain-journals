@@ -7,6 +7,7 @@ const Messages = () => {
   const [messages, setMessages] = useState([]);
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [filter, setFilter] = useState("unread"); // default to unread
 
   useEffect(() => {
     setLoading(true);
@@ -37,30 +38,85 @@ const Messages = () => {
     }
   };
 
+  const filteredMessages = messages.filter((msg) =>
+    filter === "unread" ? !msg.read : msg.read
+  );
+
   return (
     <div className="messages-container">
       <h2 className="messages-title">Inbox</h2>
-      <div className="messages-list">
-        {messages.map((msg) => (
-          <div
-            key={msg._id}
-            className="message-card"
-            onClick={() => setSelectedMessage(msg)}
+
+      <div style={{ marginBottom: 15 }}>
+        {["unread", "read"].map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setFilter(tab)}
+            style={
+              filter === tab
+                ? {
+                    padding: "8px 16px",
+                    marginRight: 10,
+                    border: "none",
+                    borderRadius: 4,
+                    cursor: "pointer",
+                    fontWeight: 600,
+                    backgroundColor: "#659377",
+                    color: "white",
+                    transition: "background-color 0.3s ease",
+                  }
+                : {
+                    padding: "8px 16px",
+                    marginRight: 10,
+                    border: "none",
+                    borderRadius: 4,
+                    cursor: "pointer",
+                    fontWeight: 600,
+                    backgroundColor: "#eee",
+                    color: "#333",
+                    transition: "background-color 0.3s ease",
+                  }
+            }
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.backgroundColor =
+                filter === tab ? "#527055" : "#ddd")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.backgroundColor =
+                filter === tab ? "#659377" : "#eee")
+            }
           >
-            <div className="message-header">
-              <span className="message-name">
-                {msg.firstName} {msg.lastName}
-              </span>
-              <span
-                className={`message-status ${msg.read ? "read" : "unread"}`}
-              >
-                {msg.read ? "Read" : "Unread"}
-              </span>
-            </div>
-            <div className="message-email">{msg.email}</div>
-            <div className="message-body">{msg.message}</div>
-          </div>
+            {tab.charAt(0).toUpperCase() + tab.slice(1)}
+          </button>
         ))}
+      </div>
+
+      <div className="messages-list">
+        {loading ? (
+          <p>Loading messages...</p>
+        ) : filteredMessages.length === 0 ? (
+          <p>No messages to show.</p>
+        ) : (
+          filteredMessages.map((msg) => (
+            <div
+              key={msg._id}
+              className="message-card"
+              onClick={() => setSelectedMessage(msg)}
+            >
+              <div className="message-header">
+                <span className="message-name">
+                  {msg.firstName} {msg.lastName}
+                </span>
+                <span
+                  className={`message-status ${msg.read ? "read" : "unread"}`}
+                >
+                  {msg.read ? "Read" : "Unread"}
+                </span>
+              </div>
+              <div className="message-email">{msg.email}</div>
+              <div className="message-body">{msg.message}</div>
+            </div>
+          ))
+        )}
       </div>
 
       <ReplyBox
