@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "../styles/contact.css";
 import axios from "../api/axios";
+import NewsletterSubscription from "./NewsLetterSubscription";
 
 const Contact = () => {
   const [msg, setMsg] = useState("");
@@ -92,6 +93,8 @@ const Contact = () => {
         {msg && <p>{msg}</p>}
         <button>{loading ? "Sending" : "Send"}</button>
       </form>
+
+      <NewsletterSubscription />
     </div>
   );
 };

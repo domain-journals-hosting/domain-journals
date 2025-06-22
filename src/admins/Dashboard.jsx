@@ -6,7 +6,7 @@ import { useState } from "react";
 import axios from "../api/axios";
 
 const Dashboard = () => {
-  const { user, setUser, sendResetMail } = useUser();
+  const { user, setUser, sendResetMail, logout } = useUser();
   const [uploading, setUploading] = useState(false);
   const navigate = useNavigate();
 
@@ -37,8 +37,8 @@ const Dashboard = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post("/logout", {}, { withCredentials: true });
-      setUser(null);
+      await axios.post("admin/logout", {}, { withCredentials: true });
+      logout();
       navigate("/login");
     } catch (err) {
       console.error("Logout failed", err);
@@ -100,6 +100,11 @@ const Dashboard = () => {
         <li>
           <Link to="/admin/message" style={styles.link}>
             See all messages
+          </Link>
+        </li>
+        <li>
+          <Link to="/admin/newsletter" style={styles.link}>
+            Send a newsletter
           </Link>
         </li>
       </ul>
