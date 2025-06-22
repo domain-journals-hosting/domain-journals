@@ -1,5 +1,7 @@
 .messages-container {
   width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
   max-width: 600px;
   margin: 30px auto;
   font-family: sans-serif;
@@ -7,6 +9,7 @@
 
 .messages-title {
   font-size: 24px;
+  margin-left: 10px;
   margin-bottom: 20px;
   color: #333;
 }
