@@ -51,7 +51,7 @@ const ReviewCarousel = () => {
   useEffect(() => {
     carouselInterval.current = setInterval(() => {
       handleSlide("right");
-    }, 4000);
+    }, 10000);
     return () => clearInterval(carouselInterval.current);
   }, [handleSlide]);
 
