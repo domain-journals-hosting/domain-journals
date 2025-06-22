@@ -116,7 +116,7 @@ const ManuscriptForm = () => {
   };
 
   return (
-    <div className="form-wrapper">
+    <div className="form-wrapper" style={{ paddingTop: "70px" }}>
       <h1>Submit a Manuscript</h1>
       <form onSubmit={handleSubmit}>
         <label htmlFor="name">Name:</label>
@@ -172,7 +172,7 @@ const ManuscriptForm = () => {
           onChange={(e) => setAbstract(e.target.value)}
         ></textarea>
 
-        <label htmlFor="file">Please attach your file as pdf:</label>
+        <label htmlFor="file">Please attach your file as pdf/doc:</label>
         <input
           required
           id="file"

@@ -6,108 +6,102 @@ import useScreenSize from "../hooks/useScreenSize";
 import { useAuth } from "../hooks/useAuthor";
 import { useUser } from "../hooks/useUser";
 
-const Nav = () => {
+const Nav = ({ isHeroVisible }) => {
   const isMobile = useScreenSize();
   const iconRef = useRef(null);
   const location = useLocation();
-
-  const [isOpened, setIsOpened] = useState(false);
   const { user } = useAuth();
   const admin = useUser();
+
+  const [isOpened, setIsOpened] = useState(false);
+  const [visibleLinks, setVisibleLinks] = useState([]);
+
+  const links = [
+    { to: "/", label: "Home" },
+    { to: "/journals", label: "Journals" },
+    { to: "/submit", label: "Submit manuscript" },
+    { to: "/contact", label: "Contact us" },
+  ];
+
+  if (admin.user) links.push({ to: "/admin/dashboard", label: "Dashboard" });
+  if (!user && !admin.user) {
+    links.push({ to: "/signup", label: "Sign up" });
+    links.push({ to: "/login", label: "Log in" });
+  }
+  if (user) links.push({ to: "/author", label: "View profile" });
+
   const toggleMenu = () => {
-    setIsOpened((prev) => !prev);
+    const opening = !isOpened;
+    setIsOpened(opening);
+    if (opening) {
+      let current = [];
+      links.forEach((_, i) => {
+        setTimeout(() => {
+          current = [...links.slice(0, i + 1)];
+          setVisibleLinks(current);
+        }, (300 / links.length) * i);
+      });
+    } else {
+      setVisibleLinks([]);
+    }
+
     if (iconRef.current) {
       iconRef.current.classList.remove("animate-icon");
-      void iconRef.current.offsetWidth; // force reflow
+      void iconRef.current.offsetWidth;
       iconRef.current.classList.add("animate-icon");
     }
   };
 
-  if (location.pathname.startsWith("/journals/")) {
-    return;
-  }
+  if (location.pathname.startsWith("/journals/")) return null;
+  if (isHeroVisible) return null;
+
   return (
     <>
-      <div className="nav-wrapper">
-        <h2>Domain Journals</h2>
-        {!isMobile && (
+      <div
+        className="nav-wrapper"
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 999,
+        }}
+      >
+        <h1 style={{ whiteSpace: "nowrap" }}>Domain Journals</h1>
+        {!isMobile ? (
           <nav className="big-screen">
-            <Link to="/">
-              <li>Home</li>
-            </Link>
-            <Link to="/journals">
-              <li>Journals</li>
-            </Link>
-            <Link to="/submit">
-              <li>Submit manuscript</li>
-            </Link>
-            <Link to="/contact">
-              <li>Contact us</li>
-            </Link>
-            {admin.user && (
-              <Link to="/admin/dashboard">
-                <li>Dashboard</li>
+            {links.map((item) => (
+              <Link to={item.to} key={item.to}>
+                <li>{item.label}</li>
               </Link>
-            )}
-
-            {!user && !admin.user && (
-              <Link to="/signup">
-                <li>Sign up</li>
-              </Link>
-            )}
-            {!user && !admin.user && (
-              <Link to="/login">
-                <li>Log in</li>
-              </Link>
-            )}
-            {user && (
-              <Link to={`/author`}>
-                <li>View profile</li>
-              </Link>
-            )}
+            ))}
           </nav>
-        )}
-        {isMobile && (
+        ) : (
           <div className="icon-wrapper" onClick={toggleMenu} ref={iconRef}>
             {isOpened ? <FaTimes /> : <FaBars />}
           </div>
         )}
       </div>
-      {isOpened && isMobile && (
-        <nav>
-          <Link to="/">
-            <li>Home</li>
-          </Link>
-          <Link to="/journals">
-            <li>Journals</li>
-          </Link>
-          <Link to="/submit">
-            <li>Submit manuscript</li>
-          </Link>
-          <Link to="/contact">
-            <li>Contact us</li>
-          </Link>
-          {admin.user && (
-            <Link to="/admin/dashboard">
-              <li>Dashboard</li>
-            </Link>
-          )}
 
-          {!user && !admin.user && (
-            <Link to="/signup">
-              <li>Sign up</li>
+      {isMobile && isOpened && (
+        <nav className="mobile show" style={{ marginTop: "4.2rem" }}>
+          {visibleLinks.map((item) => (
+            <Link
+              to={item.to}
+              key={item.to}
+              style={{
+                transition: "all 0.3s ease",
+                opacity: 1,
+                transform: "translateY(0)",
+              }}
+              onClick={() => {
+                setIsOpened(false);
+                setVisibleLinks([]);
+              }}
+            >
+              <li>{item.label}</li>
             </Link>
-          )}
-          {!user && !admin.user && (
-            <Link to="/login">
-              <li>Log in</li>
-            </Link>
-          )}
-          {user && (
-            <Link to={`/author`}>
-              <li>View profile</li>
-            </Link>
-          )}
+          ))}
         </nav>
       )}
     </>

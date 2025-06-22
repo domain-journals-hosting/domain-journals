@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import journals from "../data/journals.json";
 import "../styles/journalsList.css";
 import health from "../assets/health.jpg";
@@ -18,13 +18,30 @@ const source = (string) =>
 
 const JournalsList = () => {
   const [expanded, setExpanded] = useState(null);
+  const navigate = useNavigate();
+  const delayRef = useRef(null);
+  useEffect(() => {
+    return () => clearTimeout(delayRef.current);
+  }, []);
+  const handleMouseEnter = (slug) => {
+    clearTimeout(delayRef.current);
+    delayRef.current = setTimeout(() => {
+      setExpanded(slug);
+    }, 500);
+  };
+
+  const handleMouseLeave = () => {
+    clearTimeout(delayRef.current);
+    setExpanded(null);
+  };
 
   const toggleExpand = (slug) => {
+    clearTimeout(delayRef.current);
     setExpanded((prev) => (prev === slug ? null : slug));
   };
 
   return (
-    <div className="journal-container">
+    <div className="journal-container" style={{ paddingTop: "70px" }}>
       {journals.map((journalObject) => {
         const isActive = expanded === journalObject.slug;
         return (
@@ -34,7 +51,7 @@ const JournalsList = () => {
               <button
                 className="expand-btn"
                 onClick={() => toggleExpand(journalObject.slug)}
-                onMouseEnter={() => setExpanded(journalObject.slug)}
+                onMouseEnter={() => handleMouseEnter(journalObject.slug)}
               >
                 {isActive ? "✖" : "➕"}
               </button>
@@ -42,7 +59,7 @@ const JournalsList = () => {
               {isActive && (
                 <div
                   className="overlay-actions"
-                  onMouseLeave={() => setExpanded(null)}
+                  onMouseLeave={handleMouseLeave}
                 >
                   <Link to={journalObject.slug}>Home</Link>
                   <Link to={`${journalObject.slug}/editorial-board`}>
@@ -54,8 +71,12 @@ const JournalsList = () => {
                 </div>
               )}
             </div>
-            <h2>{journalObject.title}</h2>
-            <p>{journalObject.description.substring(0, 300)}...</p>
+            <h2 onClick={() => navigate(`${journalObject.slug}`)}>
+              {journalObject.title}
+            </h2>
+            <p onClick={() => navigate(`${journalObject.slug}`)}>
+              {journalObject.description.substring(0, 300)}...
+            </p>
           </div>
         );
       })}

@@ -1,29 +1,38 @@
-import journals from "../data/journals.json";
-import { FaArrowRight, FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import "../styles/home.css";
-import logo from "../assets/logo.jpg";
+import { useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import journals from "../data/journals.json";
+import welcome from "../assets/welcome.jpg";
+import "../styles/home.css";
 import Contact from "./Contact";
-import { useEffect, useState } from "react";
 import JournalCarousel from "../journal/JournalCarousel";
 import useScreenSize from "../hooks/useScreenSize";
 import RecentArticles from "./RecentArticles";
 import ReviewCarousel from "./ReviewCarousel";
-import welcome from "../assets/welcome.jpg";
+import { FaArrowRight } from "react-icons/fa";
 
-const Home = () => {
-  const isMobile = useScreenSize();
+const Home = ({ setIsHeroVisible }) => {
+  const heroRef = useRef();
   const navigate = useNavigate();
 
-  const truncate = (str, n) =>
-    str.length > n ? str.substr(0, n - 1) + "…" : str;
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!heroRef.current) return;
+      const heroBottom = heroRef.current.getBoundingClientRect().bottom;
+      const offset = 100; // show nav only after 100px past bottom
+      setIsHeroVisible(heroBottom - offset > 0);
+    };
+
+    handleScroll(); // run initially
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [setIsHeroVisible]);
 
   return (
     <div className="home-wrapper">
-      <div className="hero-banner">
+      <div className="hero-banner" ref={heroRef}>
         <img src={welcome} alt="Welcome" className="hero-image" />
         <div className="hero-text">
-          <h1 className="typing"> Discover. Inspire. Innovate.</h1>
+          <h1 className="typing">Discover. Inspire. Innovate.</h1>
           <p>
             Welcome to Domain Journals, your open-source gateway to
             groundbreaking research. From cutting-edge Health Studies and
@@ -38,6 +47,7 @@ const Home = () => {
           </Link>
         </div>
       </div>
+
       <JournalCarousel journals={journals} />
 
       <article>
@@ -96,6 +106,7 @@ const Home = () => {
           </p>
         </div>
       </section>
+
       <RecentArticles />
       <Contact />
     </div>

@@ -14,9 +14,55 @@ const AuthorProfile = () => {
   const [acceptedManuscripts, setAcceptedManuscripts] = useState([]);
   const navigate = useNavigate();
 
-  const handleNameUpdate = async () => {
-    if (!newName.trim()) return alert("Name cannot be empty.");
+  useEffect(() => {
+    const getManuscripts = async () => {
+      const res = await axios.get("/manuscript/getByUser");
+      setAllManuscripts(res.data);
+    };
+    const getAccepted = async () => {
+      const res = await axios.get("/accepted");
+      console.log(res);
+      setAcceptedManuscripts(res.data);
+    };
+    getManuscripts();
+    getAccepted();
+  }, []);
 
+  const handleLogout = async () => {
+    await axios.post("/author/logout", {}, { withCredentials: true });
+    logout();
+  };
+
+  const handleReset = async () => {
+    await sendResetMail();
+    navigate("/reset");
+  };
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+      setUploading(true);
+      const formData = new FormData();
+      formData.append("avatar", file);
+      const { data } = await axios.post("/file/avatar", formData, {
+        withCredentials: true,
+      });
+      await axios.patch(
+        "/author/avatar",
+        { authorId: user._id, avatarUrl: data.url },
+        { withCredentials: true }
+      );
+      setUser({ ...user, profilePicture: data.url });
+    } catch (err) {
+      console.error("Avatar upload failed", err);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleNameUpdate = async () => {
+    if (!newName.trim()) return;
     try {
       await axios.patch(
         "/author/",
@@ -26,259 +72,176 @@ const AuthorProfile = () => {
       setUser({ ...user, name: newName });
       setEditingName(false);
     } catch (err) {
-      console.error("Name update failed", err);
-      alert("Failed to update name.");
+      alert("Failed to update name");
     }
   };
 
-  useEffect(() => {
-    const getManuscripts = async () => {
-      const response = await axios.get("manuscript/getByUser");
-      setAllManuscripts(response.data);
-    };
-    const getAcceptedManuscripts = async () => {
-      const response = await axios.get("/accepted");
-      setAcceptedManuscripts(response.data);
-    };
-    getManuscripts();
-    getAcceptedManuscripts();
-  }, []);
-
-  const handleLogout = async () => {
-    await axios.post("author/logout", {}, { withCredentials: true });
-    logout();
-  };
-
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    try {
-      setUploading(true);
-      const formData = new FormData();
-      formData.append("avatar", file);
-
-      const { data } = await axios.post("/file/avatar", formData, {
-        withCredentials: true,
-      });
-      const avatarUrl = data.url;
-
-      await axios.patch(
-        "/author/avatar",
-        { authorId: user._id, avatarUrl },
-        { withCredentials: true }
-      );
-
-      setUser({ ...user, profilePicture: avatarUrl });
-    } catch (err) {
-      console.error("Upload failed", err);
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  const handleReset = async () => {
-    await sendResetMail();
-    navigate("/reset");
-  };
+  console.log(acceptedManuscripts);
 
   return (
-    <div style={styles.container}>
-      <div style={styles.profileHeader}>
-        <img
-          src={user.profilePicture || defaultAvatar}
-          alt="Profile"
-          style={styles.avatar}
-        />
-        <label
-          htmlFor="dp"
-          style={styles.cameraLabel}
-          title="Change profile picture"
-        >
-          <FaCamera size={20} style={{ color: "black" }} />
-        </label>
-        <input
-          id="dp"
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-          disabled={uploading}
-          style={{ display: "none" }}
-        />
-      </div>
-
-      <div style={styles.nameRow}>
-        {!editingName ? (
-          <>
-            <h1 style={styles.name}>{user.name}</h1>
-            <FaPencilAlt
-              size={16}
-              title="Edit name"
-              style={styles.pencil}
-              onClick={() => setEditingName(true)}
+    <div
+      style={{
+        background: "#f1f8e9",
+        minHeight: "100vh",
+        padding: "2rem 1rem",
+        paddingTop: "70px",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: 900,
+          margin: "0 auto",
+          background: "#fff",
+          borderRadius: 16,
+          padding: "2rem",
+          boxShadow: "0 0 15px rgba(0,0,0,0.1)",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
+          <div style={{ position: "relative" }}>
+            <img
+              src={user.profilePicture || defaultAvatar}
+              alt="avatar"
+              style={{
+                width: 120,
+                height: 120,
+                borderRadius: "50%",
+                objectFit: "cover",
+              }}
             />
-          </>
-        ) : (
-          <div style={styles.editRow}>
+            <label
+              htmlFor="avatar-upload"
+              style={{
+                position: "absolute",
+                bottom: 0,
+                right: 0,
+                background: "#659377",
+                padding: 6,
+                borderRadius: "50%",
+                cursor: "pointer",
+              }}
+            >
+              <FaCamera size={14} color="#fff" />
+            </label>
             <input
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
-              style={styles.nameInput}
-              placeholder="Enter full name"
+              id="avatar-upload"
+              type="file"
+              style={{ display: "none" }}
+              onChange={handleFileChange}
             />
-            <button onClick={handleNameUpdate} style={styles.saveButton}>
-              Save
-            </button>
           </div>
-        )}
-      </div>
-      {uploading && <p style={styles.uploadingText}>Uploading...</p>}
-
-      <div style={styles.buttonGroup}>
-        <button style={styles.button} onClick={handleLogout}>
-          Logout
-        </button>
-        <button
-          style={{ ...styles.button, marginLeft: 10 }}
-          onClick={handleReset}
-        >
-          Reset Password
-        </button>
-      </div>
-      <Link to="/review" style={{ fontWeight: 700 }}>
-        Leave a review?
-      </Link>
-      {allManuscripts.length > 0 && (
-        <section style={styles.section}>
-          <h2 style={styles.sectionTitle}>Your pending manuscripts</h2>
-          {allManuscripts.map((manuscript) => (
-            <p key={manuscript._id} style={styles.manuscriptItem}>
-              {manuscript.title} - <em>{manuscript.status}</em>
+          <div>
+            {!editingName ? (
+              <h1 style={{ fontSize: "1.8rem", color: "#093238" }}>
+                {user.name}{" "}
+                <FaPencilAlt
+                  size={14}
+                  color="#659377"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => setEditingName(true)}
+                />
+              </h1>
+            ) : (
+              <div style={{ display: "flex", gap: 10 }}>
+                <input
+                  value={newName}
+                  onChange={(e) => setNewName(e.target.value)}
+                  style={{
+                    padding: 8,
+                    borderRadius: 6,
+                    border: "1px solid #ccc",
+                  }}
+                />
+                <button
+                  onClick={handleNameUpdate}
+                  style={{
+                    background: "#659377",
+                    color: "#fff",
+                    padding: "8px 16px",
+                    border: "none",
+                    borderRadius: 6,
+                  }}
+                >
+                  Save
+                </button>
+              </div>
+            )}
+            <p style={{ color: uploading ? "#c62828" : "#4caf50" }}>
+              {uploading ? "Uploading avatar..." : null}
             </p>
-          ))}
-        </section>
-      )}
+          </div>
+        </div>
 
-      {acceptedManuscripts.length > 0 && (
-        <section style={styles.section}>
-          <h2 style={styles.sectionTitle}>Your published manuscripts</h2>
-          {acceptedManuscripts.map((manuscript) => (
-            <p key={manuscript._id} style={styles.manuscriptItem}>
-              {manuscript.title}
-            </p>
-          ))}
-        </section>
-      )}
+        <div style={{ display: "flex", gap: 12, marginTop: 24 }}>
+          <button
+            onClick={handleLogout}
+            style={{
+              background: "#1e9965",
+              color: "#fff",
+              padding: "0.5rem 1.2rem",
+              border: "none",
+              borderRadius: 6,
+            }}
+          >
+            Logout
+          </button>
+          <button
+            onClick={handleReset}
+            style={{
+              background: "#659377",
+              color: "#fff",
+              padding: "0.5rem 1.2rem",
+              border: "none",
+              borderRadius: 6,
+            }}
+          >
+            Reset Password
+          </button>
+        </div>
+
+        <div style={{ marginTop: 40 }}>
+          {allManuscripts.length > 0 && (
+            <section>
+              <h2 style={{ color: "#093238" }}>Pending Manuscripts</h2>
+              {allManuscripts.map((m) => (
+                <div key={m._id} style={{ marginBottom: 10 }}>
+                  <strong>{m.title}</strong> - <em>{m.status}</em>
+                  {m.status === "approved" && (
+                    <Link
+                      to={`/pay/${m._id}`}
+                      style={{ marginLeft: 10, color: "#1e9965" }}
+                    >
+                      Pay now
+                    </Link>
+                  )}
+                </div>
+              ))}
+            </section>
+          )}
+
+          {acceptedManuscripts.length > 0 && (
+            <section style={{ marginTop: 30 }}>
+              <h2 style={{ color: "#093238" }}>Published Manuscripts</h2>
+              {acceptedManuscripts.map((m) => (
+                <p key={m._id}>
+                  <strong>{m.title}</strong> -{" "}
+                  <Link to={`/journals/${m.journal}/archive`}>
+                    view in the current issue
+                  </Link>
+                </p>
+              ))}
+            </section>
+          )}
+        </div>
+
+        <div style={{ marginTop: 40 }}>
+          <Link to="/review" style={{ color: "#659377", fontWeight: 600 }}>
+            Leave a review?
+          </Link>
+        </div>
+      </div>
     </div>
   );
 };
 
 export default AuthorProfile;
-
-const styles = {
-  container: {
-    maxWidth: 600,
-    margin: "40px auto",
-    padding: 20,
-    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    boxShadow: "0 2px 12px rgba(0,0,0,0.1)",
-    textAlign: "center",
-  },
-  profileHeader: {
-    position: "relative",
-    display: "inline-block",
-    marginBottom: 15,
-  },
-  avatar: {
-    width: 120,
-    height: 120,
-    borderRadius: "50%",
-    objectFit: "cover",
-  },
-  cameraLabel: {
-    position: "absolute",
-    bottom: 5,
-    right: 5,
-    backgroundColor: "#007bff",
-    borderRadius: "50%",
-    padding: 8,
-    color: "white",
-    cursor: "pointer",
-  },
-  name: {
-    margin: "10px 0 20px",
-    fontWeight: "700",
-    fontSize: "1.8rem",
-  },
-  uploadingText: {
-    color: "#007bff",
-    marginBottom: 20,
-  },
-  buttonGroup: {
-    marginBottom: 30,
-  },
-  button: {
-    backgroundColor: "#007bff",
-    border: "none",
-    padding: "10px 20px",
-    color: "white",
-    fontSize: "1rem",
-    borderRadius: 6,
-    cursor: "pointer",
-    transition: "background-color 0.2s ease",
-  },
-  section: {
-    textAlign: "left",
-    marginBottom: 30,
-  },
-  sectionTitle: {
-    borderBottom: "2px solid #007bff",
-    paddingBottom: 6,
-    marginBottom: 12,
-    fontSize: "1.4rem",
-  },
-  manuscriptItem: {
-    marginBottom: 6,
-    fontSize: "1rem",
-  },
-  nameRow: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 8,
-    marginBottom: 10,
-  },
-
-  pencil: {
-    cursor: "pointer",
-    color: "#555",
-  },
-
-  editRow: {
-    display: "flex",
-    gap: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 10,
-  },
-
-  nameInput: {
-    padding: "8px 12px",
-    borderRadius: 6,
-    border: "1px solid #ccc",
-    fontSize: "1rem",
-    minWidth: 200,
-  },
-
-  saveButton: {
-    padding: "8px 16px",
-    backgroundColor: "#007bff",
-    color: "white",
-    border: "none",
-    borderRadius: 6,
-    cursor: "pointer",
-    fontWeight: 600,
-  },
-};

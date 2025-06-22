@@ -81,14 +81,10 @@ const ReviewCarousel = () => {
   if (!reviews.length) return <p>No reviews to show </p>;
   return (
     <div
-      className="reviews-carousel"
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
       style={{
         position: "relative",
-        maxWidth: 600,
-        overflow: "visible",
-        margin: "50px auto",
+        width: `${isMobile ? "100%" : "600px"}`,
+        height: "400px",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -99,10 +95,10 @@ const ReviewCarousel = () => {
           onClick={() => handleSlide("left")}
           style={{
             position: "absolute",
-            left: 0,
+            left: "-100px",
             top: "50%",
             transform: "translateY(-50%)",
-            background: "none",
+            backgroundColor: "darkgreen",
             border: "none",
             fontSize: 24,
             zIndex: 1,
@@ -112,99 +108,112 @@ const ReviewCarousel = () => {
           <FaChevronLeft />
         </button>
       )}
-
       <div
-        className="track"
+        className="reviews-carousel"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
         style={{
-          display: "flex",
+          position: "relative",
+          maxWidth: 600,
           overflow: "visible",
-          width: `${activeReviews.length * 100}%`,
-          transform: `translateX(${translateValue})`,
-          transition: direction ? "transform 0.5s ease-in-out" : "none",
+          margin: "50px auto",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
-        {activeReviews.map((review, idx) => (
-          <div
-            key={idx}
-            className="review-wrapper"
-            style={{
-              justifySelf: "center",
-              width: "100%",
-              flex: "100%",
-              position: "relative",
-              overflow: "visible",
-            }}
-          >
-            <img
-              src={review?.profilePicture || defaultAvatar}
-              alt="Author avatar"
-              className="floating-avatar"
-              width={80}
-              height={80}
-              style={{
-                borderRadius: "50%",
-                position: "absolute",
-                top: "-40px",
-                left: "50%",
-                transform: "translateX(-50%)",
-                zIndex: 2,
-                boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
-              }}
-            />
-
+        <div
+          className="track"
+          style={{
+            display: "flex",
+            overflow: "visible",
+            width: `${activeReviews.length * 100}%`,
+            transform: `translateX(${translateValue})`,
+            transition: direction ? "transform 0.5s ease-in-out" : "none",
+          }}
+        >
+          {activeReviews.map((review, idx) => (
             <div
-              className="review-card"
+              key={idx}
+              className="review-wrapper"
               style={{
-                background: "#f9f9f9",
-                borderRadius: 10,
-                boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-                padding: "50px 20px 20px",
-                clipPath: "polygon(0 0, 100% 0, 100% 100%, 25% 100%, 0% 75%)",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                height: "100%",
-                backgroundColor: "#659377",
+                justifySelf: "center",
                 width: "100%",
+                flex: "100%",
                 position: "relative",
+                overflow: "visible",
               }}
             >
-              <p
+              <img
+                src={review?.profilePicture || defaultAvatar}
+                alt="Author avatar"
+                className="floating-avatar"
+                width={80}
+                height={80}
                 style={{
-                  color: " #F1F8E9",
-                  margin: "20px 0",
-                  fontStyle: "italic",
-                  fontSize: 20,
-                  textAlign: "center",
-                }}
-              >
-                {review?.text}
-              </p>
-              <p
-                style={{
-                  color: "#093238",
+                  borderRadius: "50%",
                   position: "absolute",
-                  right: "20px",
-                  bottom: "15px",
-                  fontWeight: "800",
+                  top: "-40px",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  zIndex: 2,
+                  boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+                }}
+              />
+
+              <div
+                className="review-card"
+                style={{
+                  background: "#f9f9f9",
+                  borderRadius: 10,
+                  boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+                  padding: "50px 20px 20px",
+                  clipPath: "polygon(0 0, 100% 0, 100% 100%, 25% 100%, 0% 75%)",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  height: "100%",
+                  backgroundColor: "#659377",
+                  width: "100%",
+                  position: "relative",
                 }}
               >
-                - {review?.name}
-              </p>
+                <p
+                  style={{
+                    color: " #F1F8E9",
+                    margin: "20px 0",
+                    fontStyle: "italic",
+                    fontSize: 20,
+                    textAlign: "center",
+                  }}
+                >
+                  {review?.text}
+                </p>
+                <p
+                  style={{
+                    color: "#093238",
+                    position: "absolute",
+                    right: "20px",
+                    bottom: "15px",
+                    fontWeight: "800",
+                  }}
+                >
+                  - {review?.name}
+                </p>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-
+          ))}
+        </div>
+      </div>{" "}
       {!isMobile && (
         <button
           onClick={() => handleSlide("right")}
           style={{
             position: "absolute",
-            right: 0,
+            backgroundColor: "darkgreen",
+            right: "-80px",
             top: "50%",
             transform: "translateY(-50%)",
-            background: "none",
             border: "none",
             fontSize: 24,
             zIndex: 1,

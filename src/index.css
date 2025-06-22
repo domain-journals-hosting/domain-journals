@@ -4,17 +4,14 @@
   box-sizing: border-box;
 }
 
+html,
 body {
-  color: darkgreen;
+  height: 100%;
   margin: 0;
 }
 
-.App {
+main {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-}
-
-button {
-  background-color: #659377;
 }

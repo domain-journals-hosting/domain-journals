@@ -41,64 +41,79 @@ import Messages from "./admins/Messages";
 import Footer from "./components/Footer";
 import NewsletterSender from "./admins/NewsLetterSender";
 import AuditReviews from "./admins/AuditReviews";
+import { useEffect, useState } from "react";
 
 function App() {
+  const [isHeroVisible, setIsHeroVisible] = useState(true);
+  const isJournalsPage = location.pathname.startsWith("/journals/");
+  const isHomePage = location.pathname === "/";
+  const showNav = !isJournalsPage && !isHomePage;
+
+  useEffect(() => {
+    if (!isHomePage) setIsHeroVisible(false);
+  }, [isHomePage]);
   return (
     <div className="App">
-      <Nav />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/unauthorized" element={<Unauthorized />} />
-        <Route path="/journals" element={<JournalsList />} />
-        <Route path="/journals/:slug" element={<JournalsHome />} />
-        <Route
-          path="/journals/:slug/current-issue"
-          element={<CurrentIssue />}
-        />
-        <Route
-          path="/journals/:slug/editorial-board"
-          element={<EditorialBoard />}
-        />
-        <Route element={<RequireUserAuth allowedRoles={["editor", "admin"]} />}>
-          <Route path="/admin/dashboard" element={<Dashboard />} />
-          <Route path="/admin/review" element={<ReviewManuscripts />} />
-          <Route path="/admin/message" element={<Messages />} />
-          <Route path="admin/audit" element={<AuditReviews />} />
-          <Route path="/admin/newsletter" element={<NewsletterSender />} />
-        </Route>
-        <Route path="/admin/forgot" element={<AdminForgotPW />} />
-        <Route path="/admin/reset" element={<ResetAdminPW />} />
-        <Route element={<RequireUserAuth allowedRoles={["admin"]} />}>
-          <Route path="/admin/invite" element={<InviteUser />} />
-          <Route path="/admin/all" element={<UsersList />} />
-          <Route path="/admin/issue" element={<NewIssue />} />
-        </Route>
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/invite/:token" element={<CompleteInvite />} />
-        <Route element={<RequireAuth />}>
-          <Route path="/submit" element={<ManuscriptForm />} />
-          <Route path="/author" element={<AuthorProfile />} />
-          <Route path="/review" element={<NewReview />} />
-        </Route>
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/forgot" element={<ForgotPw />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/reset" element={<ResetPassword />} />
-        <Route path="/journals/:slug/guidelines" element={<Guidelines />} />
-        <Route path="/journals/:slug/archive" element={<Archive />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/publication-ethics" element={<PublicationEthics />} />
-        <Route path="/review-process" element={<ReviewProcess />} />
-        <Route path="/support" element={<Support />} />
-        <Route path="/success" element={<Success />} />
-        <Route path="/edit/:token" element={<EditManuscript />} />
-        <Route path="/delete/:token" element={<DeleteManuscript />} />
-        <Route path="/status/:id" element={<TrackManuscript />} />
-        <Route path="/pay/:manuscriptId" element={<Pay />} />
-        <Route path="/payment-success" element={<PaymentSuccess />} />
-        <Route path="/*" element={<Missing />} />
-      </Routes>
-
+      <Nav isHeroVisible={isHeroVisible} />
+      <main style={{ paddingTop: !showNav ? 0 : "70px" }}>
+        <Routes>
+          <Route
+            path="/"
+            element={<Home setIsHeroVisible={setIsHeroVisible} />}
+          />
+          <Route path="/unauthorized" element={<Unauthorized />} />
+          <Route path="/journals" element={<JournalsList />} />
+          <Route path="/journals/:slug" element={<JournalsHome />} />
+          <Route
+            path="/journals/:slug/current-issue"
+            element={<CurrentIssue />}
+          />
+          <Route
+            path="/journals/:slug/editorial-board"
+            element={<EditorialBoard />}
+          />
+          <Route
+            element={<RequireUserAuth allowedRoles={["editor", "admin"]} />}
+          >
+            <Route path="/admin/dashboard" element={<Dashboard />} />
+            <Route path="/admin/review" element={<ReviewManuscripts />} />
+            <Route path="/admin/message" element={<Messages />} />
+            <Route path="admin/audit" element={<AuditReviews />} />
+            <Route path="/admin/newsletter" element={<NewsletterSender />} />
+          </Route>
+          <Route path="/admin/forgot" element={<AdminForgotPW />} />
+          <Route path="/admin/reset" element={<ResetAdminPW />} />
+          <Route element={<RequireUserAuth allowedRoles={["admin"]} />}>
+            <Route path="/admin/invite" element={<InviteUser />} />
+            <Route path="/admin/all" element={<UsersList />} />
+            <Route path="/admin/issue" element={<NewIssue />} />
+          </Route>
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/invite/:token" element={<CompleteInvite />} />
+          <Route element={<RequireAuth />}>
+            <Route path="/submit" element={<ManuscriptForm />} />
+            <Route path="/author" element={<AuthorProfile />} />
+            <Route path="/review" element={<NewReview />} />
+          </Route>
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/forgot" element={<ForgotPw />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/reset" element={<ResetPassword />} />
+          <Route path="/journals/:slug/guidelines" element={<Guidelines />} />
+          <Route path="/journals/:slug/archive" element={<Archive />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/publication-ethics" element={<PublicationEthics />} />
+          <Route path="/review-process" element={<ReviewProcess />} />
+          <Route path="/support" element={<Support />} />
+          <Route path="/success" element={<Success />} />
+          <Route path="/edit/:token" element={<EditManuscript />} />
+          <Route path="/delete/:token" element={<DeleteManuscript />} />
+          <Route path="/status/:id" element={<TrackManuscript />} />
+          <Route path="/pay/:manuscriptId" element={<Pay />} />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/*" element={<Missing />} />
+        </Routes>
+      </main>
       <Footer />
     </div>
   );

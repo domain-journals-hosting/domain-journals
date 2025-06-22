@@ -336,11 +336,17 @@
   font-weight: 700;
   color: #dce5dd;
   width: 0;
-  font-size: clamp(1rem, 5vw, 2.5rem); /* auto-resize but stay single-line */
+  font-size: clamp(1rem, 5vw, 2.5rem);
 }
 
 @media (max-width: 600px) {
   .hero-text h1 {
-    font-size: 1.5rem;
+    font-size: 1rem;
+    max-width: 28ch;
+  }
+}
+@media (min-width: 700px) {
+  nav h1 {
+    font-size: 2rem;
   }
 }
