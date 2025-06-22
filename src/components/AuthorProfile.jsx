@@ -97,7 +97,14 @@ const AuthorProfile = () => {
           boxShadow: "0 0 15px rgba(0,0,0,0.1)",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 24,
+            flexDirection: "column",
+          }}
+        >
           <div style={{ position: "relative" }}>
             <img
               src={user.profilePicture || defaultAvatar}
@@ -133,7 +140,7 @@ const AuthorProfile = () => {
           <div>
             {!editingName ? (
               <h1 style={{ fontSize: "1.8rem", color: "#093238" }}>
-                {user.name}{" "}
+                {user.name}
                 <FaPencilAlt
                   size={14}
                   color="#659377"
