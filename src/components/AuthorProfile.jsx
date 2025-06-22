@@ -139,7 +139,7 @@ const AuthorProfile = () => {
           </div>
           <div>
             {!editingName ? (
-              <h1 style={{ fontSize: "1.8rem", color: "#093238" }}>
+              <h2 style={{ fontSize: "1.3rem", color: "#093238" }}>
                 {user.name}
                 <FaPencilAlt
                   size={14}
@@ -147,7 +147,7 @@ const AuthorProfile = () => {
                   style={{ cursor: "pointer" }}
                   onClick={() => setEditingName(true)}
                 />
-              </h1>
+              </h2>
             ) : (
               <div style={{ display: "flex", gap: 10 }}>
                 <input

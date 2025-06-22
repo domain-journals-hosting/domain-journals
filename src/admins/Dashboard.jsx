@@ -229,11 +229,11 @@ const styles = {
     flexWrap: "wrap",
     justifyContent: "center",
     gap: "10px",
-    maxWidth: "800px", // restrict row width
+    maxWidth: "800px",
   },
 
   link: {
-    flex: "1 1 calc(25% - 10px)", // at most 4 per row
+    flex: "1 1 calc(25% - 10px)",
     minWidth: "120px",
     maxWidth: "180px",
     boxSizing: "border-box",

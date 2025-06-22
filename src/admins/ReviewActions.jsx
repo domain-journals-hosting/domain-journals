@@ -141,9 +141,8 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal }) => {
           </button>
         </>
       )}
-
       {status === "paid" && (
-        <>
+        <div className="paid-group">
           <div className="upload-section">
             <label htmlFor={`upload-${id}`}>
               Upload edited file (optional)
@@ -160,7 +159,7 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal }) => {
             </button>
           </div>
 
-          <div className="paid-actions">
+          <div className="publish-wrapper">
             <button
               className="btn publish"
               onClick={() => handleAction("publish")}
@@ -168,7 +167,7 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal }) => {
               {loadingAction === "publish" ? "Publishing..." : "Publish"}
             </button>
           </div>
-        </>
+        </div>
       )}
 
       {status === "rejected" && (
