@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "../api/axios";
 import "../styles/currentIssue.css";
 import JournalHeader from "./JournalHeader";
+import RecentArticles from "../components/RecentArticles";
 export const CurrentIssue = () => {
   const { slug } = useParams();
   const [manuscripts, setManuscripts] = useState([]);
@@ -31,7 +32,7 @@ export const CurrentIssue = () => {
   }, [slug]);
 
   return (
-    <>
+    <div style={{ width: "100%" }}>
       <JournalHeader slug={slug} />
       <div className="current-issue">
         <h1>Current Issue</h1>
@@ -67,6 +68,7 @@ export const CurrentIssue = () => {
           </ul>
         )}
       </div>
-    </>
+      <RecentArticles />
+    </div>
   );
 };

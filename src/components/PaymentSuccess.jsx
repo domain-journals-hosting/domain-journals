@@ -16,7 +16,9 @@ const PaymentSuccess = () => {
 
     const fetchManuscript = async () => {
       try {
-        const { data } = await axios.get(`/manuscript/verify/${reference}`);
+        const { data } = await axios.get(
+          `/manuscript/verify/payment/${reference}`
+        );
         console.log(data);
         setManuscriptId(data._id);
       } catch (err) {

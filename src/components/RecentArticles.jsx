@@ -61,7 +61,6 @@ const RecentArticles = () => {
                     <button className="btn">Download</button>
                   </a>
                 </div>
-                <hr />
               </li>
             ))}
           </ul>

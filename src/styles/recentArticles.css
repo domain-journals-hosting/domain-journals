@@ -29,7 +29,9 @@
 }
 
 .article-card {
+  padding: 10px;
   border-radius: 8px;
+  border: 1px solid gray;
 }
 
 .article-title {

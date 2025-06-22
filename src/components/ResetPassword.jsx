@@ -64,6 +64,7 @@ const ResetPassword = () => {
   return (
     <div style={styles.container}>
       <h2 style={styles.heading}>Reset Password</h2>
+      <p>A 6 digit code has been sent to your email</p>
       {message && <p style={styles.message}>{message}</p>}
       {error && <p style={styles.error}>{error}</p>}
 

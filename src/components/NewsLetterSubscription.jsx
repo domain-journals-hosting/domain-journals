@@ -59,52 +59,45 @@ const NewsletterSubscription = () => {
 };
 
 export default NewsletterSubscription;
-
 const styles = {
-  section: {
-    backgroundColor: "#f1f8e9",
-    padding: "2rem",
-    textAlign: "center",
-    fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif',
-  },
   heading: {
-    fontSize: "1.8rem",
+    fontSize: "1.5rem",
     color: "#093238",
-    marginBottom: "1.5rem",
+    margin: "0 0 1rem",
+    fontWeight: 700,
   },
   box: {
     display: "flex",
     justifyContent: "center",
     alignItems: "stretch",
+    flexWrap: "wrap",
     maxWidth: "500px",
-    margin: "0 auto",
-    borderRadius: "4px",
+    borderRadius: "6px",
     overflow: "hidden",
-    gap: "0", // no gap needed because widths are fixed
   },
   input: {
-    width: "70%", // 70% width for input
-    padding: "1rem",
+    flex: "1 1 70%",
+    padding: "0.75rem 1rem",
     fontSize: "1rem",
     border: "none",
     outline: "none",
-    backgroundColor: "#fff",
-    fontWeight: "bold",
-    color: "#555",
+    backgroundColor: "#f9f9f9",
+    fontWeight: 500,
+    color: "#333",
   },
   button: {
-    width: "30%",
+    flex: "1 1 30%",
     backgroundColor: "#659377",
-    color: "white",
+    color: "#f1f8e9",
     fontSize: "1rem",
-    fontWeight: "bold",
+    fontWeight: 600,
     border: "none",
     cursor: "pointer",
-    padding: "50px 30px ",
     transition: "background 0.3s ease",
   },
   message: {
-    marginTop: "1rem",
     fontSize: "0.95rem",
+    fontWeight: 500,
+    marginTop: "0.8rem",
   },
 };

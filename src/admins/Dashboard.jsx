@@ -171,13 +171,14 @@ export default Dashboard;
 
 const styles = {
   container: {
+    padding: "20px",
+    paddingTop: "70px",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "column",
     width: "100%",
     margin: "0 auto",
-    padding: "20px",
     fontFamily: "sans-serif",
     backgroundColor: "#fff",
     borderRadius: "10px",
