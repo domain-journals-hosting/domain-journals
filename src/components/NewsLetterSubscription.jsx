@@ -76,9 +76,10 @@ const styles = {
     margin: "0 auto",
     borderRadius: "4px",
     overflow: "hidden",
+    gap: "0", // no gap needed because widths are fixed
   },
   input: {
-    flex: 1,
+    width: "70%", // 70% width for input
     padding: "1rem",
     fontSize: "1rem",
     border: "none",
@@ -88,13 +89,14 @@ const styles = {
     color: "#555",
   },
   button: {
+    width: "30%",
     backgroundColor: "#659377",
     color: "white",
-    padding: "0 2rem",
     fontSize: "1rem",
     fontWeight: "bold",
     border: "none",
     cursor: "pointer",
+    padding: "50px 30px ",
     transition: "background 0.3s ease",
   },
   message: {
