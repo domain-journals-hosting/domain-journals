@@ -34,12 +34,16 @@ const JournalsList = () => {
               <button
                 className="expand-btn"
                 onClick={() => toggleExpand(journalObject.slug)}
+                onMouseEnter={() => setExpanded(journalObject.slug)}
               >
                 {isActive ? "✖" : "➕"}
               </button>
 
               {isActive && (
-                <div className="overlay-actions">
+                <div
+                  className="overlay-actions"
+                  onMouseLeave={() => setExpanded(null)}
+                >
                   <Link to={journalObject.slug}>Home</Link>
                   <Link to={`${journalObject.slug}/editorial-board`}>
                     Editorial board
