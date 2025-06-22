@@ -18,7 +18,7 @@ const Pay = () => {
         }
       } catch (err) {
         console.error(err);
-        setError("Failed to initiate payment.");
+        setError(err?.response?.data?.error || "Failed to initiate payment.");
       } finally {
         setLoading(false);
       }
