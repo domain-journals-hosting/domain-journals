@@ -10,49 +10,66 @@ const ManuscriptStatusTracker = ({ currentStatus }) => {
   const isRejected = currentStatus === "rejected";
 
   return (
-    <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-      <p>
+    <div style={{ padding: "1rem 0" }}>
+      <p
+        style={{
+          marginBottom: "1rem",
+          fontStyle: "italic",
+          fontSize: "0.9rem",
+        }}
+      >
         These statuses are only valid until your manuscript has been uploaded
       </p>
-      {statusOrder.map((status, index) => {
-        const isActive = currentStatus === status;
-        const isDone =
-          statusOrder.indexOf(currentStatus) > index && !isRejected;
 
-        return (
-          <div
-            key={status}
-            style={{
-              display: "flex",
-              justifyContent: "start",
-              alignItems: "center",
+      <div style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
+        {statusOrder.map((status, index) => {
+          const isActive = currentStatus === status;
+          const isDone =
+            statusOrder.indexOf(currentStatus) > index && !isRejected;
 
-              padding: "10px",
-            }}
-          >
-            <div
-              style={{
-                width: "30px",
-                height: "30px",
-                borderRadius: "50%",
-                background: isActive ? "green" : isDone ? "#ccc" : "#eee",
-                color: isActive ? "#fff" : "#333",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontWeight: "bold",
-              }}
-            >
-              {index + 1}
+          return (
+            <div key={status} style={{ textAlign: "center" }}>
+              <div
+                style={{
+                  width: "32px",
+                  height: "32px",
+                  borderRadius: "50%",
+                  backgroundColor: isActive
+                    ? "green"
+                    : isDone
+                    ? "#ccc"
+                    : "#e0e0e0",
+                  color: isActive ? "#fff" : "#333",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontWeight: "bold",
+                  margin: "0 auto",
+                }}
+              >
+                {index + 1}
+              </div>
+              <small
+                style={{
+                  display: "block",
+                  marginTop: "0.5rem",
+                  fontSize: "0.75rem",
+                }}
+              >
+                {statusLabels[status]}
+              </small>
             </div>
-            <small style={{ fontSize: "0.8rem" }}>{statusLabels[status]}</small>
-          </div>
-        );
-      })}
+          );
+        })}
 
-      {isRejected && (
-        <div style={{ marginLeft: "20px", color: "crimson" }}>❌ Rejected</div>
-      )}
+        {isRejected && (
+          <div
+            style={{ marginLeft: "2rem", color: "crimson", fontWeight: "bold" }}
+          >
+            ❌ Rejected
+          </div>
+        )}
+      </div>
     </div>
   );
 };
