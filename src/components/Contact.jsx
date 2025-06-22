@@ -44,58 +44,59 @@ const Contact = () => {
     }
   };
   return (
-    <div className="contact-container">
-      <h2>Contact Us</h2>
-      <p>
-        <strong>Address:</strong> 484 Greg's Road, Lagos, Nigeria
-      </p>
-      <p>
-        <strong>Phone:</strong> 0812 345 6789
-      </p>
-      <p>
-        <strong>Email:</strong> contact@domainjournals.org
-      </p>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="firstname">First Name</label>
-        <input
-          required
-          type="text"
-          id="firstname"
-          value={firstName}
-          onChange={onFirstNameChange}
-        />
-        <label htmlFor="lastname">Last Name</label>
-        <input
-          required
-          type="text"
-          id="lastname"
-          value={lastName}
-          onChange={onLastNameChange}
-        />
-        <label htmlFor="email">Email</label>
-        <input
-          type="text"
-          id="email"
-          value={email}
-          onChange={onEmailChange}
-          required
-        />
-        <label htmlFor="message">Enter message</label>
-        <textarea
-          required
-          id="message"
-          rows={10}
-          value={message}
-          onChange={onMessageChange}
-        ></textarea>
+    <>
+      <div className="contact-container">
+        <h2>Contact Us</h2>
+        <p>
+          <strong>Address:</strong> 484 Greg's Road, Lagos, Nigeria
+        </p>
+        <p>
+          <strong>Phone:</strong> 0812 345 6789
+        </p>
+        <p>
+          <strong>Email:</strong> contact@domainjournals.org
+        </p>
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="firstname">First Name</label>
+          <input
+            required
+            type="text"
+            id="firstname"
+            value={firstName}
+            onChange={onFirstNameChange}
+          />
+          <label htmlFor="lastname">Last Name</label>
+          <input
+            required
+            type="text"
+            id="lastname"
+            value={lastName}
+            onChange={onLastNameChange}
+          />
+          <label htmlFor="email">Email</label>
+          <input
+            type="text"
+            id="email"
+            value={email}
+            onChange={onEmailChange}
+            required
+          />
+          <label htmlFor="message">Enter message</label>
+          <textarea
+            required
+            id="message"
+            rows={10}
+            value={message}
+            onChange={onMessageChange}
+          ></textarea>
 
-        {errorMsg && <p style={{ color: "crimson" }}>{errorMsg}</p>}
-        {msg && <p>{msg}</p>}
-        <button>{loading ? "Sending" : "Send"}</button>
-      </form>
-
+          {errorMsg && <p style={{ color: "crimson" }}>{errorMsg}</p>}
+          {msg && <p>{msg}</p>}
+          <button>{loading ? "Sending" : "Send"}</button>
+        </form>
+      </div>
       <NewsletterSubscription />
-    </div>
+    </>
   );
 };
 

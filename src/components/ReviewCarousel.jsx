@@ -15,7 +15,6 @@ const ReviewCarousel = () => {
   const touchStartX = useRef(null);
   const touchEndX = useRef(null);
 
-  // Fetch data
   useEffect(() => {
     const fetch = async () => {
       try {
@@ -28,7 +27,6 @@ const ReviewCarousel = () => {
     fetch();
   }, []);
 
-  // Slide trigger
   const handleSlide = useCallback(
     (dir) => {
       if (isAnimating || reviews.length <= 1) return;
@@ -47,7 +45,6 @@ const ReviewCarousel = () => {
     [isAnimating, reviews.length]
   );
 
-  // Auto-slide
   useEffect(() => {
     carouselInterval.current = setInterval(() => {
       handleSlide("right");
@@ -55,7 +52,6 @@ const ReviewCarousel = () => {
     return () => clearInterval(carouselInterval.current);
   }, [handleSlide]);
 
-  // Swipe for mobile
   const handleTouchStart = (e) => {
     touchStartX.current = e.changedTouches[0].clientX;
   };
@@ -82,7 +78,7 @@ const ReviewCarousel = () => {
       ? "-100%"
       : "0%"
     : "0%";
-
+  if (!reviews.length) return <p>No reviews to show </p>;
   return (
     <div
       className="reviews-carousel"
