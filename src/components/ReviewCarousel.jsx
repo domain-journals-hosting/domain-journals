@@ -158,8 +158,6 @@ const ReviewCarousel = () => {
             <div
               className="review-card"
               style={{
-                color: "#F1F8E9",
-
                 background: "#f9f9f9",
                 borderRadius: 10,
                 boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
@@ -169,13 +167,14 @@ const ReviewCarousel = () => {
                 flexDirection: "column",
                 alignItems: "center",
                 height: "100%",
-                backgroundColor: "#6ca466",
+                backgroundColor: "#659377",
 
                 position: "relative",
               }}
             >
               <p
                 style={{
+                  color: " #F1F8E9",
                   marginTop: "10px",
                   fontStyle: "italic",
                   fontSize: 20,
@@ -186,10 +185,11 @@ const ReviewCarousel = () => {
               </p>
               <p
                 style={{
+                  color: "#093238",
                   position: "absolute",
                   right: "20px",
                   bottom: "15px",
-                  fontWeight: "bold",
+                  fontWeight: "800",
                 }}
               >
                 - {review?.name}
