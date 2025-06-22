@@ -1,11 +1,13 @@
 import { useRef, useState } from "react";
 import axios from "../api/axios";
 import "../styles/review.css";
+import Toast from "../components/Toast";
 
 const ReviewActions = ({ id, status, issue, onUpdate, journal }) => {
   const fileInputRef = useRef(null);
   const [file, setFile] = useState(null);
   const [showRejectInput, setShowRejectInput] = useState(false);
+  const [toast, setToast] = useState(null);
   const [comment, setComment] = useState(
     "Sorry, We couldn't accept this manuscript"
   );
@@ -24,7 +26,7 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal }) => {
 
       await axios.patch(`manuscript/admin/${id}`, { file: url });
 
-      alert("Successfully updated manuscript file");
+      setToast({ message: "Successfully updated manuscript file" });
       fileInputRef.current.value = "";
       onUpdate();
     } catch (err) {
@@ -56,25 +58,29 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal }) => {
     };
 
     const action = actionMap[type];
-    if (!action) return alert("Invalid action.");
+    if (!action) return setToast({ message: "Invalid action.", error: true });
 
     try {
       await axios[action.method](action.url, action.data || {}, {
         withCredentials: true,
       });
-      alert(`Action '${type}' successful.`);
+      setToast({ message: `Action '${type}' successful.` });
       onUpdate?.();
       setFile(null);
     } catch (err) {
       console.error(err);
-      alert(`Action '${type}' failed.`);
+      setToast({ message: `Action '${type}' failed.`, error: true });
     } finally {
       setLoadingAction("");
     }
   };
 
   const handleRejectSubmit = () => {
-    if (!comment.trim()) return alert("Please enter a rejection reason.");
+    if (!comment.trim())
+      return setToast({
+        message: "Please enter a rejection reason.",
+        error: true,
+      });
     handleAction("reject");
     setShowRejectInput(false);
     setComment("");
@@ -82,6 +88,14 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal }) => {
 
   return (
     <div className="review-actions">
+      {toast && (
+        <Toast
+          message={toast.message}
+          error={toast.error}
+          onClose={() => setToast(null)}
+        />
+      )}
+
       {status === "under-review" && (
         <>
           <button
