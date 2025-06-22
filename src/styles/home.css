@@ -1,6 +1,6 @@
+/* === Base Container === */
 .home-wrapper {
   background-color: #f1f8f4;
-  padding: 10px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: #1b5e20;
   max-width: 1500px;
@@ -13,13 +13,16 @@
   margin-bottom: 1.2rem;
   font-weight: 700;
 }
+
 .home-wrapper h3 {
   color: #093238;
   margin: 1.2rem;
 }
 
+/* === Buttons === */
 .home-wrapper button {
   color: #f1f8e9;
+  background-color: #659377;
   border: none;
   padding: 0.75rem 1.25rem;
   border-radius: 8px;
@@ -30,23 +33,25 @@
   transition: background-color 0.3s ease;
 }
 
+.home-wrapper button:hover {
+  background-color: #4e745b;
+}
+
+/* === Article Section === */
 .home-wrapper article {
   background-color: #e8f5e9;
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   border-radius: 0.5rem;
   margin-bottom: 2rem;
   box-shadow: 0 3px 8px rgba(46, 125, 50, 0.1);
-  overflow: visible;
 }
 
 .home-wrapper img {
-  width: calc(100% - 30px);
-  max-width: 500px;
-  height: auto;
-  height: auto;
+  width: 100%;
+  max-width: 600px;
 }
 
 .home-wrapper section {
@@ -85,28 +90,25 @@
 .card p:last-child {
   cursor: pointer;
   max-width: 100px;
-
-  color: #1b5e20;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
   font-weight: 600;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
   user-select: none;
   transition: color 0.3s ease;
 }
 
 .card p:last-child:hover,
 .card p:last-child:focus {
-  text-decoration: underline;
   color: #2e7d32;
+  text-decoration: underline;
   outline: none;
 }
 
-.re.reviews-carousel {
+.reviews-carousel {
   position: relative;
   margin: 50px auto 0;
   max-width: 600px;
-  overflow: visible;
 }
 
 .reviews-carousel button {
@@ -115,14 +117,13 @@
   transform: translateY(-50%);
   background: rgba(255, 255, 255, 0.8);
   border: none;
+  border-radius: 50%;
+  padding: 8px 12px;
   cursor: pointer;
   font-size: 1.8rem;
-  padding: 8px 12px;
-  border-radius: 50%;
-  user-select: none;
   box-shadow: 0 2px 6px rgba(46, 125, 50, 0.4);
-  transition: background-color 0.25s ease, color 0.25s ease;
   z-index: 3;
+  transition: background-color 0.25s ease;
 }
 
 .reviews-carousel button.left {
@@ -135,25 +136,21 @@
 
 .track {
   display: flex;
-  overflow: visible;
   transition: transform 0.5s ease;
 }
 
 .review-wrapper {
-  position: relative;
   flex: 0 0 100%;
-  width: 100vw;
   max-width: 300px;
-  overflow: visible;
+  position: relative;
 }
 
-.home-wrapper .review-wrapper img.floating-avatar {
+.review-wrapper img.floating-avatar {
   position: absolute;
   top: -40px;
   left: 50%;
   transform: translateX(-50%);
   width: 100px;
-  max-width: 100px;
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
@@ -171,14 +168,12 @@
   align-items: center;
   height: 100%;
   position: relative;
-  overflow: visible;
 }
 
 .review-card p {
   font-style: italic;
   font-size: 14px;
   text-align: center;
-  margin: 0;
 }
 
 .review-card p:last-child {
@@ -187,4 +182,165 @@
   bottom: 0;
   font-weight: bold;
   font-style: normal;
+}
+.hero-banner {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.hero-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1;
+}
+
+.hero-banner .hero-image {
+  width: 100%;
+  height: 100%;
+  max-width: 100vw;
+  object-fit: cover;
+  display: block;
+}
+
+.hero-text {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #f1f8e9;
+  box-sizing: border-box;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
+}
+
+.hero-text h1 {
+  display: inline-block;
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: #dce5dd;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 3px solid #dce5dd;
+  animation: typing 3s steps(30, end) forwards, blink 0.75s step-end infinite;
+  max-width: 30ch;
+}
+
+.hero-text p {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  font-weight: 500;
+  max-width: 800px;
+  margin-bottom: 2rem;
+  animation: fadeInUp 1.2s ease forwards;
+  color: #f1f8e9;
+}
+
+.hero-button {
+  padding: 14px 30px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 30px;
+  text-decoration: none;
+  background-color: #659377;
+  color: #f1f8e9;
+  transition: background 0.3s ease;
+  animation: fadeIn 1.4s ease forwards;
+}
+
+.hero-button:hover {
+  background-color: #4e745b;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-text h1 {
+    font-size: 2rem;
+  }
+
+  .hero-text p {
+    font-size: 1rem;
+  }
+
+  .hero-button {
+    font-size: 1rem;
+    padding: 12px 24px;
+  }
+}
+
+@keyframes typing {
+  0% {
+    width: 0;
+    white-space: nowrap;
+  }
+  100% {
+    width: 100%;
+    white-space: normal;
+  }
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    border-color: transparent;
+  }
+  50% {
+    border-color: #dce5dd;
+  }
+}
+
+.typing {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 2px solid #f1f8e9;
+  animation: typing 2.5s steps(30, end) forwards, blink 0.75s step-end infinite;
+  font-weight: 700;
+  color: #dce5dd;
+  width: 0;
+  font-size: clamp(1rem, 5vw, 2.5rem); /* auto-resize but stay single-line */
+}
+
+@media (max-width: 600px) {
+  .hero-text h1 {
+    font-size: 1.5rem;
+  }
 }

@@ -24,7 +24,7 @@ const NewsletterSubscription = () => {
 
   return (
     <form onSubmit={handleSubmit} style={styles.section}>
-      <h2 style={styles.heading}>Join our news letter</h2>
+      <h2 style={styles.heading}>Join our newsletter</h2>
 
       <div style={styles.box}>
         <input
@@ -44,7 +44,11 @@ const NewsletterSubscription = () => {
         <p
           style={{
             ...styles.message,
-            color: msg === "Subscription failed." ? "crimson" : "#1b5e20",
+            color:
+              msg === "Subscription failed." ||
+              msg === "A valid email is required."
+                ? "crimson"
+                : "#1b5e20",
           }}
         >
           {msg}
