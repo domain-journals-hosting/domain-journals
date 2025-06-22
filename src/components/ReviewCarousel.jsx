@@ -90,10 +90,12 @@ const ReviewCarousel = () => {
       onTouchEnd={handleTouchEnd}
       style={{
         position: "relative",
-        width: "100%",
         maxWidth: 600,
-        padding: "70px 20px",
         overflow: "visible",
+        margin: "50px auto",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
       {!isMobile && (
@@ -130,10 +132,9 @@ const ReviewCarousel = () => {
             key={idx}
             className="review-wrapper"
             style={{
-              width: "100vw",
-              maxWidth: "300px",
-              flex: "0 0 100%",
-              margin: "0 auto",
+              justifySelf: "center",
+              width: "100%",
+              flex: "100%",
               position: "relative",
               overflow: "visible",
             }}
@@ -161,14 +162,14 @@ const ReviewCarousel = () => {
                 background: "#f9f9f9",
                 borderRadius: 10,
                 boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-                padding: "60px 20px 20px",
+                padding: "100px 20px 20px",
                 clipPath: "polygon(0 0, 100% 0, 100% 100%, 25% 100%, 0% 75%)",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 height: "100%",
                 backgroundColor: "#659377",
-
+                width: "100%",
                 position: "relative",
               }}
             >

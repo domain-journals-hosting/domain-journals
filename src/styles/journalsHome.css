@@ -1,12 +1,12 @@
 .journal-container-home {
-  padding: 2rem;
+  padding: 4rem 0.7rem;
   display: flex;
   flex-direction: column;
   margin: auto;
   font-family: sans-serif;
 }
 .journal-container-home img {
-  max-width: 100%;
+  max-width: 600px;
   height: auto;
   margin-bottom: 1rem;
   border-radius: 8px;

@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import journals from "../data/journals.json";
 import "../styles/journalsHome.css";
 import JournalHeader from "./JournalHeader";
@@ -27,6 +27,8 @@ const JournalsHome = () => {
         <img src={source(journal.image)} alt="" />
         <h1 className="journal-title">{journal.title}</h1>
         <p className="journal-description">{journal.description}</p>
+
+        <Link to="archive">View archive</Link>
       </div>
     </>
   );

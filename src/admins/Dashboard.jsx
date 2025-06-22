@@ -1,19 +1,41 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
 import defaultAvatar from "../assets/defaultAvatar.jpg";
-import { FaCamera } from "react-icons/fa";
+import { FaCamera, FaPencilAlt } from "react-icons/fa";
 import { useState } from "react";
 import axios from "../api/axios";
+import useScreenSize from "../hooks/useScreenSize";
 
 const Dashboard = () => {
   const { user, setUser, sendResetMail, logout } = useUser();
   const [uploading, setUploading] = useState(false);
+  const [editingName, setEditingName] = useState(false);
+  const [newName, setNewName] = useState(user.name || "");
+  const isMobile = useScreenSize(600);
   const navigate = useNavigate();
+
+  const handleNameUpdate = async () => {
+    if (!newName.trim()) return alert("Name cannot be empty.");
+
+    try {
+      await axios.patch(
+        "/admin/",
+        { name: newName },
+        { withCredentials: true }
+      );
+      setUser({ ...user, name: newName });
+      setEditingName(false);
+    } catch (err) {
+      console.error("Name update failed", err);
+      alert("Failed to update name.");
+    }
+  };
 
   const resetPassword = async () => {
     await sendResetMail();
     navigate("/admin/reset");
   };
+
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -48,9 +70,34 @@ const Dashboard = () => {
   return (
     <div style={styles.container}>
       <h1 style={styles.heading}>Dashboard</h1>
-      <p style={styles.welcome}>
-        Welcome, <strong>{user.name}</strong>
-      </p>
+
+      <div style={styles.nameRow}>
+        {!editingName ? (
+          <>
+            <p style={styles.welcome}>
+              Welcome,<strong> {user.name}</strong>
+            </p>
+            <FaPencilAlt
+              size={16}
+              title="Edit name"
+              style={styles.pencil}
+              onClick={() => setEditingName(true)}
+            />
+          </>
+        ) : (
+          <div style={styles.editRow}>
+            <input
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              style={styles.nameInput}
+              placeholder="Enter full name"
+            />
+            <button onClick={handleNameUpdate} style={styles.saveButton}>
+              Save
+            </button>
+          </div>
+        )}
+      </div>
 
       <div style={styles.avatarWrapper}>
         <img
@@ -76,43 +123,39 @@ const Dashboard = () => {
       {uploading && <p style={styles.uploading}>Uploading...</p>}
 
       <h2 style={styles.subheading}>Actions</h2>
-      <ul style={styles.list}>
-        <li>
-          <Link to="/admin/invite" style={styles.link}>
-            Invite Member
+
+      <div
+        style={{
+          ...styles.actionList,
+          flexDirection: isMobile ? "column" : "row",
+        }}
+      >
+        {[
+          { to: "/admin/invite", text: "Invite Member" },
+          { to: "/admin/review", text: "Review Manuscripts" },
+          { to: "/admin/issue", text: "Send a New Issue" },
+          { to: "/admin/all", text: "See All Users" },
+          { to: "/admin/message", text: "See all messages" },
+          { to: "/admin/newsletter", text: "Send a newsletter" },
+          { to: "/admin/audit", text: "Audit reviews" },
+        ].map(({ to, text }) => (
+          <Link
+            key={to}
+            to={to}
+            style={styles.link}
+            onMouseOver={(e) => {
+              e.target.style.backgroundColor = "#e0f2f1";
+              e.target.style.borderColor = "#1e9965";
+            }}
+            onMouseOut={(e) => {
+              e.target.style.backgroundColor = "#f1f8e9";
+              e.target.style.borderColor = "#659377";
+            }}
+          >
+            {text}
           </Link>
-        </li>
-        <li>
-          <Link to="/admin/review" style={styles.link}>
-            Review Manuscripts
-          </Link>
-        </li>
-        <li>
-          <Link to="/admin/issue" style={styles.link}>
-            Send a New Issue
-          </Link>
-        </li>
-        <li>
-          <Link to="/admin/all" style={styles.link}>
-            See All Users
-          </Link>
-        </li>
-        <li>
-          <Link to="/admin/message" style={styles.link}>
-            See all messages
-          </Link>
-        </li>
-        <li>
-          <Link to="/admin/newsletter" style={styles.link}>
-            Send a newsletter
-          </Link>
-        </li>
-        <li>
-          <Link to="/admin/audit" style={styles.link}>
-            Audit reviews
-          </Link>
-        </li>
-      </ul>
+        ))}
+      </div>
 
       <button onClick={handleLogout} style={styles.logoutButton}>
         Logout
@@ -128,8 +171,12 @@ export default Dashboard;
 
 const styles = {
   container: {
-    maxWidth: "600px",
-    margin: "40px auto",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+    width: "100%",
+    margin: "0 auto",
     padding: "20px",
     fontFamily: "sans-serif",
     backgroundColor: "#fff",
@@ -176,20 +223,31 @@ const styles = {
     fontSize: "20px",
     marginBottom: "10px",
   },
-  list: {
-    listStyle: "none",
-    paddingLeft: "0",
-    marginBottom: "20px",
+  actionList: {
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    gap: "10px",
+    maxWidth: "800px", // restrict row width
   },
+
   link: {
-    display: "inline-block",
-    marginBottom: "10px",
-    padding: "8px 12px",
-    background: "#007bff",
-    color: "#fff",
+    flex: "1 1 calc(25% - 10px)", // at most 4 per row
+    minWidth: "120px",
+    maxWidth: "180px",
+    boxSizing: "border-box",
+    padding: "6px 12px",
+    background: "#f1f8e9",
+    color: "#093238",
     textDecoration: "none",
     borderRadius: "6px",
+    border: "1px solid #659377",
+    fontSize: "0.95rem",
+    fontWeight: 500,
+    textAlign: "center",
+    transition: "all 0.2s ease",
   },
+
   logoutButton: {
     background: "crimson",
     color: "white",
@@ -198,10 +256,9 @@ const styles = {
     borderRadius: "6px",
     cursor: "pointer",
     display: "block",
-    margin: "0 auto",
+    margin: "20px auto",
     fontSize: "16px",
   },
-
   resetButton: {
     background: "#007bff",
     color: "white",
@@ -212,5 +269,39 @@ const styles = {
     display: "block",
     margin: "20px auto 0",
     fontSize: "16px",
+  },
+  nameRow: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    marginBottom: 10,
+  },
+  pencil: {
+    cursor: "pointer",
+    color: "#555",
+  },
+  editRow: {
+    display: "flex",
+    gap: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 10,
+  },
+  nameInput: {
+    padding: "8px 12px",
+    borderRadius: 6,
+    border: "1px solid #ccc",
+    fontSize: "1rem",
+    minWidth: 200,
+  },
+  saveButton: {
+    padding: "8px 16px",
+    backgroundColor: "#007bff",
+    color: "white",
+    border: "none",
+    borderRadius: 6,
+    cursor: "pointer",
+    fontWeight: 600,
   },
 };

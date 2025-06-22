@@ -2,15 +2,34 @@ import { useAuth } from "../hooks/useAuthor";
 import axios from "../api/axios";
 import defaultAvatar from "../assets/defaultAvatar.jpg";
 import { useEffect, useState } from "react";
-import { FaCamera } from "react-icons/fa";
+import { FaCamera, FaPencilAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 
 const AuthorProfile = () => {
   const { user, setUser, logout, sendResetMail } = useAuth();
   const [uploading, setUploading] = useState(false);
   const [allManuscripts, setAllManuscripts] = useState([]);
+  const [editingName, setEditingName] = useState(false);
+  const [newName, setNewName] = useState(user.name || "");
   const [acceptedManuscripts, setAcceptedManuscripts] = useState([]);
   const navigate = useNavigate();
+
+  const handleNameUpdate = async () => {
+    if (!newName.trim()) return alert("Name cannot be empty.");
+
+    try {
+      await axios.patch(
+        "/author/",
+        { name: newName },
+        { withCredentials: true }
+      );
+      setUser({ ...user, name: newName });
+      setEditingName(false);
+    } catch (err) {
+      console.error("Name update failed", err);
+      alert("Failed to update name.");
+    }
+  };
 
   useEffect(() => {
     const getManuscripts = async () => {
@@ -88,7 +107,31 @@ const AuthorProfile = () => {
         />
       </div>
 
-      <h1 style={styles.name}>{user.name}</h1>
+      <div style={styles.nameRow}>
+        {!editingName ? (
+          <>
+            <h1 style={styles.name}>{user.name}</h1>
+            <FaPencilAlt
+              size={16}
+              title="Edit name"
+              style={styles.pencil}
+              onClick={() => setEditingName(true)}
+            />
+          </>
+        ) : (
+          <div style={styles.editRow}>
+            <input
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              style={styles.nameInput}
+              placeholder="Enter full name"
+            />
+            <button onClick={handleNameUpdate} style={styles.saveButton}>
+              Save
+            </button>
+          </div>
+        )}
+      </div>
       {uploading && <p style={styles.uploadingText}>Uploading...</p>}
 
       <div style={styles.buttonGroup}>
@@ -199,5 +242,43 @@ const styles = {
   manuscriptItem: {
     marginBottom: 6,
     fontSize: "1rem",
+  },
+  nameRow: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    marginBottom: 10,
+  },
+
+  pencil: {
+    cursor: "pointer",
+    color: "#555",
+  },
+
+  editRow: {
+    display: "flex",
+    gap: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 10,
+  },
+
+  nameInput: {
+    padding: "8px 12px",
+    borderRadius: 6,
+    border: "1px solid #ccc",
+    fontSize: "1rem",
+    minWidth: 200,
+  },
+
+  saveButton: {
+    padding: "8px 16px",
+    backgroundColor: "#007bff",
+    color: "white",
+    border: "none",
+    borderRadius: 6,
+    cursor: "pointer",
+    fontWeight: 600,
   },
 };

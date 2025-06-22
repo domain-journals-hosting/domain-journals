@@ -41,7 +41,10 @@ const NewIssue = () => {
               Current issue: {loading ? "Loading..." : allCount[slug(journal)]}
             </span>
             <button
-              style={styles.button}
+              style={{
+                ...styles.button,
+                ...(loading ? { opacity: 0.6, cursor: "not-allowed" } : {}),
+              }}
               onClick={() => handleNewIssue(slug(journal))}
               disabled={loading}
             >
@@ -60,37 +63,49 @@ export default NewIssue;
 
 const styles = {
   container: {
-    padding: "20px",
-    maxWidth: "600px",
+    padding: "30px 20px",
+    maxWidth: "700px",
     margin: "0 auto",
-    fontFamily: "sans-serif",
+    fontFamily: "Segoe UI, sans-serif",
+    color: "#093238",
   },
   heading: {
     textAlign: "center",
-    marginBottom: "20px",
+    marginBottom: "30px",
+    fontSize: "1.8rem",
+    fontWeight: "bold",
+    color: "#093238",
   },
   list: {
     listStyle: "none",
     padding: 0,
   },
   listItem: {
-    marginBottom: "15px",
-    background: "#f9f9f9",
-    padding: "10px 15px",
-    borderRadius: "8px",
-    boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+    display: "flex",
+    flexWrap: "wrap",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: "20px",
+    background: "#F1F8E9",
+    padding: "16px 20px",
+    borderRadius: "12px",
+    boxShadow: "0 3px 8px rgba(0, 0, 0, 0.08)",
   },
   issue: {
-    marginLeft: "10px",
-    marginRight: "20px",
+    margin: "0 20px",
     fontStyle: "italic",
+    fontSize: "1rem",
+    color: "#659377",
+    fontWeight: "500",
   },
   button: {
-    background: "#007bff",
-    color: "white",
+    background: "#659377",
+    color: "#F1F8E9",
     border: "none",
-    padding: "8px 12px",
-    borderRadius: "6px",
+    padding: "8px 14px",
+    borderRadius: "8px",
+    fontWeight: "600",
     cursor: "pointer",
+    transition: "background 0.3s ease",
   },
 };
