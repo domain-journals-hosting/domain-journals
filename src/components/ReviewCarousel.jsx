@@ -175,7 +175,7 @@ const ReviewCarousel = () => {
               <p
                 style={{
                   color: " #F1F8E9",
-                  marginTop: "10px",
+                  margin: "20px 0",
                   fontStyle: "italic",
                   fontSize: 20,
                   textAlign: "center",
