@@ -89,7 +89,7 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal }) => {
             disabled={!!loadingAction}
             onClick={() => handleAction("approve")}
           >
-            Approve
+            {loadingAction === "approve" ? "Approving..." : "Approve"}
           </button>
 
           {!showRejectInput ? (
@@ -108,7 +108,7 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal }) => {
                 placeholder="Rejection reason"
               />
               <button className="btn reject" onClick={handleRejectSubmit}>
-                Submit
+                {loadingAction === "reject" ? "Submitting" : "Submit"}
               </button>
               <button
                 className="btn cancel"
@@ -124,10 +124,11 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal }) => {
       {status === "approved" && (
         <>
           <button className="btn remind" onClick={() => handleAction("remind")}>
-            Send Reminder
+            {loadingAction === "remind" ? "Sending..." : "Send Reminder"}
           </button>
+
           <button className="btn revoke" onClick={() => handleAction("revoke")}>
-            Revoke Approval
+            {loadingAction === "revoke" ? "Revoking..." : "Revoke Approval"}
           </button>
           <button
             className="btn pay"
@@ -136,29 +137,37 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal }) => {
                 handleAction("pay");
             }}
           >
-            Set to Paid
+            {loadingAction === "pay" ? "Setting to Paid..." : "Set to Paid"}
           </button>
         </>
       )}
 
       {status === "paid" && (
         <>
-          <label>Upload edited file (optional)</label>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".doc,.pdf"
-            onChange={(e) => setFile(e.target.files[0])}
-          />
-          <button className="btn upload" onClick={handleFileUpload}>
-            Upload
-          </button>
-          <button
-            className="btn publish"
-            onClick={() => handleAction("publish")}
-          >
-            Publish
-          </button>
+          <div className="upload-section">
+            <label htmlFor={`upload-${id}`}>
+              Upload edited file (optional)
+            </label>
+            <input
+              id={`upload-${id}`}
+              ref={fileInputRef}
+              type="file"
+              accept=".doc,.pdf"
+              onChange={(e) => setFile(e.target.files[0])}
+            />
+            <button className="btn upload" onClick={handleFileUpload}>
+              {loadingAction === "upload" ? "Uploading..." : "Upload"}
+            </button>
+          </div>
+
+          <div className="paid-actions">
+            <button
+              className="btn publish"
+              onClick={() => handleAction("publish")}
+            >
+              {loadingAction === "publish" ? "Publishing..." : "Publish"}
+            </button>
+          </div>
         </>
       )}
 
@@ -168,10 +177,11 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal }) => {
             className="btn approve"
             onClick={() => handleAction("approve")}
           >
-            Accept Again
+            {loadingAction === "approve" ? "Re-approving..." : "Accept Again"}
           </button>
+
           <button className="btn delete" onClick={() => handleAction("delete")}>
-            Delete
+            {loadingAction === "delete" ? "Deleting..." : "Delete"}
           </button>
         </>
       )}

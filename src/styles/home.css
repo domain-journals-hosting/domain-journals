@@ -32,7 +32,6 @@
 
 .home-wrapper article {
   background-color: #e8f5e9;
-  padding: 1.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -167,7 +166,6 @@
   border-radius: 10px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   padding: 60px 20px 20px;
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 25% 100%, 0% 75%);
   display: flex;
   flex-direction: column;
   align-items: center;

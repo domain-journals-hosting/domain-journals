@@ -1,6 +1,7 @@
+/* === 1. Page & Layout === */
 .review-container {
   padding: 20px;
-  font-family: sans-serif;
+  font-family: "Segoe UI", sans-serif;
 }
 
 .review-heading {
@@ -9,6 +10,7 @@
   color: #2e7d32;
 }
 
+/* === 2. Tabs / Filters === */
 .status-tabs {
   display: flex;
   flex-wrap: wrap;
@@ -17,43 +19,44 @@
 }
 
 .status-tab {
-  border: none;
-  border-radius: 20px;
-  padding: 10px 15px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
   background-color: #f0f0f0;
   color: #333;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .status-tab.active {
   color: white;
 }
 
-.status-under-review.active {
+.status-tab.status-under-review.active {
   background-color: #ffa500;
 }
 
-.status-approved.active {
+.status-tab.status-approved.active {
   background-color: #4caf50;
 }
 
-.status-paid.active {
+.status-tab.status-paid.active {
   background-color: #2196f3;
 }
 
-.status-rejected.active {
+.status-tab.status-rejected.active {
   background-color: #f44336;
 }
 
+/* === 3. Manuscript Cards === */
 .manuscript-list {
   list-style: none;
   padding: 0;
 }
 
 .manuscript-card {
-  background: white;
+  background: #fff;
   padding: 20px;
   margin-bottom: 15px;
   border-radius: 10px;
@@ -71,51 +74,51 @@
   margin-top: 10px;
 }
 
-.review-button {
+/* === 4. Buttons === */
+.review-button,
+.btn {
   padding: 8px 14px;
+  font-size: 14px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 14px;
   transition: background-color 0.2s ease;
+  color: white;
 }
 
 .btn.approve {
-  background-color: green;
-  color: white;
+  background-color: #4caf50;
 }
 
 .btn.reject {
-  background-color: crimson;
-  color: white;
+  background-color: #d32f2f;
 }
 
 .btn.cancel {
-  background-color: #555;
-  color: white;
+  background-color: #6c757d;
 }
 
 .btn.remind {
   background-color: #f0ad4e;
-  color: white;
 }
 
 .btn.revoke {
   background-color: #6c757d;
-  color: white;
 }
 
-.btn.upload,
-.btn.publish {
+.btn.upload {
   background-color: #007bff;
-  color: white;
+}
+
+.btn.publish {
+  background-color: #0288d1;
 }
 
 .btn.delete {
   background-color: darkred;
-  color: white;
 }
 
+/* === 5. Reject Input === */
 .reject-input-container {
   display: flex;
   align-items: center;
@@ -123,13 +126,14 @@
 }
 
 .reject-input-container input {
-  padding: 6px;
+  flex: 1;
+  padding: 6px 10px;
   margin-right: 8px;
   border-radius: 4px;
   border: 1px solid #ccc;
-  width: 60%;
 }
 
+/* === 6. Selects / Labels === */
 .review-label {
   display: block;
   margin-top: 10px;
@@ -142,6 +146,32 @@
   border-radius: 6px;
   border: 1px solid #ccc;
   min-width: 180px;
-  margin-bottom: 10px;
   font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.upload-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.upload-section label {
+  font-weight: bold;
+}
+
+.upload-section input[type="file"] {
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #f9f9f9;
+  max-width: 100%;
+}
+
+.paid-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
 }
