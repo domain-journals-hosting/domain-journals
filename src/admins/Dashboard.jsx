@@ -107,6 +107,11 @@ const Dashboard = () => {
             Send a newsletter
           </Link>
         </li>
+        <li>
+          <Link to="/admin/audit" style={styles.link}>
+            Audit reviews
+          </Link>
+        </li>
       </ul>
 
       <button onClick={handleLogout} style={styles.logoutButton}>

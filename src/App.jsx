@@ -40,6 +40,7 @@ import NewReview from "./components/NewReview";
 import Messages from "./admins/Messages";
 import Footer from "./components/Footer";
 import NewsletterSender from "./admins/NewsLetterSender";
+import AuditReviews from "./admins/AuditReviews";
 
 function App() {
   return (
@@ -62,6 +63,7 @@ function App() {
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/review" element={<ReviewManuscripts />} />
           <Route path="/admin/message" element={<Messages />} />
+          <Route path="admin/audit" element={<AuditReviews />} />
           <Route path="/admin/newsletter" element={<NewsletterSender />} />
         </Route>
         <Route path="/admin/forgot" element={<AdminForgotPW />} />
