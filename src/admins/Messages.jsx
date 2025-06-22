@@ -2,19 +2,24 @@ import { useEffect, useState } from "react";
 import axios from "../api/axios";
 import ReplyBox from "./ReplyBox";
 import "../styles/messages.css";
+import Toast from "../components/Toast";
 
 const Messages = () => {
   const [messages, setMessages] = useState([]);
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [filter, setFilter] = useState("unread"); // default to unread
+  const [filter, setFilter] = useState("unread");
+  const [toast, setToast] = useState(null);
 
   useEffect(() => {
     setLoading(true);
     axios
       .get("/message")
       .then((res) => setMessages(res.data))
-      .catch((err) => console.error("Fetch failed:", err))
+      .catch((err) => {
+        console.error("Fetch failed:", err);
+        setToast({ message: "Fetch failed", error: true });
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -27,14 +32,14 @@ const Messages = () => {
         email: msg.email,
       });
       console.log(response);
-      alert("Reply sent!");
+      setToast({ message: "Reply sent!" });
       setMessages((prev) =>
         prev.map((m) => (m._id === msg._id ? { ...m, read: true } : m))
       );
       setSelectedMessage(null);
       return true;
     } catch (err) {
-      alert("Reply failed.");
+      setToast({ message: "Reply failed.", error: true });
     }
   };
 
@@ -44,6 +49,14 @@ const Messages = () => {
 
   return (
     <div className="messages-container">
+      {toast && (
+        <Toast
+          message={toast.message}
+          error={toast.error}
+          onClose={() => setToast(null)}
+        />
+      )}
+
       <h2 className="messages-title">Inbox</h2>
 
       <div style={{ marginBottom: 15 }}>

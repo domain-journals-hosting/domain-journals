@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
-import journals, {slug} from "../data/journals";
+import journals, { slug } from "../data/journals";
 import "../styles/form.css";
 import axios from "../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
-
-
+import Toast from "../components/Toast";
 
 const EditManuscript = () => {
   const { token } = useParams();
@@ -22,6 +21,7 @@ const EditManuscript = () => {
   const [errMsg, setErrMsg] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const [toast, setToast] = useState(null);
   useEffect(() => {
     (async () => {
       try {
@@ -36,7 +36,12 @@ const EditManuscript = () => {
         setCountry(m.country);
       } catch (err) {
         setErrMsg(err.response.data.error);
-        alert(`There was an error: ${err.response.data.error}`);
+        setToast({
+          message: `There was an error: ${
+            err.response.data.error || "Something went wrong"
+          } `,
+          error: true,
+        });
         navigate(-1);
       }
     })();
@@ -109,6 +114,14 @@ const EditManuscript = () => {
 
   return (
     <div className="form-wrapper">
+      {toast && (
+        <Toast
+          message={toast.message}
+          error={toast.error}
+          onClose={() => setToast(null)}
+        />
+      )}
+
       <h1>Edit Manuscript</h1>
       <form onSubmit={handleSubmit}>
         <label htmlFor="name">Name:</label>

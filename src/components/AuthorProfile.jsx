@@ -4,6 +4,7 @@ import defaultAvatar from "../assets/defaultAvatar.jpg";
 import { useEffect, useState } from "react";
 import { FaCamera, FaPencilAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+import Toast from "./Toast";
 
 const AuthorProfile = () => {
   const { user, setUser, logout, sendResetMail } = useAuth();
@@ -12,6 +13,7 @@ const AuthorProfile = () => {
   const [editingName, setEditingName] = useState(false);
   const [newName, setNewName] = useState(user.name || "");
   const [acceptedManuscripts, setAcceptedManuscripts] = useState([]);
+  const [toast, setToast] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -55,6 +57,7 @@ const AuthorProfile = () => {
       );
       setUser({ ...user, profilePicture: data.url });
     } catch (err) {
+      setToast({ message: "Avatar uploading failed", error: true });
       console.error("Avatar upload failed", err);
     } finally {
       setUploading(false);
@@ -72,7 +75,7 @@ const AuthorProfile = () => {
       setUser({ ...user, name: newName });
       setEditingName(false);
     } catch (err) {
-      alert("Failed to update name");
+      setToast({ message: "Failed to update name", error: true });
     }
   };
 
@@ -87,6 +90,14 @@ const AuthorProfile = () => {
         paddingTop: "70px",
       }}
     >
+      {toast && (
+        <Toast
+          message={toast.message}
+          error={toast.error}
+          onClose={() => setToast(null)}
+        />
+      )}
+      s
       <div
         style={{
           maxWidth: 900,

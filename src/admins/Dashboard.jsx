@@ -5,6 +5,7 @@ import { FaCamera, FaPencilAlt } from "react-icons/fa";
 import { useState } from "react";
 import axios from "../api/axios";
 import useScreenSize from "../hooks/useScreenSize";
+import Toast from "../components/Toast";
 
 const Dashboard = () => {
   const { user, setUser, sendResetMail, logout } = useUser();
@@ -13,9 +14,11 @@ const Dashboard = () => {
   const [newName, setNewName] = useState(user.name || "");
   const isMobile = useScreenSize(600);
   const navigate = useNavigate();
+  const [toast, setToast] = useState(null);
 
   const handleNameUpdate = async () => {
-    if (!newName.trim()) return alert("Name cannot be empty.");
+    if (!newName.trim())
+      return setToast({ message: "Name cannot be empty", error: true });
 
     try {
       await axios.patch(
@@ -24,10 +27,12 @@ const Dashboard = () => {
         { withCredentials: true }
       );
       setUser({ ...user, name: newName });
+      setToast({ message: "Successfully updated name." });
+
       setEditingName(false);
     } catch (err) {
       console.error("Name update failed", err);
-      alert("Failed to update name.");
+      setToast({ message: "Failed to update name.", error: true });
     }
   };
 
@@ -52,6 +57,7 @@ const Dashboard = () => {
       setUser({ ...user, profilePicture: avatarUrl });
     } catch (err) {
       console.error("Avatar update failed", err);
+      setToast({ message: "Avatar update failed.", error: true });
     } finally {
       setUploading(false);
     }
@@ -63,12 +69,21 @@ const Dashboard = () => {
       logout();
       navigate("/login");
     } catch (err) {
+      setToast({ message: "Logout failed.", error: true });
       console.error("Logout failed", err);
     }
   };
 
   return (
     <div style={styles.container}>
+      {toast && (
+        <Toast
+          message={toast.message}
+          error={toast.error}
+          onClose={() => setToast(null)}
+        />
+      )}
+
       <h1 style={styles.heading}>Dashboard</h1>
 
       <div style={styles.nameRow}>
