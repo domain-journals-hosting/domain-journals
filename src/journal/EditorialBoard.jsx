@@ -5,7 +5,7 @@ const EditorialBoard = () => {
   const { slug } = useParams();
   const journal = journals.find((journal) => journal.slug === slug);
   const editorialSection = (
-    <div>
+    <div style={{ padding: "20px" }}>
       <h1>{journal.title}</h1>
       <h2>Editorial board</h2>
       {journal.editorialBoard.map((member, index) => (

@@ -8,69 +8,15 @@ import { useEffect, useState } from "react";
 import JournalCarousel from "../journal/JournalCarousel";
 import useScreenSize from "../hooks/useScreenSize";
 import RecentArticles from "./RecentArticles";
-
-const reviewsFromBackend = [
-  {
-    id: 1,
-    author: "Jane Doe",
-    text: "Excellent platform for scientific publications. Quick review process!",
-  },
-  {
-    id: 2,
-    author: "John Smith",
-    text: "Very supportive editors and smooth submission workflow.",
-  },
-  {
-    id: 3,
-    author: "Alice Johnson",
-    text: "High quality journals with broad readership and impact.",
-  },
-  {
-    id: 4,
-    author: "Michael Brown",
-    text: "Great experience publishing my research here. Highly recommended!",
-  },
-  {
-    id: 5,
-    author: "Emily Davis",
-    text: "The peer review is fair and timely. I appreciated the detailed feedback.",
-  },
-];
-
-const MAX_VISIBLE = 3;
+import ReviewCarousel from "./ReviewCarousel";
 
 const Home = () => {
   const isMobile = useScreenSize();
   const navigate = useNavigate();
 
-  const [startIndex, setStartIndex] = useState(0);
-
-  const handlePrev = () => {
-    setStartIndex((prev) =>
-      prev === 0 ? reviewsFromBackend.length - MAX_VISIBLE : prev - 1
-    );
-  };
-
-  const handleNext = () => {
-    setStartIndex((prev) =>
-      prev + MAX_VISIBLE >= reviewsFromBackend.length ? 0 : prev + 1
-    );
-  };
-
-  const visibleReviews = [];
-  for (let i = 0; i < MAX_VISIBLE; i++) {
-    visibleReviews.push(
-      reviewsFromBackend[(startIndex + i) % reviewsFromBackend.length]
-    );
-  }
-
   const truncate = (str, n) =>
     str.length > n ? str.substr(0, n - 1) + "…" : str;
 
-  useEffect(() => {
-    const interval = setInterval(handleNext, 4000);
-    return () => clearInterval(interval);
-  }, []);
   return (
     <div className="home-wrapper">
       <JournalCarousel journals={journals} />
@@ -88,97 +34,7 @@ const Home = () => {
           Submit a manuscript?
         </button>
         <h2>Authors reviews</h2>
-        <div className="reviews-carousel" style={{ position: "relative" }}>
-          {!isMobile && (
-            <button
-              onClick={handlePrev}
-              aria-label="Previous reviews"
-              style={{
-                position: "absolute",
-                left: 0,
-                top: "50%",
-                transform: "translateY(-50%)",
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                fontSize: "1.5rem",
-                color: "#333",
-                padding: 0,
-              }}
-            >
-              <FaChevronLeft />
-            </button>
-          )}
-
-          <div
-            className="reviews-list"
-            style={{
-              display: "flex",
-              gap: 20,
-              overflow: "hidden",
-              width: "80vw",
-              maxWidth: 700,
-              margin: "0 auto",
-              padding: "10px 40px",
-            }}
-          >
-            {visibleReviews.map((review) => (
-              <div
-                key={review.id}
-                className="review-card"
-                style={{
-                  flex: "0 0 100%",
-                  background: "#f9f9f9",
-                  padding: 15,
-                  borderRadius: 8,
-                  boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-                  minHeight: 120,
-                }}
-              >
-                <img
-                  src={logo}
-                  alt="Author avatar"
-                  width={60}
-                  style={{ borderRadius: "50%", marginBottom: 10 }}
-                />
-                <p style={{ fontStyle: "italic", fontSize: 14 }}>
-                  {truncate(review.text, 120)}
-                </p>
-                <p
-                  style={{
-                    marginTop: 8,
-                    fontWeight: "bold",
-                    fontSize: 14,
-                    textAlign: "right",
-                  }}
-                >
-                  - {review.author}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          {!isMobile && (
-            <button
-              onClick={handleNext}
-              aria-label="Next reviews"
-              style={{
-                position: "absolute",
-                right: 0,
-                top: "50%",
-                transform: "translateY(-50%)",
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                fontSize: "1.5rem",
-                color: "#333",
-                padding: 0,
-              }}
-            >
-              <FaChevronRight />
-            </button>
-          )}
-        </div>
+        <ReviewCarousel />
       </article>
 
       <section>

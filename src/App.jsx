@@ -39,6 +39,7 @@ import ResetAdminPW from "./admins/ResetAdminPW";
 import NewReview from "./components/NewReview";
 import Messages from "./admins/Messages";
 import Footer from "./components/Footer";
+import NewsletterSender from "./admins/NewsLetterSender";
 
 function App() {
   return (
@@ -61,6 +62,7 @@ function App() {
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/review" element={<ReviewManuscripts />} />
           <Route path="/admin/message" element={<Messages />} />
+          <Route path="/admin/newsletter" element={<NewsletterSender />} />
         </Route>
         <Route path="/admin/forgot" element={<AdminForgotPW />} />
         <Route path="/admin/reset" element={<ResetAdminPW />} />

@@ -3,6 +3,7 @@
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
+  padding: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -23,7 +24,7 @@
 }
 
 .journal-full-image {
-  width: 100%;
+  width: calc(100% - 30px);
   max-width: 500px;
   height: auto;
   border-radius: 20px;

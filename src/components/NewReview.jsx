@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import axios from "../api/axios";
 import "../styles/newReview.css";
+import { useAuth } from "../hooks/useAuthor";
 
 const NewReview = () => {
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
+  const [err, setErr] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -14,10 +16,12 @@ const NewReview = () => {
     setLoading(true);
     try {
       await axios.post("/review", { text }, { withCredentials: true });
+      setErr("");
       setSuccess("Review submitted successfully.");
       setText("");
     } catch (err) {
-      setSuccess("Something went wrong.");
+      setSuccess("");
+      setErr(err?.response?.data?.error || "Something went wrong.");
       console.error(err);
     } finally {
       setLoading(false);
@@ -38,6 +42,7 @@ const NewReview = () => {
       <button type="submit" disabled={loading}>
         {loading ? "Submitting..." : "Submit Review"}
       </button>
+      {err && <p style={{ color: "crimson" }}>{err}</p>}
       {success && <p className="status">{success}</p>}
     </form>
   );

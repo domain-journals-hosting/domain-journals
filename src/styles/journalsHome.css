@@ -5,6 +5,12 @@
   margin: auto;
   font-family: sans-serif;
 }
+.journal-container-home img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+}
 
 .journal-title {
   font-size: 2rem;

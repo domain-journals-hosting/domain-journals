@@ -3,7 +3,7 @@ import axios from "../api/axios";
 import defaultAvatar from "../assets/defaultAvatar.jpg";
 import { useEffect, useState } from "react";
 import { FaCamera } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const AuthorProfile = () => {
   const { user, setUser, logout, sendResetMail } = useAuth();
@@ -102,7 +102,9 @@ const AuthorProfile = () => {
           Reset Password
         </button>
       </div>
-
+      <Link to="/review" style={{ fontWeight: 700 }}>
+        Leave a review?
+      </Link>
       {allManuscripts.length > 0 && (
         <section style={styles.section}>
           <h2 style={styles.sectionTitle}>Your pending manuscripts</h2>
