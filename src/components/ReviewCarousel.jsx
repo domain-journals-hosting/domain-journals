@@ -122,7 +122,7 @@ const ReviewCarousel = () => {
           overflow: "visible",
           width: `${activeReviews.length * 100}%`,
           transform: `translateX(${translateValue})`,
-          transition: direction ? "transform 0.5s ease" : "none",
+          transition: direction ? "transform 0.5s ease-in-out" : "none",
         }}
       >
         {activeReviews.map((review, idx) => (
@@ -182,9 +182,7 @@ const ReviewCarousel = () => {
                   textAlign: "center",
                 }}
               >
-                {review?.text.length > 120
-                  ? review?.text.slice(0, 119) + "…"
-                  : review?.text}
+                {review?.text}
               </p>
               <p
                 style={{

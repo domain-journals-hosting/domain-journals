@@ -11,7 +11,7 @@ const NewReview = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!text.trim()) return;
+    if (!text.trim() || text.trim().length > 300) return;
 
     setLoading(true);
     try {
@@ -31,6 +31,8 @@ const NewReview = () => {
   return (
     <form className="review-form" onSubmit={handleSubmit}>
       <h2>Submit a Review</h2>
+      <p>{300 - text.length} characters remaining</p>
+      <i>Maximum of 300 characters</i>
       <textarea
         placeholder="Write your review..."
         value={text}
@@ -38,6 +40,7 @@ const NewReview = () => {
         rows={5}
         disabled={loading}
         required
+        maxLength={300}
       />
       <button type="submit" disabled={loading}>
         {loading ? "Submitting..." : "Submit Review"}

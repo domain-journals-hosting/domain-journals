@@ -23,20 +23,28 @@ const NewsletterSubscription = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="newsletter-form">
-      <h3>Subscribe to our newsletter</h3>
-      <input
-        type="email"
-        placeholder="Your email address"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
-      <button type="submit">Subscribe</button>
+    <form onSubmit={handleSubmit} style={styles.section}>
+      <h2 style={styles.heading}>Join our news letter</h2>
+
+      <div style={styles.box}>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          style={styles.input}
+        />
+        <button type="submit" style={styles.button}>
+          Join us
+        </button>
+      </div>
+
       {msg && (
         <p
           style={{
-            color: msg === "Subscription failed." ? "crimson" : "",
+            ...styles.message,
+            color: msg === "Subscription failed." ? "crimson" : "#1b5e20",
           }}
         >
           {msg}
@@ -47,3 +55,50 @@ const NewsletterSubscription = () => {
 };
 
 export default NewsletterSubscription;
+
+const styles = {
+  section: {
+    backgroundColor: "#f1f8e9",
+    padding: "2rem",
+    textAlign: "center",
+    fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif',
+  },
+  heading: {
+    fontSize: "1.8rem",
+    color: "#093238",
+    marginBottom: "1.5rem",
+  },
+  box: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "stretch",
+    maxWidth: "500px",
+    margin: "0 auto",
+    borderRadius: "4px",
+    overflow: "hidden",
+  },
+  input: {
+    flex: 1,
+    padding: "1rem",
+    fontSize: "1rem",
+    border: "none",
+    outline: "none",
+    backgroundColor: "#fff",
+    fontWeight: "bold",
+    color: "#555",
+  },
+  button: {
+    backgroundColor: "#659377",
+    color: "white",
+    padding: "0 2rem",
+    fontSize: "1rem",
+    fontWeight: "bold",
+    border: "none",
+    cursor: "pointer",
+    transition: "background 0.3s ease",
+  },
+  message: {
+    marginTop: "1rem",
+    fontSize: "0.95rem",
+  },
+};
