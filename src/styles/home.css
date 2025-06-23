@@ -244,6 +244,8 @@
 .hero-button {
   padding: 14px 30px;
   font-size: 1.1rem;
+  margin-top: 1rem;
+  margin-left: calc(35vw);
   font-weight: bold;
   border-radius: 30px;
   text-decoration: none;
@@ -257,6 +259,17 @@
   background-color: #4e745b;
 }
 
+.typing {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 2px solid #f1f8e9;
+  animation: typing 2.5s steps(30, end) forwards, blink 0.75s step-end infinite;
+  font-weight: 700;
+  color: #dce5dd;
+  width: 0;
+  font-size: clamp(1rem, 5vw, 2.5rem);
+}
 @keyframes fadeInDown {
   from {
     opacity: 0;
@@ -322,18 +335,6 @@
   50% {
     border-color: #dce5dd;
   }
-}
-
-.typing {
-  display: inline-block;
-  white-space: nowrap;
-  overflow: hidden;
-  border-right: 2px solid #f1f8e9;
-  animation: typing 2.5s steps(30, end) forwards, blink 0.75s step-end infinite;
-  font-weight: 700;
-  color: #dce5dd;
-  width: 0;
-  font-size: clamp(1rem, 5vw, 2.5rem);
 }
 
 @media (max-width: 600px) {
