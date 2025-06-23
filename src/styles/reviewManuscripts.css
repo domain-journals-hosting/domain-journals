@@ -1,4 +1,3 @@
-/* === Page Container === */
 .review-container {
   padding: 20px;
   max-width: 900px;
@@ -6,11 +5,10 @@
   font-family: "Segoe UI", sans-serif;
 }
 
-/* === Tabs === */
 .review-tabs {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 12px;
   margin-bottom: 24px;
 }
@@ -25,7 +23,6 @@
   transition: background-color 0.3s ease;
 }
 
-/* === Manuscript List === */
 .review-list {
   list-style: none;
   padding: 0;
@@ -40,7 +37,6 @@
   margin-bottom: 20px;
 }
 
-/* === Actions (View, Download, ReviewActions) === */
 .review-actions {
   display: flex;
   flex-direction: column;
@@ -48,7 +44,6 @@
   margin-top: 16px;
 }
 
-/* Row of View + Download */
 .view-download {
   display: flex;
   gap: 12px;
@@ -66,7 +61,6 @@
   transition: background-color 0.2s ease;
 }
 
-/* === Dropdown Labels & Selects === */
 .review-label {
   display: block;
   margin-top: 12px;
