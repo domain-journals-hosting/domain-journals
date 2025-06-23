@@ -44,6 +44,7 @@ import AuditReviews from "./admins/AuditReviews";
 import { useEffect, useState } from "react";
 
 function App() {
+  const location = useLocation();
   const [isHeroVisible, setIsHeroVisible] = useState(true);
   const isJournalsPage = location.pathname.startsWith("/journals/");
   const isHomePage = location.pathname === "/";
