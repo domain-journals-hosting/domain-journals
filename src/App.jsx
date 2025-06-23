@@ -50,7 +50,7 @@ function App() {
   const showNav = !isJournalsPage && !isHomePage;
 
   useEffect(() => {
-    if (!isHomePage) setIsHeroVisible(false);
+    if (!location.pathname !== "/") setIsHeroVisible(false);
   }, [isHomePage]);
   return (
     <div className="App">
