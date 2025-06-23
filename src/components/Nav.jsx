@@ -53,7 +53,6 @@ const Nav = ({ isHeroVisible }) => {
   };
 
   if (location.pathname.startsWith("/journals/")) return null;
-  if (isHeroVisible) return null;
 
   return (
     <>
@@ -65,6 +64,7 @@ const Nav = ({ isHeroVisible }) => {
           left: 0,
           right: 0,
           zIndex: 999,
+          backgroundColor: isHeroVisible && "transparent",
         }}
       >
         <h1 style={{ whiteSpace: "nowrap" }}>Domain Journals</h1>
@@ -84,7 +84,13 @@ const Nav = ({ isHeroVisible }) => {
       </div>
 
       {isMobile && isOpened && (
-        <nav className="mobile show" style={{ marginTop: "4.2rem" }}>
+        <nav
+          className="mobile show"
+          style={{
+            backgroundColor: isHeroVisible && "black",
+            marginTop: "4.2rem",
+          }}
+        >
           {visibleLinks.map((item) => (
             <Link
               to={item.to}
