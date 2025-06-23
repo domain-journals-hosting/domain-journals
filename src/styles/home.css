@@ -1,4 +1,3 @@
-/* === Base Container === */
 .home-wrapper {
   background-color: #f1f8f4;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -19,7 +18,6 @@
   margin: 1.2rem;
 }
 
-/* === Buttons === */
 .home-wrapper button {
   color: #f1f8e9;
   background-color: #659377;
@@ -37,7 +35,6 @@
   background-color: #4e745b;
 }
 
-/* === Article Section === */
 .home-wrapper article {
   background-color: #e8f5e9;
   display: flex;
