@@ -4,6 +4,13 @@ import { slug } from "../data/journals";
 import ReviewActions from "./ReviewActions";
 import journals from "../data/journals";
 import "../styles/reviewManuscripts.css";
+const backendBase = import.meta.env.VITE_API_BASE_URL;
+const downloadLink = (file) => {
+  console.log(file);
+  return file.endsWith(".doc")
+    ? file
+    : `${backendBase}/file?url=${encodeURIComponent(file)}`;
+};
 
 const STATUS_TABS = [
   { label: "Under Review", value: "under-review", color: "#FFA500" },
@@ -166,12 +173,7 @@ const ReviewManuscripts = () => {
                 >
                   <button className="review-action-btn">View</button>
                 </a>
-                <a
-                  href={m.file}
-                  download={
-                    m.file.endsWith(".doc") ? undefined : "Manuscript.pdf"
-                  }
-                >
+                <a href={downloadLink(m.file)} download>
                   <button className="review-action-btn">Download</button>
                 </a>
 

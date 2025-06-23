@@ -24,6 +24,6 @@
 }
 
 .social-links a:hover {
-  color: #1e9965; /* bullet green */
+  color: #1e9965;
   transform: scale(1.2);
 }

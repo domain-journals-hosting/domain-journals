@@ -104,13 +104,3 @@ nav.mobile.show a {
     transform: scale(1) rotate(360deg);
   }
 }
-
-/* Optional: hide mobile nav on large screens */
-@media (min-width: 768px) {
-  nav.mobile {
-    display: none;
-  }
-  .icon-wrapper {
-    display: none;
-  }
-}

@@ -9,6 +9,13 @@ export const CurrentIssue = () => {
   const [manuscripts, setManuscripts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState(null);
+  const backendBase = import.meta.env.VITE_API_BASE_URL;
+  const downloadLink = (file) => {
+    console.log(file);
+    return file.endsWith(".doc")
+      ? file
+      : `${backendBase}/file?url=${encodeURIComponent(file)}`;
+  };
 
   useEffect(() => {
     const fetchAccepted = async () => {
@@ -59,7 +66,7 @@ export const CurrentIssue = () => {
                   >
                     <button>View</button>
                   </a>
-                  <a href={m.file} download>
+                  <a href={downloadLink(m.file)} download>
                     <button>Download</button>
                   </a>
                 </div>

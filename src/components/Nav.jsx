@@ -53,7 +53,6 @@ const Nav = ({ isHeroVisible }) => {
   };
 
   if (location.pathname.startsWith("/journals/")) return null;
-
   return (
     <>
       <div
@@ -64,7 +63,7 @@ const Nav = ({ isHeroVisible }) => {
           left: 0,
           right: 0,
           zIndex: 999,
-          backgroundColor: isHeroVisible && "transparent",
+          backgroundColor: isHeroVisible || (isHeroVisible && "transparent"),
         }}
       >
         <h1 style={{ whiteSpace: "nowrap" }}>Domain Journals</h1>

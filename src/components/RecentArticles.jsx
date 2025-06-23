@@ -6,7 +6,13 @@ const RecentArticles = () => {
   const [articles, setArticles] = useState([]);
   const [visibleCount, setVisibleCount] = useState(8);
   const [loading, setLoading] = useState(true);
-
+  const backendBase = import.meta.env.VITE_API_BASE_URL;
+  const downloadLink = (file) => {
+    console.log(file);
+    return file.endsWith(".doc")
+      ? file
+      : `${backendBase}/file?url=${encodeURIComponent(file)}`;
+  };
   useEffect(() => {
     const fetchArticles = async () => {
       console.log("Fetching recent articles...");
@@ -57,7 +63,7 @@ const RecentArticles = () => {
                   >
                     <button className="btn">View</button>
                   </a>
-                  <a href={m.file} download>
+                  <a href={downloadLink(m.file)} download>
                     <button className="btn">Download</button>
                   </a>
                 </div>

@@ -68,6 +68,7 @@ function App() {
           />
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route path="/journals" element={<JournalsList />} />
+
           <Route path="/journals/:slug" element={<JournalsHome />} />
           <Route
             path="/journals/:slug/current-issue"

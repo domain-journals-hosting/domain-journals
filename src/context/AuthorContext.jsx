@@ -14,7 +14,6 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     setChecked(true);
-    
   };
   useEffect(() => {
     const checkUser = async () => {
@@ -25,7 +24,10 @@ export const AuthProvider = ({ children }) => {
         console.log(response);
         setUser(response.data);
       } catch (err) {
-        setError(err.message);
+        if (!err.response) setError("No server response");
+        else {
+          setError(err.message);
+        }
         console.log(err.message);
         setUser(null);
       } finally {
