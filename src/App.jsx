@@ -54,7 +54,7 @@ function App() {
   const isHomepage = location.pathname === "/";
 
   if (!isHomepage) {
-    setHeroVisible(false); 
+    setIsHeroVisible(false); 
   }
 }, [location.pathname]);
   return (
