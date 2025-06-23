@@ -7,7 +7,7 @@ import { useAuth } from "../hooks/useAuthor";
 import { useUser } from "../hooks/useUser";
 
 const Nav = ({ isHeroVisible }) => {
-  const isMobile = useScreenSize();
+  const isMobile = useScreenSize(800);
   const iconRef = useRef(null);
   const location = useLocation();
   const { user } = useAuth();

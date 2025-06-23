@@ -44,14 +44,19 @@ import AuditReviews from "./admins/AuditReviews";
 import { useEffect, useState } from "react";
 
 function App() {
+  const location = useLocation();
   const [isHeroVisible, setIsHeroVisible] = useState(true);
   const isJournalsPage = location.pathname.startsWith("/journals/");
   const isHomePage = location.pathname === "/";
   const showNav = !isJournalsPage && !isHomePage;
 
   useEffect(() => {
-    if (!location.pathname !== "/") setIsHeroVisible(false);
-  }, [isHomePage]);
+    const isHomepage = location.pathname === "/";
+
+    if (!isHomepage) {
+      setIsHeroVisible(false);
+    }
+  }, [location.pathname]);
   return (
     <div className="App">
       <Nav isHeroVisible={isHeroVisible} />
