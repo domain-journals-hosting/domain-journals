@@ -63,7 +63,7 @@ const Nav = ({ isHeroVisible }) => {
           left: 0,
           right: 0,
           zIndex: 999,
-          backgroundColor: isHeroVisible || (isHeroVisible && "transparent"),
+          backgroundColor: isHeroVisible && "transparent",
         }}
       >
         <h1 style={{ whiteSpace: "nowrap" }}>Domain Journals</h1>
