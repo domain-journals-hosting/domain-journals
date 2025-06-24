@@ -97,7 +97,6 @@ const AuthorProfile = () => {
           onClose={() => setToast(null)}
         />
       )}
-      s
       <div
         style={{
           maxWidth: 900,
