@@ -54,13 +54,13 @@ const Home = ({ setIsHeroVisible }) => {
         <h3>
           <Link to={"/signup"}>Become an author?</Link>
         </h3>
-
+        <hr style={{ padding: "20px" }} />
         <h3>Contribute to the advancement of knowledge</h3>
         <button
           style={{ margin: "20px", padding: "20px", borderRadius: "25px" }}
           onClick={() => navigate("/submit")}
         >
-          Submit a manuscript?
+          Submit a manuscript
         </button>
         <h2>Authors reviews</h2>
         <ReviewCarousel />
