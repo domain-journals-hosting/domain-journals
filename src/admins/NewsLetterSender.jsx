@@ -36,7 +36,9 @@ const NewsletterSender = () => {
         required
         rows={6}
       />
-      <button type="submit">Send Newsletter</button>
+      <button type="submit" style={{ color: "rgb(101, 147, 119)" }}>
+        Send Newsletter
+      </button>
       {status && <p>{status}</p>}
     </form>
   );
