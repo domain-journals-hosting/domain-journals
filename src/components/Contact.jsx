@@ -48,13 +48,15 @@ const Contact = () => {
       <div className="contact-container">
         <h2>Contact Us</h2>
         <p>
-          <strong>Address:</strong> 484 Greg's Road, Lagos, Nigeria
+          <strong>Address:</strong> Delta State University, Abraka
         </p>
         <p>
-          <strong>Phone:</strong> 0812 345 6789
+          <strong>Phone:</strong>{" "}
+          <a href="tel: +2349156263372"> +234 915 626 3372</a>
         </p>
         <p>
-          <strong>Email:</strong> contact@domainjournals.org
+          <strong>Email:</strong>
+          <a href="mailto:contactdomainjournals@gmail.com"></a>
         </p>
         <form onSubmit={handleSubmit}>
           <label htmlFor="firstname">First Name</label>
