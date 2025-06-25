@@ -55,8 +55,10 @@ const Contact = () => {
           <a href="tel: +2349156263372"> +234 915 626 3372</a>
         </p>
         <p>
-          <strong>Email:</strong>
-          <a href="mailto:contactdomainjournals@gmail.com"></a>
+          <strong>Email:</strong>{" "}
+          <a href="mailto:contactdomainjournals@gmail.com">
+            contactdomainjournals@gmail.com
+          </a>
         </p>
         <form onSubmit={handleSubmit}>
           <label htmlFor="firstname">First Name</label>
