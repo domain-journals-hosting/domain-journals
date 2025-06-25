@@ -42,6 +42,7 @@ import Footer from "./components/Footer";
 import NewsletterSender from "./admins/NewsLetterSender";
 import AuditReviews from "./admins/AuditReviews";
 import { useEffect, useState } from "react";
+import ManuscriptView from "./manuscript/ManuscriptView";
 
 function App() {
   const location = useLocation();
@@ -68,12 +69,14 @@ function App() {
           />
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route path="/journals" element={<JournalsList />} />
+          <Route path="/view/:id" element={<ManuscriptView />} />
 
           <Route path="/journals/:slug" element={<JournalsHome />} />
           <Route
             path="/journals/:slug/current-issue"
             element={<CurrentIssue />}
           />
+
           <Route
             path="/journals/:slug/editorial-board"
             element={<EditorialBoard />}

@@ -18,7 +18,7 @@ const Home = ({ setIsHeroVisible }) => {
     const handleScroll = () => {
       if (!heroRef.current) return;
       const heroBottom = heroRef.current.getBoundingClientRect().bottom;
-      const offset = 100; // show nav only after 100px past bottom
+      const offset = 100;
       setIsHeroVisible(heroBottom - offset > 0);
     };
 
@@ -54,8 +54,17 @@ const Home = ({ setIsHeroVisible }) => {
         <h3>
           <Link to={"/signup"}>Become an author?</Link>
         </h3>
-        <hr style={{ padding: "20px" }} />
-        <h3>Contribute to the advancement of knowledge</h3>
+        <div
+          style={{
+            padding: "20px",
+            backgroundColor: "#093238",
+            width: "100%",
+          }}
+        ></div>
+        <h3 style={{ textAlign: "center", fontWeight: "900", lineHeight: "2" }}>
+          Contribute to the advancement of knowledge. Submit your article to
+          domain journals today
+        </h3>
         <button
           style={{ margin: "20px", padding: "20px", borderRadius: "25px" }}
           onClick={() => navigate("/submit")}
