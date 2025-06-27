@@ -1,10 +1,9 @@
-// No changes to import section
 import { useEffect, useRef, useState, useCallback } from "react";
 import axios from "../api/axios";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import useScreenSize from "../hooks/useScreenSize";
 import defaultAvatar from "../assets/defaultAvatar.jpg";
-import "../styles/reviewCarousel.css"; // ✅ NEW: Import the CSS animation file
+import "../styles/reviewCarousel.css";
 
 const ReviewCarousel = () => {
   const isMobile = useScreenSize();
@@ -42,7 +41,7 @@ const ReviewCarousel = () => {
         );
         setDirection(null);
         setIsAnimating(false);
-      }, 600); // Match CSS duration
+      }, 600);
     },
     [isAnimating, reviews.length]
   );
@@ -131,6 +130,7 @@ const ReviewCarousel = () => {
             display: "flex",
             overflow: "visible",
             width: `${activeReviews.length * 100}%`,
+            maxWidth: "100%",
             transform: `translateX(${translateValue})`,
           }}
         >
