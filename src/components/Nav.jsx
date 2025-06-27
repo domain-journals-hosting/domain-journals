@@ -5,7 +5,7 @@ import "../styles/nav.css";
 import useScreenSize from "../hooks/useScreenSize";
 import { useAuth } from "../hooks/useAuthor";
 import { useUser } from "../hooks/useUser";
-
+import logo from "../assets/logo.png";
 const Nav = ({ isHeroVisible }) => {
   const isMobile = useScreenSize(800);
   const iconRef = useRef(null);
@@ -66,7 +66,7 @@ const Nav = ({ isHeroVisible }) => {
           backgroundColor: isHeroVisible && "transparent",
         }}
       >
-        <img src="/src/assets/logo.png" alt="" width={40} height={40} />
+        <img src={logo} alt="" width={40} height={40} />
         {!isMobile ? (
           <nav className="big-screen">
             {links.map((item) => (
