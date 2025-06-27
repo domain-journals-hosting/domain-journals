@@ -42,6 +42,7 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal }) => {
     const actionMap = {
       approve: { method: "patch", url: `/manuscript/${id}/approve` },
       pay: { method: "patch", url: `/manuscript/${id}/paid` },
+      screen: { method: "patch", url: `manuscript/screen/${id}` },
       reject: {
         method: "patch",
         url: `/manuscript/${id}/reject`,
@@ -94,6 +95,25 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal }) => {
           error={toast.error}
           onClose={() => setToast(null)}
         />
+      )}
+      {status === "screening" && (
+        <>
+          <button
+            className="btn keep"
+            onClick={() => handleAction("screen")}
+            disabled={!!loadingAction}
+          >
+            {loadingAction === "screen" ? "Marking..." : "Mark as Under Review"}
+          </button>
+
+          <button
+            className="btn delete"
+            onClick={() => handleAction("delete")}
+            disabled={!!loadingAction}
+          >
+            {loadingAction === "delete" ? "Deleting..." : "Delete"}
+          </button>
+        </>
       )}
 
       {status === "under-review" && (

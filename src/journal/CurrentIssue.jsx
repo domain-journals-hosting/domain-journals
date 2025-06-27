@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "../api/axios";
 import "../styles/currentIssue.css";
@@ -53,22 +53,27 @@ export const CurrentIssue = () => {
             {manuscripts.map((m) => (
               <li key={m._id} className="manuscript-item">
                 <h3>{m.title}</h3>
-                <p>
-                  <strong>Author(s):</strong> {m.name}
+                <p
+                  title={[m.author, ...m.coAuthors.map((a) => a.name)].join(
+                    ", "
+                  )}
+                >
+                  <strong>Author(s):</strong>{" "}
+                  {(() => {
+                    const names = [
+                      m.author,
+                      ...m.coAuthors.map((a) => a.name),
+                    ].join(", ");
+                    return names.length > 100
+                      ? names.slice(0, 97) + "..."
+                      : names;
+                  })()}
                 </p>
+
                 <div className="actions">
-                  <a
-                    href={`https://docs.google.com/viewer?url=${encodeURIComponent(
-                      m.file
-                    )}&embedded=true`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <button>View</button>
-                  </a>
-                  <a href={downloadLink(m.file)} download>
-                    <button>Download</button>
-                  </a>
+                  <Link to="/view" state={{ manuscript: m }}>
+                    <button>📄 View Abstract</button>
+                  </Link>
                 </div>
               </li>
             ))}

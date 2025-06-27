@@ -10,6 +10,10 @@ body {
   margin: 0;
 }
 
+a {
+  color: rgb(9, 50, 56);
+}
+
 main {
   min-height: calc(100vh - 120px);
   display: flex;

@@ -98,7 +98,6 @@ const ReviewCarousel = () => {
             left: "-100px",
             top: "50%",
             transform: "translateY(-50%)",
-            backgroundColor: "darkgreen",
             border: "none",
             fontSize: 24,
             zIndex: 1,
@@ -210,7 +209,6 @@ const ReviewCarousel = () => {
           onClick={() => handleSlide("right")}
           style={{
             position: "absolute",
-            backgroundColor: "darkgreen",
             right: "-80px",
             top: "50%",
             transform: "translateY(-50%)",

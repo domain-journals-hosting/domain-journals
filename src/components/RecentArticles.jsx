@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "../api/axios";
 import "../styles/recentArticles.css";
+import { Link } from "react-router-dom";
 
 const RecentArticles = () => {
   const [articles, setArticles] = useState([]);
@@ -27,6 +28,8 @@ const RecentArticles = () => {
       }
     };
 
+    console.log(articles);
+
     fetchArticles();
   }, []);
 
@@ -50,22 +53,27 @@ const RecentArticles = () => {
             {visibleArticles.map((m) => (
               <li key={m._id} className="article-card">
                 <h3 className="article-title">{m.title}</h3>
-                <p>
-                  <strong>Author(s):</strong> {m.name}
+                <p
+                  title={[m.author, ...m.coAuthors.map((a) => a.name)].join(
+                    ", "
+                  )}
+                >
+                  <strong>Author(s):</strong>{" "}
+                  {(() => {
+                    const names = [
+                      m.author,
+                      ...m.coAuthors.map((a) => a.name),
+                    ].join(", ");
+                    return names.length > 100
+                      ? names.slice(0, 97) + "..."
+                      : names;
+                  })()}
                 </p>
+
                 <div className="article-actions">
-                  <a
-                    href={`https://docs.google.com/viewer?url=${encodeURIComponent(
-                      m.file
-                    )}&embedded=true`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <button className="btn">View</button>
-                  </a>
-                  <a href={downloadLink(m.file)} download>
-                    <button className="btn">Download</button>
-                  </a>
+                  <Link to="/view" state={{ manuscript: m }}>
+                    <button>📄 View Abstract</button>
+                  </Link>
                 </div>
               </li>
             ))}
