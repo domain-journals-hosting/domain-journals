@@ -3,7 +3,7 @@ import axios from "../api/axios";
 import "../styles/review.css";
 import Toast from "../components/Toast";
 
-const ReviewActions = ({ id, status, issue, onUpdate, journal }) => {
+const ReviewActions = ({ id, status, issue, onUpdate, journal, edited }) => {
   const fileInputRef = useRef(null);
   const [file, setFile] = useState(null);
   const [showRejectInput, setShowRejectInput] = useState(false);
@@ -14,6 +14,11 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal }) => {
   const [loadingAction, setLoadingAction] = useState("");
 
   const handleFileUpload = async () => {
+    if (!file)
+      return setToast({
+        message: "You need to pick a file first",
+        error: true,
+      });
     const formData = new FormData();
     formData.append("file", file);
     try {
@@ -70,7 +75,8 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal }) => {
       setFile(null);
     } catch (err) {
       console.error(err);
-      setToast({ message: `Action '${type}' failed.`, error: true });
+      const message = err?.response?.data?.error || `Action '${type}' failed.`;
+      setToast({ message, error: true });
     } finally {
       setLoadingAction("");
     }
@@ -179,7 +185,7 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal }) => {
         <div className="paid-group">
           <div className="upload-section">
             <label htmlFor={`upload-${id}`}>
-              Upload edited file (optional)
+              Upload edited file ({edited ? "Updated" : "Yet to update"})
             </label>
             <input
               id={`upload-${id}`}

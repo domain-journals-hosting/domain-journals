@@ -1,8 +1,10 @@
+// No changes to import section
 import { useEffect, useRef, useState, useCallback } from "react";
 import axios from "../api/axios";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import useScreenSize from "../hooks/useScreenSize";
 import defaultAvatar from "../assets/defaultAvatar.jpg";
+import "../styles/reviewCarousel.css"; // ✅ NEW: Import the CSS animation file
 
 const ReviewCarousel = () => {
   const isMobile = useScreenSize();
@@ -40,7 +42,7 @@ const ReviewCarousel = () => {
         );
         setDirection(null);
         setIsAnimating(false);
-      }, 500);
+      }, 600); // Match CSS duration
     },
     [isAnimating, reviews.length]
   );
@@ -72,13 +74,14 @@ const ReviewCarousel = () => {
       ? [reviews[current], reviews[nextIndex]]
       : [reviews[prevIndex], reviews[current]]
     : [reviews[current]];
-
   const translateValue = direction
     ? direction === "right"
       ? "-100%"
-      : "0%"
+      : "100%"
     : "0%";
-  if (!reviews.length) return <p>No reviews to show </p>;
+
+  if (!reviews.length) return <p>No reviews to show</p>;
+
   return (
     <div
       style={{
@@ -107,6 +110,7 @@ const ReviewCarousel = () => {
           <FaChevronLeft />
         </button>
       )}
+
       <div
         className="reviews-carousel"
         onTouchStart={handleTouchStart}
@@ -122,13 +126,12 @@ const ReviewCarousel = () => {
         }}
       >
         <div
-          className="track"
+          className={`track ${direction ? "animate-slide" : ""}`}
           style={{
             display: "flex",
             overflow: "visible",
             width: `${activeReviews.length * 100}%`,
             transform: `translateX(${translateValue})`,
-            transition: direction ? "transform 0.5s ease-in-out" : "none",
           }}
         >
           {activeReviews.map((review, idx) => (
@@ -203,7 +206,8 @@ const ReviewCarousel = () => {
             </div>
           ))}
         </div>
-      </div>{" "}
+      </div>
+
       {!isMobile && (
         <button
           onClick={() => handleSlide("right")}

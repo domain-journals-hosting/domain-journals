@@ -83,7 +83,9 @@ const Archive = () => {
               <ul>
                 {items.map((m) => (
                   <li key={m._id}>
-                    <h3>{m.title}</h3>
+                    <h3>
+                      {m.title} ({m.articleType || "Editorial"})
+                    </h3>
                     <p
                       title={[m.author, ...m.coAuthors.map((a) => a.name)].join(
                         ", "
@@ -100,7 +102,6 @@ const Archive = () => {
                           : names;
                       })()}
                     </p>
-
                     <div className="actions">
                       <Link to="/view" state={{ manuscript: m }}>
                         <button>📄 View Abstract</button>

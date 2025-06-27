@@ -183,6 +183,9 @@ const ReviewManuscripts = () => {
                   <p>
                     <strong>Issue:</strong> {m.issue}
                   </p>
+                  <p>
+                    <strong>Article type:</strong> {m.articleType}
+                  </p>
                 </>
               )}
 
@@ -207,6 +210,7 @@ const ReviewManuscripts = () => {
                 <div style={{ width: "100%" }}>
                   <ReviewActions
                     id={m._id}
+                    edited={m.edited}
                     status={m.status || "under-review"}
                     onUpdate={fetchManuscripts}
                     issue={selectedValues[m._id]?.issue || m.issue}
