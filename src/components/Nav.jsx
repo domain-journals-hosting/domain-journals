@@ -68,6 +68,11 @@ const Nav = ({ isHeroVisible }) => {
         }}
       >
         <img src={logo} alt="" width={40} height={40} />
+        {!isMobile && (
+          <h2 style={{ marginLeft: "30px", whiteSpace: "nowrap" }}>
+            Domain Journals
+          </h2>
+        )}
         {!isMobile ? (
           <nav className="big-screen">
             {links.map((item) => (
