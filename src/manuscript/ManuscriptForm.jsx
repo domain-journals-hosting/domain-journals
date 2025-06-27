@@ -3,12 +3,13 @@ import journals, { slug } from "../data/journals";
 import "../styles/form.css";
 import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
-
+import { FaTrash } from "react-icons/fa";
 const ManuscriptForm = () => {
   const [author, setAuthor] = useState("");
   const [coAuthors, setCoAuthors] = useState([{ name: "", email: "" }]);
   const [email, setEmail] = useState("");
   const [journalSlug, setJournalSlug] = useState(slug(journals[0]));
+  const [articleType, setArticleType] = useState("Editorial");
   const [title, setTitle] = useState("");
   const [abstract, setAbstract] = useState("");
   const [file, setFile] = useState(null);
@@ -18,6 +19,9 @@ const ManuscriptForm = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
+  const deleteCoAuthor = (index) => {
+    setCoAuthors((prev) => prev.filter((_, i) => i !== index));
+  };
   const addNewCoAuthor = () =>
     setCoAuthors((prev) => [...prev, { name: "", email: "" }]);
 
@@ -108,29 +112,22 @@ const ManuscriptForm = () => {
       file: fileUrl,
       country,
       coAuthors,
+      articleType,
     };
-    let attempts = 0;
-    const maxAttempts = 5;
 
-    const trySubmit = async () => {
-      while (attempts < maxAttempts) {
-        try {
-          const res = await axios.post("/manuscript", manuscript);
-          console.log(res.data);
-          navigate("/success");
-          return;
-        } catch (error) {
-          setLoading(false);
-          attempts++;
-          console.error(`Attempt ${attempts} failed`, error);
-          if (attempts === maxAttempts) {
-            setErrMsg("Could not submit info, please try again later.");
-          }
-        }
+    const submit = async () => {
+      try {
+        const res = await axios.post("/manuscript", manuscript);
+        console.log(res.data);
+        navigate("/success");
+        return;
+      } catch (error) {
+        setLoading(false);
+        console.error("Attempt failed", error);
       }
     };
 
-    trySubmit();
+    submit();
   };
 
   return (
@@ -160,28 +157,58 @@ const ManuscriptForm = () => {
 
         <h2>Co-authors</h2>
         {coAuthors.map((c, i) => (
-          <div key={i}>
-            <h3>Co-author {i + 1}</h3>
-            <input
-              required
-              style={{ margin: "10px" }}
-              type="text"
-              value={coAuthors[i].name}
-              placeholder="Name"
-              onChange={(e) => handleCoAuthorChange(i, "name", e.target.value)}
-              id={`co-author-${i}-name`}
-            />
-            <input
-              required
-              style={{ margin: "10px" }}
-              type="text"
-              value={coAuthors[i].email}
-              placeholder="Email"
-              onChange={(e) => handleCoAuthorChange(i, "email", e.target.value)}
-              id={`co-author-${i}-email`}
-            />
+          <div
+            key={i}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: "1rem",
+            }}
+          >
+            <div style={{ flexGrow: 1 }}>
+              <h3>Co-author {i + 1}</h3>
+              <input
+                required
+                style={{ margin: "10px" }}
+                type="text"
+                value={coAuthors[i].name}
+                placeholder="Name"
+                onChange={(e) =>
+                  handleCoAuthorChange(i, "name", e.target.value)
+                }
+                id={`co-author-${i}-name`}
+              />
+              <input
+                required
+                style={{ margin: "10px" }}
+                type="text"
+                value={coAuthors[i].email}
+                placeholder="Email"
+                onChange={(e) =>
+                  handleCoAuthorChange(i, "email", e.target.value)
+                }
+                id={`co-author-${i}-email`}
+              />
+            </div>
+            <button
+              type="button"
+              onClick={() => deleteCoAuthor(i)}
+              style={{
+                background: "none",
+                border: "none",
+                color: "red",
+                cursor: "pointer",
+                marginLeft: "10px",
+                alignSelf: "flex-start",
+              }}
+              aria-label={`Delete co-author ${i + 1}`}
+            >
+              <FaTrash />
+            </button>
           </div>
         ))}
+
         <button
           type="button"
           style={{
@@ -206,6 +233,33 @@ const ManuscriptForm = () => {
             </option>
           ))}
         </select>
+        <label htmlFor="articletype">Article Type:</label>
+        <select
+          required
+          className="form-select"
+          id="articletype"
+          value={articleType}
+          onChange={(e) => setArticleType(e.target.value)}
+        >
+          <option value="Editorial">Editorial</option>
+          <option value="Research Article">Research Article</option>
+          <option value="Case Report">Case Report</option>
+          <option value="Review Article">Review Article</option>
+          <option value="Short Article">Short Article</option>
+          <option value="Short Communication">Short Communication</option>
+          <option value="Letter to Editor">Letter to Editor</option>
+          <option value="Commentry">Commentry</option>
+          <option value="Conference Proceeding">Conference Proceeding</option>
+          <option value="Rapid Communication">Rapid Communication</option>
+          <option value="Special Issue Article">Special Issue Article</option>
+          <option value="Annual Meeting Abstract">
+            Annual Meeting Abstract
+          </option>
+          <option value="Meeting Report">Meeting Report</option>
+          <option value="Proceedings">Proceedings</option>
+          <option value="Expert Review">Expert Review</option>
+        </select>
+
         <label htmlFor="title">Manuscript Title:</label>
         <textarea
           required

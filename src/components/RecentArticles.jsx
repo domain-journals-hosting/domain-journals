@@ -3,22 +3,19 @@ import axios from "../api/axios";
 import "../styles/recentArticles.css";
 import { Link } from "react-router-dom";
 
-const RecentArticles = () => {
+const RecentArticles = ({ journal = null }) => {
   const [articles, setArticles] = useState([]);
   const [visibleCount, setVisibleCount] = useState(8);
   const [loading, setLoading] = useState(true);
-  const backendBase = import.meta.env.VITE_API_BASE_URL;
-  const downloadLink = (file) => {
-    console.log(file);
-    return file.endsWith(".doc")
-      ? file
-      : `${backendBase}/file?url=${encodeURIComponent(file)}`;
-  };
+
   useEffect(() => {
     const fetchArticles = async () => {
-      console.log("Fetching recent articles...");
+      const URL = journal
+        ? `/accepted/recent/?journal=${journal}`
+        : `/accepted/recent/`;
+      console.log(URL);
       try {
-        const res = await axios.get("/accepted/recent");
+        const res = await axios.get(URL);
         console.log("Received:", res.data);
         setArticles(res.data);
       } catch (err) {
@@ -27,8 +24,6 @@ const RecentArticles = () => {
         setLoading(false);
       }
     };
-
-    console.log(articles);
 
     fetchArticles();
   }, []);
@@ -40,7 +35,14 @@ const RecentArticles = () => {
   const visibleArticles = articles.slice(0, visibleCount);
 
   return (
-    <div className="recent-articles">
+    <div
+      className="recent-articles"
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "flex-start",
+      }}
+    >
       <h2 className="section-title">Recent Articles</h2>
 
       {loading ? (
@@ -52,13 +54,15 @@ const RecentArticles = () => {
           <ul className="articles-list">
             {visibleArticles.map((m) => (
               <li key={m._id} className="article-card">
-                <h3 className="article-title">{m.title}</h3>
+                <h3 style={{ padding: 0, margin: 0 }} className="article-title">
+                  {m.title}
+                </h3>
                 <p
                   title={[m.author, ...m.coAuthors.map((a) => a.name)].join(
                     ", "
                   )}
                 >
-                  <strong>Author(s):</strong>{" "}
+                  <strong>Author(s):</strong>
                   {(() => {
                     const names = [
                       m.author,

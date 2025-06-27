@@ -9,13 +9,6 @@ export const CurrentIssue = () => {
   const [manuscripts, setManuscripts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState(null);
-  const backendBase = import.meta.env.VITE_API_BASE_URL;
-  const downloadLink = (file) => {
-    console.log(file);
-    return file.endsWith(".doc")
-      ? file
-      : `${backendBase}/file?url=${encodeURIComponent(file)}`;
-  };
 
   useEffect(() => {
     const fetchAccepted = async () => {
@@ -52,6 +45,17 @@ export const CurrentIssue = () => {
           <ul className="manuscript-list">
             {manuscripts.map((m) => (
               <li key={m._id} className="manuscript-item">
+                <h5
+                  style={{
+                    backgroundColor: "blue",
+                    width: "fit-content",
+                    padding: "5px",
+                    borderRadius: "5px",
+                    color: "#fff",
+                  }}
+                >
+                  {m.articleType || "Editorial"}
+                </h5>
                 <h3>{m.title}</h3>
                 <p
                   title={[m.author, ...m.coAuthors.map((a) => a.name)].join(
@@ -80,7 +84,7 @@ export const CurrentIssue = () => {
           </ul>
         )}
       </div>
-      <RecentArticles />
+      <RecentArticles journal={slug} />
     </div>
   );
 };

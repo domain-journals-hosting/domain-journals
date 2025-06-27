@@ -221,7 +221,7 @@ const AuthorProfile = () => {
             <section>
               <h2 style={{ color: "#093238" }}>Pending Manuscripts</h2>
               {allManuscripts.map((m) => (
-                <div key={m._id} style={{ marginBottom: 10 }}>
+                <div key={m._id} style={{ marginTop: 40 }}>
                   <strong>{m.title}</strong> - <em>{m.status}</em>
                   {m.status === "approved" && (
                     <Link
@@ -231,6 +231,7 @@ const AuthorProfile = () => {
                       Pay now
                     </Link>
                   )}
+                  <hr />
                 </div>
               ))}
             </section>
@@ -240,11 +241,12 @@ const AuthorProfile = () => {
             <section style={{ marginTop: 30 }}>
               <h2 style={{ color: "#093238" }}>Published Manuscripts</h2>
               {acceptedManuscripts.map((m) => (
-                <p key={m._id}>
+                <p key={m._id} style={{ marginTop: 40 }}>
                   <strong>{m.title}</strong> -{" "}
                   <Link to={`/journals/${m.journal}/archive`}>
                     view in the current issue
                   </Link>
+                  <hr />
                 </p>
               ))}
             </section>

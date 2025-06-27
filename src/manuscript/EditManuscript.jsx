@@ -4,6 +4,7 @@ import "../styles/form.css";
 import axios from "../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
 import Toast from "../components/Toast";
+import { FaTrash } from "react-icons/fa";
 
 const EditManuscript = () => {
   const { token } = useParams();
@@ -22,13 +23,19 @@ const EditManuscript = () => {
   const [errMsg, setErrMsg] = useState(null);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(null);
+  const [articleType, setArticleType] = useState("Editorial");
+
+  const deleteCoAuthor = (index) => {
+    setCoAuthors((prev) => prev.filter((_, i) => i !== index));
+  };
 
   useEffect(() => {
     (async () => {
       try {
         const res = await axios.get(`/manuscript/verify/${token}`);
         const m = res.data;
-        setAuthor(m.author || "");
+        setAuthor(m.author);
+        setArticleType(m.articleType || "Editorial");
         setEmail(m.email);
         setCoAuthors(Array.isArray(m.coAuthors) ? m.coAuthors : []);
         setJournalSlug(m.journal);
@@ -112,6 +119,7 @@ const EditManuscript = () => {
       abstract,
       file: fileUrl,
       country,
+      articleType,
     };
 
     try {
@@ -156,24 +164,57 @@ const EditManuscript = () => {
 
         <h2>Co-authors</h2>
         {coAuthors.map((c, i) => (
-          <div key={i}>
-            <h3>Co-author {i + 1}</h3>
-            <input
-              style={{ margin: "10px" }}
-              type="text"
-              value={c.name}
-              placeholder="Name"
-              onChange={(e) => handleCoAuthorChange(i, "name", e.target.value)}
-            />
-            <input
-              style={{ margin: "10px" }}
-              type="text"
-              value={c.email}
-              placeholder="Email"
-              onChange={(e) => handleCoAuthorChange(i, "email", e.target.value)}
-            />
+          <div
+            key={i}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: "1rem",
+            }}
+          >
+            <div style={{ flexGrow: 1 }}>
+              <h3>Co-author {i + 1}</h3>
+              <input
+                required
+                style={{ margin: "10px" }}
+                type="text"
+                value={coAuthors[i].name}
+                placeholder="Name"
+                onChange={(e) =>
+                  handleCoAuthorChange(i, "name", e.target.value)
+                }
+                id={`co-author-${i}-name`}
+              />
+              <input
+                required
+                style={{ margin: "10px" }}
+                type="text"
+                value={coAuthors[i].email}
+                placeholder="Email"
+                onChange={(e) =>
+                  handleCoAuthorChange(i, "email", e.target.value)
+                }
+                id={`co-author-${i}-email`}
+              />
+            </div>
+            <button
+              type="button"
+              onClick={() => deleteCoAuthor(i)}
+              style={{
+                border: "none",
+                color: "red",
+                cursor: "pointer",
+                marginLeft: "10px",
+                alignSelf: "flex-start",
+              }}
+              aria-label={`Delete co-author ${i + 1}`}
+            >
+              <FaTrash />
+            </button>
           </div>
         ))}
+
         <button type="button" onClick={addNewCoAuthor}>
           Add co-author
         </button>
@@ -190,6 +231,31 @@ const EditManuscript = () => {
               {j}
             </option>
           ))}
+        </select>
+        <label htmlFor="articletype">Article Type:</label>
+        <select
+          required
+          id="articletype"
+          value={articleType}
+          onChange={(e) => setArticleType(e.target.value)}
+        >
+          <option value="Editorial">Editorial</option>
+          <option value="Research Article">Research Article</option>
+          <option value="Case Report">Case Report</option>
+          <option value="Review Article">Review Article</option>
+          <option value="Short Article">Short Article</option>
+          <option value="Short Communication">Short Communication</option>
+          <option value="Letter to Editor">Letter to Editor</option>
+          <option value="Commentry">Commentry</option>
+          <option value="Conference Proceeding">Conference Proceeding</option>
+          <option value="Rapid Communication">Rapid Communication</option>
+          <option value="Special Issue Article">Special Issue Article</option>
+          <option value="Annual Meeting Abstract">
+            Annual Meeting Abstract
+          </option>
+          <option value="Meeting Report">Meeting Report</option>
+          <option value="Proceedings">Proceedings</option>
+          <option value="Expert Review">Expert Review</option>
         </select>
 
         <label htmlFor="title">Manuscript Title:</label>
