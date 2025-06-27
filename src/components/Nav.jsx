@@ -64,6 +64,7 @@ const Nav = ({ isHeroVisible }) => {
           right: 0,
           zIndex: 999,
           backgroundColor: isHeroVisible && "transparent",
+          borderBottom: isHeroVisible && "transparent",
         }}
       >
         <img src={logo} alt="" width={40} height={40} />
