@@ -54,13 +54,7 @@ const Home = ({ setIsHeroVisible }) => {
         <h3>
           <Link to={"/signup"}>Become an author?</Link>
         </h3>
-        <div
-          style={{
-            padding: "20px",
-            backgroundColor: "#093238",
-            width: "100%",
-          }}
-        ></div>
+
         <h3 style={{ textAlign: "center", fontWeight: "900", lineHeight: "2" }}>
           Contribute to the advancement of knowledge. Submit your article to
           domain journals today
@@ -71,6 +65,13 @@ const Home = ({ setIsHeroVisible }) => {
         >
           Submit a manuscript
         </button>
+        <div
+          style={{
+            padding: "10px",
+            backgroundColor: "#093238",
+            width: "100%",
+          }}
+        ></div>
         <h2>Authors reviews</h2>
         <ReviewCarousel />
       </article>

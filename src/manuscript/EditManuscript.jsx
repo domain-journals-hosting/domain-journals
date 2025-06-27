@@ -9,8 +9,9 @@ const EditManuscript = () => {
   const { token } = useParams();
   const navigate = useNavigate();
 
-  const [name, setName] = useState("");
+  const [author, setAuthor] = useState("");
   const [email, setEmail] = useState("");
+  const [coAuthors, setCoAuthors] = useState([]);
   const [journalSlug, setJournalSlug] = useState(slug(journals[0]));
   const [title, setTitle] = useState("");
   const [abstract, setAbstract] = useState("");
@@ -20,26 +21,27 @@ const EditManuscript = () => {
   const [country, setCountry] = useState("");
   const [errMsg, setErrMsg] = useState(null);
   const [loading, setLoading] = useState(false);
-
   const [toast, setToast] = useState(null);
+
   useEffect(() => {
     (async () => {
       try {
         const res = await axios.get(`/manuscript/verify/${token}`);
         const m = res.data;
-        setName(m.name);
+        setAuthor(m.author || "");
         setEmail(m.email);
+        setCoAuthors(Array.isArray(m.coAuthors) ? m.coAuthors : []);
         setJournalSlug(m.journal);
         setTitle(m.title);
         setAbstract(m.abstract);
         setExistingFileUrl(m.file);
         setCountry(m.country);
       } catch (err) {
-        setErrMsg(err.response.data.error);
+        setErrMsg(err.response?.data?.error);
         setToast({
           message: `There was an error: ${
-            err.response.data.error || "Something went wrong"
-          } `,
+            err.response?.data?.error || "Something went wrong"
+          }`,
           error: true,
         });
         navigate(-1);
@@ -70,11 +72,20 @@ const EditManuscript = () => {
       });
   }, []);
 
+  const addNewCoAuthor = () => {
+    setCoAuthors((prev) => [...prev, { name: "", email: "" }]);
+  };
+
+  const handleCoAuthorChange = (index, field, value) => {
+    const updated = [...coAuthors];
+    updated[index] = { ...updated[index], [field]: value };
+    setCoAuthors(updated);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setErrMsg(null);
-
     let fileUrl = existingFileUrl;
 
     if (newFile) {
@@ -93,7 +104,8 @@ const EditManuscript = () => {
     }
 
     const manuscript = {
-      name,
+      author,
+      coAuthors,
       email,
       journal: journalSlug,
       title,
@@ -124,13 +136,13 @@ const EditManuscript = () => {
 
       <h1>Edit Manuscript</h1>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="name">Name:</label>
+        <label htmlFor="author">Name:</label>
         <input
           required
-          id="name"
+          id="author"
           type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={author}
+          onChange={(e) => setAuthor(e.target.value)}
         />
 
         <label htmlFor="email">Email:</label>
@@ -141,6 +153,30 @@ const EditManuscript = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
+
+        <h2>Co-authors</h2>
+        {coAuthors.map((c, i) => (
+          <div key={i}>
+            <h3>Co-author {i + 1}</h3>
+            <input
+              style={{ margin: "10px" }}
+              type="text"
+              value={c.name}
+              placeholder="Name"
+              onChange={(e) => handleCoAuthorChange(i, "name", e.target.value)}
+            />
+            <input
+              style={{ margin: "10px" }}
+              type="text"
+              value={c.email}
+              placeholder="Email"
+              onChange={(e) => handleCoAuthorChange(i, "email", e.target.value)}
+            />
+          </div>
+        ))}
+        <button type="button" onClick={addNewCoAuthor}>
+          Add co-author
+        </button>
 
         <label htmlFor="journal">Journal:</label>
         <select
@@ -184,17 +220,17 @@ const EditManuscript = () => {
                 )}&embedded=true`}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ marginRight: "10px" }}
               >
                 View File
-              </a>
+              </a>{" "}
+              |{" "}
               <a
                 href={existingFileUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 download
               >
-                Download File
+                Download
               </a>
             </div>
           </>
@@ -204,12 +240,9 @@ const EditManuscript = () => {
         <input
           id="file"
           type="file"
-          accept=".docx, .doc, "
+          accept=".docx,.doc,.pdf"
           onChange={(e) => setNewFile(e.target.files[0])}
         />
-        <p style={{ fontSize: "0.9rem", marginTop: "5px" }}>
-          (Leave blank if you don't want to replace the current file)
-        </p>
 
         <label htmlFor="country">Country:</label>
         <select
@@ -228,7 +261,7 @@ const EditManuscript = () => {
 
         {errMsg && <p style={{ color: "red" }}>{errMsg}</p>}
 
-        <button type="submit">
+        <button type="submit" disabled={loading}>
           {loading ? "Updating..." : "Update Manuscript"}
         </button>
       </form>

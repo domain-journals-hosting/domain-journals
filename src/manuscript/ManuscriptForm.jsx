@@ -5,7 +5,8 @@ import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
 const ManuscriptForm = () => {
-  const [name, setName] = useState("");
+  const [author, setAuthor] = useState("");
+  const [coAuthors, setCoAuthors] = useState([{ name: "", email: "" }]);
   const [email, setEmail] = useState("");
   const [journalSlug, setJournalSlug] = useState(slug(journals[0]));
   const [title, setTitle] = useState("");
@@ -17,9 +18,17 @@ const ManuscriptForm = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
+  const addNewCoAuthor = () =>
+    setCoAuthors((prev) => [...prev, { name: "", email: "" }]);
+
+  const handleCoAuthorChange = (index, field, value) => {
+    const updated = [...coAuthors];
+    updated[index] = { ...updated[index], [field]: value };
+    setCoAuthors(updated);
+  };
   useEffect(() => {
     setErrMsg(null);
-  }, [name, email, title, abstract, country]);
+  }, [author, email, title, abstract, country]);
   useEffect(() => {
     fetch("https://restcountries.com/v3.1/all?fields=name")
       .then((res) => res.json())
@@ -48,6 +57,14 @@ const ManuscriptForm = () => {
     setErrMsg(null);
     let fileUrl = "";
     e.preventDefault();
+    const allCoAuthorsValid = coAuthors.every(
+      (c) => c.name.trim() && c.email.trim()
+    );
+    if (!allCoAuthorsValid) {
+      setErrMsg("Please fill in all co-author name and email fields.");
+      setLoading(false);
+      return;
+    }
     if (!file) return setErrMsg("Please select a file");
     const formData = new FormData();
     const allowedTypes = [
@@ -83,13 +100,14 @@ const ManuscriptForm = () => {
       return;
     }
     const manuscript = {
-      name,
+      author,
       email,
       journal: journalSlug,
       title,
       abstract,
       file: fileUrl,
       country,
+      coAuthors,
     };
     let attempts = 0;
     const maxAttempts = 5;
@@ -125,8 +143,8 @@ const ManuscriptForm = () => {
           id="name"
           type="text"
           placeholder="Enter your name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={author}
+          onChange={(e) => setAuthor(e.target.value)}
         />
 
         <label htmlFor="email">Email:</label>
@@ -140,6 +158,41 @@ const ManuscriptForm = () => {
         />
         <p>We'll never share your email with anyone else</p>
 
+        <h2>Co-authors</h2>
+        {coAuthors.map((c, i) => (
+          <div key={i}>
+            <h3>Co-author {i + 1}</h3>
+            <input
+              required
+              style={{ margin: "10px" }}
+              type="text"
+              value={coAuthors[i].name}
+              placeholder="Name"
+              onChange={(e) => handleCoAuthorChange(i, "name", e.target.value)}
+              id={`co-author-${i}-name`}
+            />
+            <input
+              required
+              style={{ margin: "10px" }}
+              type="text"
+              value={coAuthors[i].email}
+              placeholder="Email"
+              onChange={(e) => handleCoAuthorChange(i, "email", e.target.value)}
+              id={`co-author-${i}-email`}
+            />
+          </div>
+        ))}
+        <button
+          type="button"
+          style={{
+            backgroundColor: "green",
+            fontSize: "20px",
+            borderRadius: "30px",
+          }}
+          onClick={addNewCoAuthor}
+        >
+          Add co-author
+        </button>
         <label htmlFor="journal">Journal:</label>
         <select
           required
@@ -153,7 +206,6 @@ const ManuscriptForm = () => {
             </option>
           ))}
         </select>
-
         <label htmlFor="title">Manuscript Title:</label>
         <textarea
           required

@@ -1,83 +1,77 @@
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import axios from "../api/axios";
-
-const backendBase = import.meta.env.VITE_API_BASE_URL;
+import { useLocation } from "react-router-dom";
 
 const ManuscriptView = () => {
-  const { id } = useParams();
-  const [manuscript, setManuscript] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [errMsg, setErrMsg] = useState("");
-
-  useEffect(() => {
-    const fetchManuscript = async () => {
-      setLoading(true);
-      try {
-        const res = await axios.get(`/accepted/view/${id}`);
-        setManuscript(res.data);
-        setErrMsg("");
-      } catch (err) {
-        const msg = err.response?.data?.error || "Something went wrong";
-        setErrMsg(msg);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchManuscript();
-  }, [id]);
-
+  const backendBase = import.meta.env.VITE_API_BASE_URL;
   const downloadLink = (file) => {
+    console.log(file);
     return file.endsWith(".doc")
       ? file
       : `${backendBase}/file?url=${encodeURIComponent(file)}`;
   };
+  const { state } = useLocation();
+  const manuscript = state?.manuscript;
+  if (!manuscript) return <p>Manuscript not found.</p>;
 
-  if (loading) return <p>Loading manuscript...</p>;
-  if (errMsg) return <p style={{ color: "crimson" }}>{errMsg}</p>;
-  if (!manuscript) return <p>No manuscript found.</p>;
-
-  const authorsList = manuscript.authors?.length
-    ? manuscript.authors.map((author, i) => (
-        <li key={i}>
-          {author.name} <small>({author.email})</small>
-        </li>
-      ))
-    : [`(This is only for testing) ${manuscript.name}`];
-
-  const file = manuscript.file;
-  const previewUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(
-    file
-  )}&embedded=true`;
+  const {
+    title,
+    author,
+    coAuthors = [],
+    journal,
+    volume,
+    issue,
+    abstract,
+    file,
+    country,
+    identifier,
+  } = manuscript;
+  const authors = [author, ...coAuthors.map((a) => a.name)].join(", ");
 
   return (
-    <div className="manuscript-view">
-      <h1>{manuscript.title}</h1>
-      <p className="meta">
-        <strong>Journal:</strong> {manuscript.journal}
+    <div
+      className="manuscript-view"
+      style={{ padding: "20px", maxWidth: "700px", margin: "0 auto" }}
+    >
+      <h1 style={{ marginBottom: "10px" }}>{title}</h1>
+
+      {identifier && (
+        <p>
+          <strong>ID:</strong> {identifier}
+        </p>
+      )}
+
+      <p>
+        <strong>Author(s):</strong> {authors}
       </p>
-      <p className="meta">
-        <strong>Volume:</strong> {manuscript.volume} | <strong>Issue:</strong>{" "}
-        {manuscript.issue}
+      <p>
+        <strong>Journal:</strong> {journal}
+      </p>
+      <p>
+        <strong>Volume:</strong> {volume}
+      </p>
+      <p>
+        <strong>Issue:</strong> {issue}
+      </p>
+      <p>
+        <strong>Country:</strong> {country}
       </p>
 
-      <h2>Authors</h2>
-      <ul className="authors-list">
-        {authorsList.map((item, idx) => (
-          <li key={idx}>{item}</li>
-        ))}
-      </ul>
+      <p style={{ marginTop: "20px" }}>
+        <strong>Abstract:</strong>
+      </p>
+      <p style={{ whiteSpace: "pre-wrap" }}>{abstract}</p>
 
-      <h2>Abstract</h2>
-      <p className="abstract">{manuscript.abstract}</p>
-
-      <div className="actions">
-        <a href={previewUrl} target="_blank" rel="noopener noreferrer">
-          <button className="review-action-btn">View</button>
+      <div className="actions" style={{ marginTop: "30px" }}>
+        <a
+          href={`https://docs.google.com/viewer?url=${encodeURIComponent(
+            file
+          )}&embedded=true`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <button style={{ marginRight: "10px" }}>📄 View Full Text</button>
         </a>
         <a href={downloadLink(file)} download>
-          <button className="review-action-btn">Download</button>
+          <button>⬇️ Download</button>
         </a>
       </div>
     </div>

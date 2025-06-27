@@ -66,7 +66,7 @@ const Nav = ({ isHeroVisible }) => {
           backgroundColor: isHeroVisible && "transparent",
         }}
       >
-        <h1 style={{ whiteSpace: "nowrap" }}>Domain Journals</h1>
+        <img src="/src/assets/logo.png" alt="" width={40} height={40} />
         {!isMobile ? (
           <nav className="big-screen">
             {links.map((item) => (

@@ -4,6 +4,7 @@ import { slug } from "../data/journals";
 import ReviewActions from "./ReviewActions";
 import journals from "../data/journals";
 import "../styles/reviewManuscripts.css";
+import { useUser } from "../hooks/useUser";
 const backendBase = import.meta.env.VITE_API_BASE_URL;
 const downloadLink = (file) => {
   console.log(file);
@@ -12,14 +13,29 @@ const downloadLink = (file) => {
     : `${backendBase}/file?url=${encodeURIComponent(file)}`;
 };
 
-const STATUS_TABS = [
-  { label: "Under Review", value: "under-review", color: "#FFA500" },
-  { label: "Approved", value: "approved", color: "#4CAF50" },
-  { label: "Paid", value: "paid", color: "#2196F3" },
-  { label: "Rejected", value: "rejected", color: "#F44336" },
-];
-
 const ReviewManuscripts = () => {
+  const { user } = useUser();
+  const role = user?.role;
+
+  const getStatusTabs = () => {
+    const tabs = [
+      { label: "Under Review", value: "under-review", color: "#FFA500" },
+      { label: "Approved", value: "approved", color: "#4CAF50" },
+      { label: "Paid", value: "paid", color: "#2196F3" },
+      { label: "Rejected", value: "rejected", color: "#F44336" },
+    ];
+
+    if (role === "admin") {
+      tabs.unshift({
+        label: "Screening",
+        value: "screening",
+        color: "#9E9E9E",
+      });
+    }
+
+    return tabs;
+  };
+  const STATUS_TABS = getStatusTabs();
   const [selectedValues, setSelectedValues] = useState({});
   const [manuscripts, setManuscripts] = useState([]);
   const [filtered, setFiltered] = useState([]);
@@ -95,8 +111,19 @@ const ReviewManuscripts = () => {
           {filtered.map((m) => (
             <li key={m._id} className="review-card">
               <h3>{m.title}</h3>
-              <p>
-                <strong>Author:</strong> {m.name}
+              <p
+                title={[m.author, ...m.coAuthors.map((a) => a.name)].join(", ")}
+              >
+                <strong>Author(s):</strong>{" "}
+                {(() => {
+                  const names = [
+                    m.author,
+                    ...m.coAuthors.map((a) => a.name),
+                  ].join(", ");
+                  return names.length > 100
+                    ? names.slice(0, 97) + "..."
+                    : names;
+                })()}
               </p>
 
               {m.status === "paid" ? (

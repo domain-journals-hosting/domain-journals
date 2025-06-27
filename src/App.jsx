@@ -69,7 +69,7 @@ function App() {
           />
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route path="/journals" element={<JournalsList />} />
-          <Route path="/view/:id" element={<ManuscriptView />} />
+          <Route path="/view" element={<ManuscriptView />} />
 
           <Route path="/journals/:slug" element={<JournalsHome />} />
           <Route
