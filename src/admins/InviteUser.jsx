@@ -5,7 +5,7 @@ import journals, { slug } from "../data/journals";
 const InviteUser = () => {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("editor");
-  const [access, setAccess] = useState("editor");
+  const [access, setAccess] = useState("domain-health-journal");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [err, setErr] = useState("");
