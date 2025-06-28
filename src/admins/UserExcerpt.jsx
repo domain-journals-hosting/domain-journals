@@ -13,7 +13,9 @@ const UserExcerpt = ({ user }) => {
         style={styles.avatar}
       />
       <div>
-        <p style={styles.name}>{user.name}</p>
+        <p style={styles.name}>
+          {user.name ? user.name : `Pendin user ${user.email}`}
+        </p>
         <p style={styles.role}>
           Role: <strong>{user.role}</strong>
           {user.role === "editor" && user.access
