@@ -1,5 +1,8 @@
 import { useLocation } from "react-router-dom";
-
+import health from "../assets/health.jpg";
+import biological from "../assets/biological.jpg";
+import multidisciplinary from "../assets/multidisciplinary.jpg";
+import scienceImage from "../assets/science.jpg";
 const ManuscriptView = () => {
   const backendBase = import.meta.env.VITE_API_BASE_URL;
   const downloadLink = (file) => {
@@ -11,7 +14,14 @@ const ManuscriptView = () => {
   const { state } = useLocation();
   const manuscript = state?.manuscript;
   if (!manuscript) return <p>Manuscript not found.</p>;
-
+  const source = (string) =>
+    string === "health"
+      ? health
+      : string === "biological"
+      ? biological
+      : string === "multidisciplinary"
+      ? multidisciplinary
+      : scienceImage;
   const {
     title,
     author,
@@ -31,6 +41,7 @@ const ManuscriptView = () => {
       className="manuscript-view"
       style={{ padding: "20px", maxWidth: "700px", margin: "0 auto" }}
     >
+      <img src={source(manuscript.journal.image)} style={styles.img} alt="" />
       <h1 style={{ marginBottom: "10px" }}>{title}</h1>
 
       {identifier && (
@@ -79,3 +90,13 @@ const ManuscriptView = () => {
 };
 
 export default ManuscriptView;
+
+const styles = {
+  img: {
+    width: "100%",
+    maxWidth: "600px",
+    height: "auto",
+    marginBottom: "1rem",
+    borderRadius: "8px",
+  },
+};

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "../api/axios";
+import ConfirmDialog from "../components/ConfirmDialog";
 
 const AuditReviews = () => {
   const [reviews, setReviews] = useState([]);
@@ -7,7 +8,15 @@ const AuditReviews = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [toast, setToast] = useState(null);
+  const [confirmVisible, setConfirmVisible] = useState(false);
+  const [confirmMessage, setConfirmMessage] = useState("");
+  const [onConfirmAction, setOnConfirmAction] = useState(() => () => {});
 
+  const confirm = (message, action) => {
+    setConfirmMessage(message);
+    setOnConfirmAction(() => () => action());
+    setConfirmVisible(true);
+  };
   useEffect(() => {
     fetchReviews();
   }, []);
@@ -45,17 +54,17 @@ const AuditReviews = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this review?")) return;
-
-    try {
-      await axios.delete(`/review/${id}`);
-      showToast("success", "Review deleted.");
-      setReviews((prev) => prev.filter((r) => r._id !== id));
-    } catch (err) {
-      showToast("error", "Failed to delete review.");
-      console.error(err);
-    }
+  const handleDelete = (id) => {
+    confirm("Delete this review?", async () => {
+      try {
+        await axios.delete(`/review/${id}`);
+        showToast("success", "Review deleted.");
+        setReviews((prev) => prev.filter((r) => r._id !== id));
+      } catch (err) {
+        showToast("error", "Failed to delete review.");
+        console.error(err);
+      }
+    });
   };
 
   console.log(reviews);
@@ -126,6 +135,16 @@ const AuditReviews = () => {
 
   return (
     <div style={containerStyle}>
+      <ConfirmDialog
+        open={confirmVisible}
+        onClose={() => setConfirmVisible(false)}
+        onConfirm={() => {
+          onConfirmAction();
+          setConfirmVisible(false);
+        }}
+        message={confirmMessage}
+      />
+
       <h2>Audit Reviews</h2>
 
       {/* Tabs */}

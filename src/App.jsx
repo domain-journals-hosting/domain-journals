@@ -81,20 +81,19 @@ function App() {
             path="/journals/:slug/editorial-board"
             element={<EditorialBoard />}
           />
-          <Route
-            element={<RequireUserAuth allowedRoles={["editor", "admin"]} />}
-          >
+          <Route element={<RequireUserAuth />}>
+            {" "}
+            <Route path="/admin/all" element={<UsersList />} />
             <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/admin/review" element={<ReviewManuscripts />} />
             <Route path="/admin/message" element={<Messages />} />
-            <Route path="admin/audit" element={<AuditReviews />} />
-            <Route path="/admin/newsletter" element={<NewsletterSender />} />
           </Route>
           <Route path="/admin/forgot" element={<AdminForgotPW />} />
           <Route path="/admin/reset" element={<ResetAdminPW />} />
           <Route element={<RequireUserAuth allowedRoles={["admin"]} />}>
             <Route path="/admin/invite" element={<InviteUser />} />
-            <Route path="/admin/all" element={<UsersList />} />
+            <Route path="admin/audit" element={<AuditReviews />} />
+            <Route path="/admin/newsletter" element={<NewsletterSender />} />
             <Route path="/admin/issue" element={<NewIssue />} />
           </Route>
           <Route path="/admin/login" element={<AdminLogin />} />

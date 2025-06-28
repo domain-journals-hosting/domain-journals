@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import axios from "../api/axios";
 import ReplyBox from "./ReplyBox";
 import "../styles/messages.css";
+import ConfirmDialog from "../components/ConfirmDialog";
 import Toast from "../components/Toast";
+import { FaTrash } from "react-icons/fa";
 
 const Messages = () => {
   const [messages, setMessages] = useState([]);
@@ -10,6 +12,7 @@ const Messages = () => {
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("unread");
   const [toast, setToast] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -23,6 +26,21 @@ const Messages = () => {
       .finally(() => setLoading(false));
   }, []);
 
+  const deleteMessage = async (id) => {
+    try {
+      const response = await axios.delete(`/message/${id}`);
+      console.log(response);
+      setToast({ message: "Message successfully deleted" });
+      setMessages((prev) =>
+        prev.filter((msg) => msg._id !== response.data._id)
+      );
+    } catch (error) {
+      setToast({
+        message: error?.response?.data?.error || "Delete failed",
+        error: true,
+      });
+    }
+  };
   const sendReply = async (replyText, msg) => {
     try {
       const response = await axios.post("/message/reply", {
@@ -56,6 +74,13 @@ const Messages = () => {
           onClose={() => setToast(null)}
         />
       )}
+
+      <ConfirmDialog
+        open={showModal}
+        onClose={() => setShowModal(false)}
+        onConfirm={() => deleteMessage(selectedMessage._id)}
+        message={"Are you sure you want to delete this message?"}
+      />
 
       <h2 className="messages-title">Inbox</h2>
 
@@ -115,16 +140,50 @@ const Messages = () => {
               className="message-card"
               onClick={() => setSelectedMessage(msg)}
             >
-              <div className="message-header">
+              <div
+                className="message-header"
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
                 <span className="message-name">
                   {msg.firstName} {msg.lastName}
                 </span>
-                <span
-                  className={`message-status ${msg.read ? "read" : "unread"}`}
-                >
-                  {msg.read ? "Read" : "Unread"}
-                </span>
+
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <span
+                    className={`message-status ${msg.read ? "read" : "unread"}`}
+                  >
+                    {msg.read ? "Read" : "Unread"}
+                  </span>
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowModal(true);
+                      setSelectedMessage(msg);
+                    }}
+                    style={{
+                      backgroundColor: "#e74c3c",
+                      color: "white",
+                      border: "none",
+                      borderRadius: 4,
+                      padding: "6px 10px",
+                      fontSize: 14,
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 5,
+                    }}
+                    title="Delete message"
+                  >
+                    <FaTrash />
+                  </button>
+                </div>
               </div>
+
               <div className="message-email">{msg.email}</div>
               <div className="message-body">{msg.message}</div>
             </div>

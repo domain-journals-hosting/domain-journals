@@ -30,7 +30,9 @@ const UsersList = () => {
       ) : users.length === 0 ? (
         <p style={styles.empty}>No users found.</p>
       ) : (
-        users.map((user) => <UserExcerpt key={user._id} user={user} />)
+        users.map((user) => (
+          <UserExcerpt key={user._id} user={user} setUsers={setUsers} />
+        ))
       )}
     </div>
   );

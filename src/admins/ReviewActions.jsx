@@ -2,8 +2,13 @@ import { useRef, useState } from "react";
 import axios from "../api/axios";
 import "../styles/review.css";
 import Toast from "../components/Toast";
+import ConfirmDialog from "../components/ConfirmDialog";
+import RequireUserAuth from "./RequireUserAuth";
 
 const ReviewActions = ({ id, status, issue, onUpdate, journal, edited }) => {
+  const [confirmVisible, setConfirmVisible] = useState(false);
+  const [confirmMessage, setConfirmMessage] = useState("");
+  const [onConfirmAction, setOnConfirmAction] = useState(() => () => {});
   const fileInputRef = useRef(null);
   const [file, setFile] = useState(null);
   const [showRejectInput, setShowRejectInput] = useState(false);
@@ -12,6 +17,12 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal, edited }) => {
     "Sorry, We couldn't accept this manuscript"
   );
   const [loadingAction, setLoadingAction] = useState("");
+
+  const confirm = (message, action) => {
+    setConfirmMessage(message);
+    setOnConfirmAction(() => () => action());
+    setConfirmVisible(true);
+  };
 
   const handleFileUpload = async () => {
     if (!file)
@@ -47,6 +58,7 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal, edited }) => {
     const actionMap = {
       approve: { method: "patch", url: `/manuscript/${id}/approve` },
       pay: { method: "patch", url: `/manuscript/${id}/paid` },
+
       screen: { method: "patch", url: `manuscript/screen/${id}` },
       reject: {
         method: "patch",
@@ -55,6 +67,7 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal, edited }) => {
       },
       remind: { method: "patch", url: `/manuscript/${id}/remind` },
       revoke: { method: "patch", url: `/manuscript/${id}/revoke` },
+      test: { method: "get", url: `/accepted/new/${journal}` },
       publish: {
         method: "post",
         url: `/accepted`,
@@ -67,12 +80,13 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal, edited }) => {
     if (!action) return setToast({ message: "Invalid action.", error: true });
 
     try {
-      await axios[action.method](action.url, action.data || {}, {
+      const res = await axios[action.method](action.url, action.data || {}, {
         withCredentials: true,
       });
       setToast({ message: `Action '${type}' successful.` });
       onUpdate?.();
       setFile(null);
+      return res.data;
     } catch (err) {
       console.error(err);
       const message = err?.response?.data?.error || `Action '${type}' failed.`;
@@ -95,6 +109,16 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal, edited }) => {
 
   return (
     <div className="review-actions">
+      <ConfirmDialog
+        open={confirmVisible}
+        onClose={() => setConfirmVisible(false)}
+        onConfirm={() => {
+          onConfirmAction();
+          setConfirmVisible(false);
+        }}
+        message={confirmMessage}
+      />
+
       {toast && (
         <Toast
           message={toast.message}
@@ -170,15 +194,18 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal, edited }) => {
           <button className="btn revoke" onClick={() => handleAction("revoke")}>
             {loadingAction === "revoke" ? "Revoking..." : "Revoke Approval"}
           </button>
-          <button
-            className="btn pay"
-            onClick={() => {
-              if (window.confirm("Are you sure you've confirmed this payment?"))
-                handleAction("pay");
-            }}
-          >
-            {loadingAction === "pay" ? "Setting to Paid..." : "Set to Paid"}
-          </button>
+          <RequireUserAuth allowedRoles={["admin"]}>
+            <button
+              className="btn pay"
+              onClick={() =>
+                confirm("Are you sure you've confirmed this payment?", () =>
+                  handleAction("pay")
+                )
+              }
+            >
+              {loadingAction === "pay" ? "Setting to Paid..." : "Set to Paid"}
+            </button>
+          </RequireUserAuth>
         </>
       )}
       {status === "paid" && (
@@ -202,7 +229,13 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal, edited }) => {
           <div className="publish-wrapper">
             <button
               className="btn publish"
-              onClick={() => handleAction("publish")}
+              onClick={async () => {
+                const id = await handleAction("test");
+                confirm(
+                  `Are you sure you want to publish this articles?\nThe ID ${id} will be attached to it`,
+                  () => handleAction("publish")
+                );
+              }}
             >
               {loadingAction === "publish" ? "Publishing..." : "Publish"}
             </button>
