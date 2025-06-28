@@ -32,7 +32,8 @@ const ManuscriptView = () => {
     abstract,
     file,
     country,
-    identifier,
+    customId,
+    articleType,
   } = manuscript;
   const authors = [author, ...coAuthors.map((a) => a.name)].join(", ");
 
@@ -44,11 +45,12 @@ const ManuscriptView = () => {
       <img src={source(manuscript.journal.image)} style={styles.img} alt="" />
       <h1 style={{ marginBottom: "10px" }}>{title}</h1>
 
-      {identifier && (
-        <p>
-          <strong>ID:</strong> {identifier}
-        </p>
-      )}
+      <p>
+        <strong>Article type:</strong> {articleType}
+      </p>
+      <p>
+        <strong>ID:</strong> {customId}
+      </p>
 
       <p>
         <strong>Author(s):</strong> {authors}

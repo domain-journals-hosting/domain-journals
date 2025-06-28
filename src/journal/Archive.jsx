@@ -86,6 +86,7 @@ const Archive = () => {
                     <h3>
                       {m.title} ({m.articleType || "Editorial"})
                     </h3>
+                    ID: {m.customId}
                     <p
                       title={[m.author, ...m.coAuthors.map((a) => a.name)].join(
                         ", "
