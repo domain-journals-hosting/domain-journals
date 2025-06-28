@@ -57,6 +57,7 @@ export const CurrentIssue = () => {
                   {m.articleType || "Editorial"}
                 </h5>
                 <h3>{m.title}</h3>
+                ID: {m.customId}
                 <p
                   title={[m.author, ...m.coAuthors.map((a) => a.name)].join(
                     ", "
@@ -70,7 +71,6 @@ export const CurrentIssue = () => {
                       : names.join(", ");
                   })()}
                 </p>
-
                 <div className="actions">
                   <Link to="/view" state={{ manuscript: m }}>
                     <button>📄 View Abstract</button>

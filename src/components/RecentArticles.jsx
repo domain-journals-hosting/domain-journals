@@ -70,7 +70,7 @@ const RecentArticles = ({ journal = null }) => {
                       : names.join(", ");
                   })()}
                 </p>
-
+                <p> ID: {m.customId}</p>
                 <div className="article-actions">
                   <Link to="/view" state={{ manuscript: m }}>
                     <button>📄 View Abstract</button>
