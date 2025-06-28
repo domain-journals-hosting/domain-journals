@@ -5,12 +5,14 @@ const journals = [
   "Domain multidisciplinary journal",
 ];
 
-export const slug  = (title) =>
-    title
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9\s-]/g, "")
-      .replace(/\s+/g, "-")
-      .replace(/-+/g, "-");
-      
+export const slug = (title) =>
+  title
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
+
 export default journals;
+
+console.log(journals.map((journal) => slug(journal)));

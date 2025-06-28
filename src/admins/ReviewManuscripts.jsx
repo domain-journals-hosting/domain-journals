@@ -81,8 +81,14 @@ const ReviewManuscripts = () => {
     setFiltered(filtered);
   }, [activeTab, manuscripts]);
 
-  if (loading) return <p>Loading manuscripts...</p>;
-  if (error) return <p>{error}</p>;
+  if (loading)
+    return (
+      <p style={{ textAlign: "center", margin: "40px auto" }}>
+        Loading manuscripts...
+      </p>
+    );
+  if (error)
+    return <p style={{ textAlign: "center", margin: "40px auto" }}>{error}</p>;
 
   return (
     <div className="review-container">

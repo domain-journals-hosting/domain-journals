@@ -1,10 +1,8 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
-import { useEffect } from "react";
 
-const RequireUserAuth = ({ allowedRoles }) => {
+const RequireUserAuth = ({ allowedRoles = ["admin", "editor"], children }) => {
   const { user, checked } = useUser();
-
   const location = useLocation();
 
   if (!checked) return <p>Loading...</p>;
@@ -14,10 +12,14 @@ const RequireUserAuth = ({ allowedRoles }) => {
   }
 
   if (!allowedRoles.includes(user.role)) {
-    return <Navigate to="/unauthorized" state={{ from: location }} replace />;
+    return children ? (
+      ""
+    ) : (
+      <Navigate to="/unauthorized" state={{ from: location }} replace />
+    );
   }
 
-  return <Outlet />;
+  return children ? children : <Outlet />;
 };
 
 export default RequireUserAuth;

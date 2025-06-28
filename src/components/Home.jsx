@@ -72,6 +72,17 @@ const Home = ({ setIsHeroVisible }) => {
             width: "100%",
           }}
         ></div>
+      </article>
+
+      <article
+        style={{
+          padding: "1.2rem 1.5rem",
+          margin: "0 15px 20px",
+          borderRadius: "1rem",
+          boxShadow: " 0 4px 10px rgba(0, 128, 0, 0.12)",
+          transition: "box-shadow 0.3s ease",
+        }}
+      >
         <h2>Authors reviews</h2>
         <ReviewCarousel />
       </article>

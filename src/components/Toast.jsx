@@ -5,7 +5,7 @@ const Toast = ({ message, error = false, onClose }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       onClose?.();
-    }, 3000); // auto close after 3s
+    }, 3000);
     return () => clearTimeout(timer);
   }, [onClose]);
 

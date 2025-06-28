@@ -2,10 +2,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
 import defaultAvatar from "../assets/defaultAvatar.jpg";
 import { FaCamera, FaPencilAlt } from "react-icons/fa";
-import { useState } from "react";
+import { act, useState } from "react";
 import axios from "../api/axios";
 import useScreenSize from "../hooks/useScreenSize";
 import Toast from "../components/Toast";
+import RequireUserAuth from "./RequireUserAuth";
 
 const Dashboard = () => {
   const { user, setUser, sendResetMail, logout } = useUser();
@@ -146,29 +147,34 @@ const Dashboard = () => {
         }}
       >
         {[
-          { to: "/admin/invite", text: "Invite Member" },
+          { to: "/admin/invite", text: "Invite Member", access: "admin" },
           { to: "/admin/review", text: "Review Manuscripts" },
-          { to: "/admin/issue", text: "Send a New Issue" },
+          { to: "/admin/issue", text: "Send a New Issue", access: "admin" },
           { to: "/admin/all", text: "See All Users" },
           { to: "/admin/message", text: "See all messages" },
-          { to: "/admin/newsletter", text: "Send a newsletter" },
-          { to: "/admin/audit", text: "Audit reviews" },
-        ].map(({ to, text }) => (
-          <Link
-            key={to}
-            to={to}
-            style={styles.link}
-            onMouseOver={(e) => {
-              e.target.style.backgroundColor = "#e0f2f1";
-              e.target.style.borderColor = "#1e9965";
-            }}
-            onMouseOut={(e) => {
-              e.target.style.backgroundColor = "#f1f8e9";
-              e.target.style.borderColor = "#659377";
-            }}
-          >
-            {text}
-          </Link>
+          {
+            to: "/admin/newsletter",
+            text: "Send a newsletter",
+            access: "admin",
+          },
+          { to: "/admin/audit", text: "Audit reviews", access: "admin" },
+        ].map(({ to, text, access }) => (
+          <RequireUserAuth key={to} allowedRoles={access ? access : undefined}>
+            <Link
+              to={to}
+              style={styles.link}
+              onMouseOver={(e) => {
+                e.target.style.backgroundColor = "#e0f2f1";
+                e.target.style.borderColor = "#1e9965";
+              }}
+              onMouseOut={(e) => {
+                e.target.style.backgroundColor = "#f1f8e9";
+                e.target.style.borderColor = "#659377";
+              }}
+            >
+              {text}
+            </Link>
+          </RequireUserAuth>
         ))}
       </div>
 

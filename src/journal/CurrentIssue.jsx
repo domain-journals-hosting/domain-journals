@@ -62,15 +62,12 @@ export const CurrentIssue = () => {
                     ", "
                   )}
                 >
-                  <strong>Author(s):</strong>{" "}
+                  <strong>Author(s): </strong>
                   {(() => {
-                    const names = [
-                      m.author,
-                      ...m.coAuthors.map((a) => a.name),
-                    ].join(", ");
-                    return names.length > 100
-                      ? names.slice(0, 97) + "..."
-                      : names;
+                    const names = [m.author, ...m.coAuthors.map((a) => a.name)];
+                    return names.length > 10
+                      ? `${m.author.trim().split(" ").slice(-1)[0]} et al.`
+                      : names.join(", ");
                   })()}
                 </p>
 
@@ -84,7 +81,6 @@ export const CurrentIssue = () => {
           </ul>
         )}
       </div>
-      <RecentArticles journal={slug} />
     </div>
   );
 };
