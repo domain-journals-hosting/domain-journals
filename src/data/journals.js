@@ -14,5 +14,3 @@ export const slug = (title) =>
     .replace(/-+/g, "-");
 
 export default journals;
-
-console.log(journals.map((journal) => slug(journal)));
