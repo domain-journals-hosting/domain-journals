@@ -60,6 +60,7 @@ const Contact = () => {
             contact@domainjournals.com
           </a>
         </p>
+        <h2>Send us a message</h2>
         <form onSubmit={handleSubmit}>
           <label htmlFor="firstname">First Name</label>
           <input
@@ -96,7 +97,9 @@ const Contact = () => {
 
           {errorMsg && <p style={{ color: "crimson" }}>{errorMsg}</p>}
           {msg && <p>{msg}</p>}
-          <button>{loading ? "Sending" : "Send"}</button>
+          <button style={{ backgroundColor: "rgb(101, 147, 119)" }}>
+            {loading ? "Sending" : "Send"}
+          </button>
         </form>
       </div>
       <NewsletterSubscription />
