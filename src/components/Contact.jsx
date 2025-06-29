@@ -56,8 +56,8 @@ const Contact = () => {
         </p>
         <p>
           <strong>Email:</strong>{" "}
-          <a href="mailto:contactdomainjournals@gmail.com">
-            contactdomainjournals@gmail.com
+          <a href="mailto:contact@domainjournals.com">
+            contact@domainjournals.com
           </a>
         </p>
         <form onSubmit={handleSubmit}>
