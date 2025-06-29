@@ -34,6 +34,7 @@ const Messages = () => {
       setMessages((prev) =>
         prev.filter((msg) => msg._id !== response.data._id)
       );
+      setSelectedMessage(null);
     } catch (error) {
       setToast({
         message: error?.response?.data?.error || "Delete failed",
