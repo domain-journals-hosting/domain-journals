@@ -123,6 +123,8 @@ const ManuscriptForm = () => {
         return;
       } catch (error) {
         setLoading(false);
+        if (!error?.response) return setErrMsg("No server response");
+        setErrMsg(error?.data?.response?.error || "submitting failed");
         console.error("Attempt failed", error);
       }
     };
