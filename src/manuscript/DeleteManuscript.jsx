@@ -31,6 +31,7 @@ const DeleteManuscript = () => {
             setStatus("error");
           }
         }}
+        onClose={() => setOpen(false)}
         message="Are you sure you want to delete this manuscript"
       />
       {status === "waiting" && <p>Preparing to delete...</p>}
