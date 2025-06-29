@@ -38,6 +38,10 @@ export const UserProvider = ({ children }) => {
     checkUser();
   }, []);
 
+  useEffect(() => {
+    console.log(checked);
+  }, [checked]);
+
   const sendResetMail = async (email = user.email) => {
     try {
       console.log(email);

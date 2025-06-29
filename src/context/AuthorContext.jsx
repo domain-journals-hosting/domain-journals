@@ -21,9 +21,11 @@ export const AuthProvider = ({ children }) => {
         const response = await axios.get("author/me", {
           withCredentials: true,
         });
+
         console.log(response);
         setUser(response.data);
       } catch (err) {
+        console.log(err);
         if (!err.response) setError("No server response");
         else {
           setError(err.message);

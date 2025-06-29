@@ -87,6 +87,8 @@ const ReviewCarousel = () => {
         position: "relative",
         width: `${isMobile ? "100%" : "600px"}`,
         height: "400px",
+        maxHeight: "400px",
+        overflow: "visible",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -128,7 +130,6 @@ const ReviewCarousel = () => {
           className={`track ${direction ? "animate-slide" : ""}`}
           style={{
             display: "flex",
-            overflow: "visible",
             width: `${activeReviews.length * 100}%`,
             maxWidth: "100%",
             transform: `translateX(${translateValue})`,

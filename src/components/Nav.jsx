@@ -10,12 +10,11 @@ const Nav = ({ isHeroVisible }) => {
   const isMobile = useScreenSize(800);
   const iconRef = useRef(null);
   const location = useLocation();
-  const { user } = useAuth();
+  const { user, checked } = useAuth();
   const admin = useUser();
 
   const [isOpened, setIsOpened] = useState(false);
   const [visibleLinks, setVisibleLinks] = useState([]);
-
   const links = [
     { to: "/", label: "Home" },
     { to: "/journals", label: "Journals" },
@@ -23,8 +22,9 @@ const Nav = ({ isHeroVisible }) => {
     { to: "/contact", label: "Contact us" },
   ];
 
-  if (admin.user) links.push({ to: "/admin/dashboard", label: "Dashboard" });
-  if (!user && !admin.user) {
+  if (admin.user && admin.checked)
+    links.push({ to: "/admin/dashboard", label: "Dashboard" });
+  if (!user && !admin.user && checked && admin.checked) {
     links.push({ to: "/signup", label: "Sign up" });
     links.push({ to: "/login", label: "Log in" });
   }

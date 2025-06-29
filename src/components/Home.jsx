@@ -83,7 +83,9 @@ const Home = ({ setIsHeroVisible }) => {
           transition: "box-shadow 0.3s ease",
         }}
       >
-        <h2>Authors reviews</h2>
+        <h2 style={{ whiteSpace: "nowrap", margin: "20px" }}>
+          Authors reviews
+        </h2>
         <ReviewCarousel />
       </article>
 
