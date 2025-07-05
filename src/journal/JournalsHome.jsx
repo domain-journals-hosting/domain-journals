@@ -7,6 +7,7 @@ import health from "../assets/health.jpg";
 import biological from "../assets/biological.jpg";
 import multidisciplinary from "../assets/multidisciplinary.jpg";
 import scienceImage from "../assets/science.jpg";
+import { Helmet } from "react-helmet";
 const source = (string) =>
   string === "health"
     ? health
@@ -22,6 +23,17 @@ const JournalsHome = () => {
 
   return (
     <>
+      <Helmet>
+        <title>{journal.title} - Domain Journals</title>
+        <meta
+          name="description"
+          content={`Read about ${journal.title}, a peer-reviewed publication under Domain Journals.`}
+        />
+        <link
+          rel="canonical"
+          href={`https://domainjournals.com/journals/${slug}`}
+        />
+      </Helmet>
       <JournalHeader slug={slug} />
       <div className="journal-container-home">
         <img src={source(journal.image)} alt="" />

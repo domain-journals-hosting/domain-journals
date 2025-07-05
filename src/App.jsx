@@ -82,7 +82,6 @@ function App() {
             element={<EditorialBoard />}
           />
           <Route element={<RequireUserAuth />}>
-            {" "}
             <Route path="/admin/all" element={<UsersList />} />
             <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/admin/review" element={<ReviewManuscripts />} />
