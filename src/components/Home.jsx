@@ -147,7 +147,7 @@ const Home = ({ setIsHeroVisible }) => {
         </section>
 
         <RecentArticles />
-        <Contact />
+        <Contact home={true}/>
       </div>
     </>
   );
