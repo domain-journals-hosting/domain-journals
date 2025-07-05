@@ -4,7 +4,7 @@ import axios from "../api/axios";
 import NewsletterSubscription from "./NewsLetterSubscription";
 import { Helmet } from "react-helmet";
 
-const Contact = () => {
+const Contact = ({home = false}) => {
   const [msg, setMsg] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -46,14 +46,14 @@ const Contact = () => {
   };
   return (
     <>
-      <Helmet>
+      {!home && <Helmet>
         <title>Contact Us - Domain Journals</title>
         <meta
           name="description"
           content="Reach out to the Domain Journals editorial team for inquiries, submissions, or support."
         />
         <link rel="canonical" href="https://domainjournals.com/contact" />
-      </Helmet>
+      </Helmet> }
       <div className="contact-container">
         <h2>Contact Us</h2>
         <p>
