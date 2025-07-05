@@ -6,6 +6,7 @@ import health from "../assets/health.jpg";
 import biological from "../assets/biological.jpg";
 import multidisciplinary from "../assets/multidisciplinary.jpg";
 import scienceImage from "../assets/science.jpg";
+import { Helmet } from "react-helmet";
 
 const source = (string) =>
   string === "health"
@@ -41,46 +42,60 @@ const JournalsList = () => {
   };
 
   return (
-    <div className="journal-container" style={{ paddingTop: "70px" }}>
-      {journals.map((journalObject) => {
-        const isActive = expanded === journalObject.slug;
-        return (
-          <div className="journal" key={journalObject.slug}>
-            <div className="image-wrapper">
-              <img src={source(journalObject.image)} alt="" />
-              <button
-                className="expand-btn"
-                onClick={() => toggleExpand(journalObject.slug)}
-                onMouseEnter={() => handleMouseEnter(journalObject.slug)}
-              >
-                {isActive ? "✖" : "➕"}
-              </button>
+    <>
+      <Helmet>
+        <title>Journals - Domain Journals</title>
+        <meta
+          name="description"
+          content="Explore all journals under Domain Journals, including Domain Health Journal, Journal of Science and Technlology, Biological sciences and Multidisciplinary."
+        />
+        <link rel="canonical" href="https://domainjournals.com/journals" />
+      </Helmet>
+      <h1 style={{ textAlign: "center", marginTop: "20px" }}>
+        All Domain Journals
+      </h1>
 
-              {isActive && (
-                <div
-                  className="overlay-actions"
-                  onMouseLeave={handleMouseLeave}
+      <div className="journal-container" style={{ paddingTop: "70px" }}>
+        {journals.map((journalObject) => {
+          const isActive = expanded === journalObject.slug;
+          return (
+            <div className="journal" key={journalObject.slug}>
+              <div className="image-wrapper">
+                <img src={source(journalObject.image)} alt="" />
+                <button
+                  className="expand-btn"
+                  onClick={() => toggleExpand(journalObject.slug)}
+                  onMouseEnter={() => handleMouseEnter(journalObject.slug)}
                 >
-                  <Link to={journalObject.slug}>Home</Link>
-                  <Link to={`${journalObject.slug}/editorial-board`}>
-                    Editorial board
-                  </Link>
-                  <Link to={`${journalObject.slug}/current-issue`}>
-                    Current issue
-                  </Link>
-                </div>
-              )}
+                  {isActive ? "✖" : "➕"}
+                </button>
+
+                {isActive && (
+                  <div
+                    className="overlay-actions"
+                    onMouseLeave={handleMouseLeave}
+                  >
+                    <Link to={journalObject.slug}>Home</Link>
+                    <Link to={`${journalObject.slug}/editorial-board`}>
+                      Editorial board
+                    </Link>
+                    <Link to={`${journalObject.slug}/current-issue`}>
+                      Current issue
+                    </Link>
+                  </div>
+                )}
+              </div>
+              <h2 onClick={() => navigate(`${journalObject.slug}`)}>
+                {journalObject.title}
+              </h2>
+              <p onClick={() => navigate(`${journalObject.slug}`)}>
+                {journalObject.description.substring(0, 300)}...
+              </p>
             </div>
-            <h2 onClick={() => navigate(`${journalObject.slug}`)}>
-              {journalObject.title}
-            </h2>
-            <p onClick={() => navigate(`${journalObject.slug}`)}>
-              {journalObject.description.substring(0, 300)}...
-            </p>
-          </div>
-        );
-      })}
-    </div>
+          );
+        })}
+      </div>
+    </>
   );
 };
 
