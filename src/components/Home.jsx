@@ -132,7 +132,7 @@ const Home = ({ setIsHeroVisible }) => {
             </p>
           </div>
           <div className="card">
-            <h2>Support</h2>
+            <h2>Support Domain Journals</h2>
             <p>
               Domain journals Publishers follows the Open Access Policy of
               publication, which allows free online availability and access of
