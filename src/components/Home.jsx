@@ -44,14 +44,14 @@ const Home = ({ setIsHeroVisible }) => {
           <img src={welcome} alt="Welcome" className="hero-image" />
           <div className="hero-text">
             <h1 className="typing">Discover. Inspire. Innovate.</h1>
+            <h2> Welcome to Domain Journals, </h2>
             <p>
-              Welcome to Domain Journals, your open-source gateway to
-              groundbreaking research. From cutting-edge Health Studies and
-              Life-changing Biology breakthroughs to the latest in Science &
-              Technology and thought-provoking Multidisciplinary insights, every
-              article is a window into tomorrow’s innovations. Dive in, explore
-              freely, and join a global community shaping the next era of
-              knowledge.
+              your open-source gateway to groundbreaking research. From
+              cutting-edge Health Studies and Life-changing Biology
+              breakthroughs to the latest in Science & Technology and
+              thought-provoking Multidisciplinary insights, every article is a
+              window into tomorrow’s innovations. Dive in, explore freely, and
+              join a global community shaping the next era of knowledge.
             </p>
             <Link to="/journals" className="hero-button">
               Start Exploring ↓
