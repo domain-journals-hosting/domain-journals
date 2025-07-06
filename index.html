@@ -14,12 +14,26 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Domain Journals",
-        "url": "https://domainjournals.com",
-        "logo": "https://domainjournals.com/favicon.ico"
+        "@graph": [
+          {
+            "@type": "Organization",
+            "name": "Domain Journals",
+            "url": "https://domainjournals.com",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://domainjournals.com/favicon.ico"
+            }
+          },
+          {
+            "@type": "WebSite",
+            "name": "Domain Journals",
+            "alternateName": "domainjournals.com",
+            "url": "https://domainjournals.com"
+          }
+        ]
       }
     </script>
+
     <meta property="og:site_name" content="Domain Journals" />
     <meta property="og:title" content="Domain Journals" />
     <meta
