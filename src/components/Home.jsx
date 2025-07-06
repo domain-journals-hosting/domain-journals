@@ -44,7 +44,7 @@ const Home = ({ setIsHeroVisible }) => {
           <img src={welcome} alt="Welcome" className="hero-image" />
           <div className="hero-text">
             <h1 className="typing">Discover. Inspire. Innovate.</h1>
-            <h2> Welcome to Domain Journals, </h2>
+            <h2 style={{ color: "white" }}> Welcome to Domain Journals, </h2>
             <p>
               your open-source gateway to groundbreaking research. From
               cutting-edge Health Studies and Life-changing Biology
