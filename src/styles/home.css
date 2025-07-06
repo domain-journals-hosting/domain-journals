@@ -246,14 +246,13 @@
   padding: 14px 30px;
   font-size: 1.1rem;
   margin-top: 1rem;
-  margin-left: calc(35vw);
   font-weight: bold;
   border-radius: 30px;
   text-decoration: none;
   background-color: #659377;
   color: #f1f8e9;
   transition: background 0.3s ease;
-  animation: fadeIn 1.4s ease forwards;
+  animation: fadeInUp 1.2s ease forwards;
 }
 
 .hero-button:hover {
