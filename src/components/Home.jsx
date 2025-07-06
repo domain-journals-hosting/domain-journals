@@ -59,7 +59,6 @@ const Home = ({ setIsHeroVisible }) => {
           </div>
         </div>
 
-        <h1>Domain Journals</h1>
         <JournalCarousel journals={journals} />
 
         <article>
