@@ -36,6 +36,8 @@ const Home = ({ setIsHeroVisible }) => {
           name="description"
           content="Domain Journals is an article publishing platform where authors can submit research manuscripts and articles for peer-reviewed open access publication."
         />
+        <meta property="og:title" content="Domain Journals | {{ page.title }}">
+          
         <link rel="canonical" href="https://domainjournals.com" />
       </Helmet>
 
