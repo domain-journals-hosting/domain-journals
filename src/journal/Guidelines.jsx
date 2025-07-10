@@ -102,7 +102,7 @@ const Guidelines = () => {
         <h3>Gallery proof</h3>
         <p>{journal.galleryProof}</p>
         <br />
-        <h3>Correspondencies</h3>
+        <h3>Correspondence</h3>
         <p>{journal.correspondences}</p>
         <br />
       </div>
