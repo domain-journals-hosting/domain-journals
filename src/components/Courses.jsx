@@ -2,13 +2,17 @@ import { useEffect, useState } from "react";
 import axios from "../api/axios";
 import "../styles/courses.css";
 import PaymentModal from "./PaymentModal";
+import { Link } from "react-router-dom";
+import { useUser } from "../hooks/useUser";
 
 const Courses = () => {
+  const user = useUser();
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const backendBase = import.meta.env.VITE_API_BASE_URL;
+  const isAdmin = user.role === "admin";
   const downloadLink = (file) => {
     console.log(file);
     return file.endsWith(".doc")
@@ -77,7 +81,7 @@ const Courses = () => {
             {/* Actions */}
             <div className="actions">
               {course.paid ? (
-                ""
+                <Link to={course._id}>View course</Link>
               ) : (
                 <button
                   onClick={() => {
@@ -89,6 +93,7 @@ const Courses = () => {
                   Pay
                 </button>
               )}
+              {isAdmin && <Link to={`/editCourse/${course._id}`}></Link>}
             </div>
           </div>
         ))}
