@@ -46,6 +46,8 @@ import ManuscriptView from "./manuscript/ManuscriptView";
 import Courses from "./components/Courses";
 import NewCourse from "./admins/NewCourse";
 import Payments from "./components/Payments";
+import Course from "./components/Course";
+import EditCourse from "./admins/EditCourse";
 
 function App() {
   const location = useLocation();
@@ -103,7 +105,9 @@ function App() {
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/invite/:token" element={<CompleteInvite />} />
           <Route element={<RequireAuth />}>
+            <Route path="/editCourse/:courseId" element={<EditCourse />} />
             <Route path="/courses" element={<Courses />} />
+            <Route path="/courses/:courseId" element={<Course />} />
             <Route path="/submit" element={<ManuscriptForm />} />
             <Route path="/author" element={<AuthorProfile />} />
             <Route path="/review" element={<NewReview />} />
