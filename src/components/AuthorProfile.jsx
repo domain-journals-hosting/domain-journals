@@ -241,13 +241,15 @@ const AuthorProfile = () => {
             <section style={{ marginTop: 30 }}>
               <h2 style={{ color: "#093238" }}>Published Manuscripts</h2>
               {acceptedManuscripts.map((m) => (
-                <p key={m._id} style={{ marginTop: 40 }}>
-                  <strong>{m.title}</strong> -{" "}
-                  <Link to={`/journals/${m.journal}/archive`}>
-                    view in the current issue
-                  </Link>
+                <div key={m._id}>
+                  <p style={{ marginTop: 40 }}>
+                    <strong>{m.title}</strong> -{" "}
+                    <Link to={`/journals/${m.journal}/archive`}>
+                      view in the current issue
+                    </Link>
+                  </p>
                   <hr />
-                </p>
+                </div>
               ))}
             </section>
           )}

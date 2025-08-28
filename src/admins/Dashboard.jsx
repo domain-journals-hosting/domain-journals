@@ -158,6 +158,12 @@ const Dashboard = () => {
             access: "admin",
           },
           { to: "/admin/audit", text: "Audit reviews", access: "admin" },
+          { to: "/admin/courses", text: "Add a course", access: "admin" },
+          {
+            to: "/admin/payments",
+            text: "Check course payments",
+            access: "admin",
+          },
         ].map(({ to, text, access }) => (
           <RequireUserAuth key={to} allowedRoles={access ? access : undefined}>
             <Link

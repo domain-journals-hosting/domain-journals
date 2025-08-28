@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../styles/nav.css";
 import useScreenSize from "../hooks/useScreenSize";
 import { useAuth } from "../hooks/useAuthor";
@@ -12,6 +12,7 @@ const Nav = ({ isHeroVisible }) => {
   const location = useLocation();
   const { user, checked } = useAuth();
   const admin = useUser();
+  const navigate = useNavigate();
 
   const [isOpened, setIsOpened] = useState(false);
   const [visibleLinks, setVisibleLinks] = useState([]);
@@ -28,8 +29,10 @@ const Nav = ({ isHeroVisible }) => {
     links.push({ to: "/signup", label: "Sign up" });
     links.push({ to: "/login", label: "Log in" });
   }
-  if (user) links.push({ to: "/author", label: "View profile" });
-
+  if (user) {
+    links.push({ to: "/author", label: "View profile" });
+    links.push({ to: "/courses", label: "Courses" });
+  }
   const toggleMenu = () => {
     const opening = !isOpened;
     setIsOpened(opening);
@@ -67,7 +70,16 @@ const Nav = ({ isHeroVisible }) => {
           borderBottom: isHeroVisible && "transparent",
         }}
       >
-        <img src={logo} alt="" width={40} height={40} />
+        <img
+          src={logo}
+          alt=""
+          width={40}
+          height={40}
+          onClick={() => navigate("/")}
+          style={{
+            cursor: "pointer",
+          }}
+        />
         {!isMobile && (
           <h2 style={{ marginLeft: "30px", whiteSpace: "nowrap" }}>
             Domain Journals

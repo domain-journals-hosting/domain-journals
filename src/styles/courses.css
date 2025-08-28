@@ -1,0 +1,128 @@
+.courses-container {
+  padding: 20px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.courses-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 26px;
+  color: #333;
+}
+
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.course-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s ease;
+}
+
+.course-card:hover {
+  transform: translateY(-4px);
+}
+
+.course-card h3 {
+  margin: 0 0 10px;
+  font-size: 20px;
+  color: #222;
+}
+
+.course-card p {
+  flex-grow: 1;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 16px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.go-btn,
+.pay-btn {
+  text-decoration: none;
+  background: #0066cc;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.go-btn:hover,
+.pay-btn:hover {
+  background: #004999;
+}
+
+.loading {
+  text-align: center;
+  font-size: 18px;
+  padding: 40px;
+}
+
+.course-price {
+  margin: 10px 0;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: #070606;
+  font-size: 14px;
+}
+
+.discounted-price {
+  font-weight: bold;
+  color: #2a7a2a;
+  font-size: 16px;
+}
+
+.discount-badge {
+  background: #e53935;
+  color: #fff;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.double-strike {
+  position: relative;
+  display: inline-block;
+  color: black;
+}
+
+.double-strike::before,
+.double-strike::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px; /* thickness of the strike */
+  background: black;
+}
+
+.double-strike::before {
+  top: 40%; /* adjust */
+}
+
+.double-strike::after {
+  top: 60%; /* adjust */
+}
