@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "../api/axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const CourseForm = ({ editing = false }) => {
   const { courseId } = useParams();
@@ -15,27 +15,27 @@ const CourseForm = ({ editing = false }) => {
   const [toast, setToast] = useState(null);
   const [uploadErrors, setUploadErrors] = useState({});
   const fileInputRefs = useRef([]);
-
+  const navigate = useNavigate();
   const setCourse = (course) => {
     setTitle(course.title);
     setDescription(course.description);
     setPrice(course.price);
     setOriginalPrice(course.originalPrice);
-    setOutline(course.outline);
-    setMaterials(course.materials);
+    if (course.outline?.length) setOutline(course.outline);
+    if (course.materials?.length) setMaterials(course.materials);
   };
 
   useEffect(() => {
     const getCourse = async () => {
+      console.log("Getting course");
       try {
-        const response = await axios.get(`"/course/${courseId}`);
-        setFetching(false);
+        const response = await axios.get(`/course/admin/${courseId}`);
         if (editing) setCourse(response.data);
         console.log(response.data);
       } catch (err) {
         console.error("Error fetching course:", err);
       } finally {
-        setLoading(false);
+        setFetching(false);
       }
     };
     if (editing) getCourse();
@@ -119,6 +119,7 @@ const CourseForm = ({ editing = false }) => {
         price,
         originalPrice,
         outline,
+        materials,
       });
       setToast({ message: "Course created successfully" });
       setTitle("");
@@ -149,13 +150,16 @@ const CourseForm = ({ editing = false }) => {
         price,
         originalPrice,
         outline,
+        materials,
       });
       setToast({ message: "Course edited successfully" });
+
       setTitle("");
       setDescription("");
       setPrice("");
       setOriginalPrice("");
       setOutline([{ title: "", file: "" }]);
+      navigate(`/courses/${courseId}`);
     } catch (err) {
       console.log(err);
       setToast({ message: err?.response?.data?.error || "Error", error: true });
@@ -331,7 +335,7 @@ const CourseForm = ({ editing = false }) => {
         </div>
         <div>
           <h3>Course Materials</h3>
-          {materials.map((item, index) => (
+          {materials?.map((item, index) => (
             <div
               key={index}
               style={{
@@ -358,7 +362,7 @@ const CourseForm = ({ editing = false }) => {
               </button>
 
               <input
-                placeholder="Materials Text"
+                placeholder="Material Text"
                 value={item.text}
                 onChange={(e) =>
                   handleMaterialChange(index, "text", e.target.value)
@@ -371,7 +375,7 @@ const CourseForm = ({ editing = false }) => {
                 }}
               />
               <input
-                placeholder="Materials Link"
+                placeholder="Material Link"
                 value={item.link}
                 onChange={(e) =>
                   handleMaterialChange(index, "link", e.target.value)

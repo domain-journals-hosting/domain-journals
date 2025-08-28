@@ -6,13 +6,14 @@ import { Link } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
 
 const Courses = () => {
-  const user = useUser();
+  const { user } = useUser();
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const backendBase = import.meta.env.VITE_API_BASE_URL;
   const isAdmin = user.role === "admin";
+  console.log(user);
   const downloadLink = (file) => {
     console.log(file);
     return file.endsWith(".doc")
@@ -66,18 +67,35 @@ const Courses = () => {
             </div>
 
             {/* Outline Section */}
-            {course.outline.map((item, i) => (
-              <div key={i}>
-                {course.paid ? (
-                  <a href={downloadLink(item.file)} download>
-                    {item.title}
-                  </a>
-                ) : (
-                  <p style={{ color: "gray" }}>{item.title}</p>
-                )}
-              </div>
-            ))}
+            <h3>Outline</h3>
+            {!course.outline.length
+              ? "Nothing to show"
+              : course.outline.map((item, i) => (
+                  <div key={i}>
+                    {course.paid ? (
+                      <a href={downloadLink(item.file)} download>
+                        {item.title}
+                      </a>
+                    ) : (
+                      <p style={{ color: "gray" }}>{item.title}</p>
+                    )}
+                  </div>
+                ))}
 
+            <h3>Materials</h3>
+            {!course.materials.length
+              ? "Nothing to show"
+              : course.materials.map((item, i) => (
+                  <div key={i}>
+                    {course.paid ? (
+                      <a href={item.link} target="_blank">
+                        {item.text}
+                      </a>
+                    ) : (
+                      <p style={{ color: "gray" }}>{item.text}</p>
+                    )}
+                  </div>
+                ))}
             {/* Actions */}
             <div className="actions">
               {course.paid ? (
@@ -93,7 +111,9 @@ const Courses = () => {
                   Pay
                 </button>
               )}
-              {isAdmin && <Link to={`/editCourse/${course._id}`}></Link>}
+              {isAdmin && (
+                <Link to={`/editCourse/${course._id}`}>Edit Course</Link>
+              )}
             </div>
           </div>
         ))}
