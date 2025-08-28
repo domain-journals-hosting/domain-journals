@@ -43,6 +43,9 @@ import NewsletterSender from "./admins/NewsLetterSender";
 import AuditReviews from "./admins/AuditReviews";
 import { useEffect, useState } from "react";
 import ManuscriptView from "./manuscript/ManuscriptView";
+import Courses from "./components/Courses";
+import NewCourse from "./admins/NewCourse";
+import Payments from "./components/Payments";
 
 function App() {
   const location = useLocation();
@@ -90,14 +93,17 @@ function App() {
           <Route path="/admin/forgot" element={<AdminForgotPW />} />
           <Route path="/admin/reset" element={<ResetAdminPW />} />
           <Route element={<RequireUserAuth allowedRoles={["admin"]} />}>
+            <Route path="/admin/courses" element={<NewCourse />} />
             <Route path="/admin/invite" element={<InviteUser />} />
             <Route path="admin/audit" element={<AuditReviews />} />
             <Route path="/admin/newsletter" element={<NewsletterSender />} />
             <Route path="/admin/issue" element={<NewIssue />} />
+            <Route path="/admin/payments" element={<Payments />} />
           </Route>
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/invite/:token" element={<CompleteInvite />} />
           <Route element={<RequireAuth />}>
+            <Route path="/courses" element={<Courses />} />
             <Route path="/submit" element={<ManuscriptForm />} />
             <Route path="/author" element={<AuthorProfile />} />
             <Route path="/review" element={<NewReview />} />
