@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "../api/axios";
 import "../styles/courses.css";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
 import ConfirmDialog from "./ConfirmDialog";
 
@@ -12,6 +12,7 @@ const Course = () => {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const backendBase = import.meta.env.VITE_API_BASE_URL;
+  const navigate = useNavigate();
   const downloadLink = (file) => {
     console.log(file);
     return file.endsWith(".doc")
@@ -24,7 +25,18 @@ const Course = () => {
     const deleteCourseURL = `/course/${courseId}`;
     const response = await axios.delete(deleteCourseURL);
     console.log(response);
+    navigate("/courses");
   };
+  const handleOpenText = (item) => {
+    navigate("/content", {
+      state: {
+        heading: course.title,
+        title: item.text,
+        text: item.text || "",
+      },
+    });
+  };
+
   useEffect(() => {
     const getCourse = async () => {
       try {
@@ -88,7 +100,7 @@ const Course = () => {
                   )}
                 </div>
               ))}
-          <h3>Materials</h3>
+          <h3 style={{ marginTop: "30px" }}>Materials</h3>
           {!course.materials.length
             ? "Nothing to show"
             : course.materials.map((item, i) => (
@@ -102,8 +114,35 @@ const Course = () => {
                   )}
                 </div>
               ))}
+          <div>
+            <h3 style={{ marginTop: "30px" }}>Texts</h3>
+            {!course.texts.length ? (
+              <p>Nothing to show</p>
+            ) : (
+              course.texts.map((item, i) => (
+                <div key={i}>
+                  {course.paid ? (
+                    <a
+                      onClick={() => handleOpenText(item)}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        textDecoration: "underline",
+                        padding: 0,
+                        fontSize: "16px",
+                      }}
+                    >
+                      {item.title}
+                    </a>
+                  ) : (
+                    <p style={{ color: "gray" }}>{item.title}</p>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
           <div className="actions">
-            {" "}
             {isAdmin && (
               <>
                 <Link to={`/editCourse/${course._id}`}>Edit Course</Link>

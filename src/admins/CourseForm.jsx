@@ -10,6 +10,7 @@ const CourseForm = ({ editing = false }) => {
   const [originalPrice, setOriginalPrice] = useState("");
   const [outline, setOutline] = useState([{ title: "", file: "" }]);
   const [materials, setMaterials] = useState([{ text: "", link: "" }]);
+  const [texts, setTexts] = useState([{ title: "", text: "" }]);
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
   const [toast, setToast] = useState(null);
@@ -44,6 +45,11 @@ const CourseForm = ({ editing = false }) => {
       return () => clearTimeout(timer);
     }
   }, [toast, courseId, editing]);
+
+  const addOutline = () => {
+    setOutline([...outline, { title: "", file: "" }]);
+  };
+
   const handleOutlineChange = (index, key, value) => {
     const updated = [...outline];
     updated[index][key] = value;
@@ -53,6 +59,9 @@ const CourseForm = ({ editing = false }) => {
     const updated = [...outline];
     updated.splice(index, 1);
     setOutline(updated);
+  };
+  const addMaterial = () => {
+    setMaterials([...materials, { text: "", link: "" }]);
   };
   const handleMaterialChange = (index, key, value) => {
     const updated = [...materials];
@@ -64,7 +73,19 @@ const CourseForm = ({ editing = false }) => {
     updated.splice(index, 1);
     setMaterials(updated);
   };
-
+  const addTexts = () => {
+    setTexts([...texts, { title: "", texts: "" }]);
+  };
+  const handleTextsChange = (index, key, value) => {
+    const updated = [...texts];
+    updated[index][key] = value;
+    setTexts(updated);
+  };
+  const removeTexts = (index) => {
+    const updated = [...texts];
+    updated.splice(index, 1);
+    setTexts(updated);
+  };
   const handleFileUpload = async (file, index) => {
     if (!file) return;
     try {
@@ -96,13 +117,6 @@ const CourseForm = ({ editing = false }) => {
     }
   };
 
-  const addOutline = () => {
-    setOutline([...outline, { title: "", file: "" }]);
-  };
-  const addMaterial = () => {
-    setMaterials([...materials, { text: "", link: "" }]);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -120,6 +134,7 @@ const CourseForm = ({ editing = false }) => {
         originalPrice,
         outline,
         materials,
+        texts,
       });
       setToast({ message: "Course created successfully" });
       setTitle("");
@@ -151,6 +166,7 @@ const CourseForm = ({ editing = false }) => {
         originalPrice,
         outline,
         materials,
+        texts,
       });
       setToast({ message: "Course edited successfully" });
 
@@ -403,6 +419,80 @@ const CourseForm = ({ editing = false }) => {
             }}
           >
             + Add Material Section
+          </button>
+        </div>
+        <div>
+          <h3>Texts</h3>
+          {texts?.map((item, index) => (
+            <div
+              key={index}
+              style={{
+                border: "1px solid #ddd",
+                padding: "10px",
+                marginBottom: "10px",
+                borderRadius: "6px",
+              }}
+            >
+              <button
+                type="button"
+                onClick={() => removeTexts(index)}
+                style={{
+                  backgroundColor: "#ffdddd",
+                  color: "red",
+                  border: "none",
+                  padding: "5px 10px",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  marginTop: "8px",
+                }}
+              >
+                Remove
+              </button>
+
+              <input
+                placeholder="Text title"
+                value={item.setTitle}
+                onChange={(e) =>
+                  handleTextsChange(index, "title", e.target.value)
+                }
+                required
+                style={{
+                  width: "100%",
+                  padding: "8px",
+                  marginBottom: "8px",
+                }}
+              />
+              <textarea
+                placeholder="Paste text here"
+                rows={10}
+                value={item.text}
+                onChange={(e) =>
+                  handleTextsChange(index, "text", e.target.value)
+                }
+                required
+                style={{
+                  width: "100%",
+                  padding: "8px",
+                  marginBottom: "8px",
+                  resize: "none",
+                }}
+              />
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={addTexts}
+            style={{
+              backgroundColor: "#1e90ff",
+              color: "white",
+              border: "none",
+              padding: "8px 12px",
+              borderRadius: "6px",
+              cursor: "pointer",
+              marginTop: "8px",
+            }}
+          >
+            + Add Texts Section
           </button>
         </div>
 
