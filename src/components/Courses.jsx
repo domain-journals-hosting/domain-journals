@@ -13,7 +13,7 @@ const Courses = () => {
   const [open, setOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const backendBase = import.meta.env.VITE_API_BASE_URL;
-  const isAdmin = user.role === "admin";
+  const isAdmin = user?.role === "admin";
   const [showModal, setShowModal] = useState(false);
 
   console.log(user);
