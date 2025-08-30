@@ -48,6 +48,7 @@ import NewCourse from "./admins/NewCourse";
 import Payments from "./components/Payments";
 import Course from "./components/Course";
 import EditCourse from "./admins/EditCourse";
+import ContentPage from "./components/ContentPage";
 
 function App() {
   const location = useLocation();
@@ -72,6 +73,7 @@ function App() {
             path="/"
             element={<Home setIsHeroVisible={setIsHeroVisible} />}
           />
+          <Route path="/content" element={<ContentPage />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route path="/journals" element={<JournalsList />} />
           <Route path="/view" element={<ManuscriptView />} />
