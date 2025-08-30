@@ -37,7 +37,7 @@ const Payments = () => {
     if (!window.confirm("Are you sure you want to delete this payment?"))
       return;
     try {
-      await axios.delete(`/course/${id}`);
+      await axios.delete(`/course/payment/${id}`);
       fetchPayments();
     } catch (err) {
       alert(err.response?.data?.error || "Failed to delete payment");

@@ -3,12 +3,14 @@ import axios from "../api/axios";
 import "../styles/courses.css";
 import { Link, useParams } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
+import ConfirmDialog from "./ConfirmDialog";
 
 const Course = () => {
   const { courseId } = useParams();
   console.log(courseId);
   const [course, setCourse] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const backendBase = import.meta.env.VITE_API_BASE_URL;
   const downloadLink = (file) => {
     console.log(file);
@@ -18,7 +20,11 @@ const Course = () => {
   };
   const { user } = useUser();
   const isAdmin = user?.role === "admin";
-
+  const deleteCourse = async () => {
+    const deleteCourseURL = `/course/${courseId}`;
+    const response = await axios.delete(deleteCourseURL);
+    console.log(response);
+  };
   useEffect(() => {
     const getCourse = async () => {
       try {
@@ -41,6 +47,12 @@ const Course = () => {
 
   return (
     <div className="course-container">
+      <ConfirmDialog
+        open={showModal}
+        onClose={() => setShowModal(false)}
+        onConfirm={() => deleteCourse(courseId)}
+        message={"Are you sure you want to delete this message?"}
+      />
       <div className="course-grid">
         <div key={course._id} className="course-card">
           <h3>{course.title}</h3>
@@ -93,7 +105,15 @@ const Course = () => {
           <div className="actions">
             {" "}
             {isAdmin && (
-              <Link to={`/editCourse/${course._id}`}>Edit Course</Link>
+              <>
+                <Link to={`/editCourse/${course._id}`}>Edit Course</Link>
+                <p
+                  style={{ color: "crimson" }}
+                  onClick={() => setShowModal(true)}
+                >
+                  Delete Course
+                </p>
+              </>
             )}
           </div>{" "}
         </div>
