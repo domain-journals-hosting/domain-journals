@@ -21,6 +21,7 @@ const CourseForm = ({ editing = false }) => {
     setTitle(course.title);
     setDescription(course.description);
     setPrice(course.price);
+    setTexts(course.texts);
     setOriginalPrice(course.originalPrice);
     if (course.outline?.length) setOutline(course.outline);
     if (course.materials?.length) setMaterials(course.materials);
@@ -40,11 +41,15 @@ const CourseForm = ({ editing = false }) => {
       }
     };
     if (editing) getCourse();
-    if (toast) {
-      const timer = setTimeout(() => setToast(null), 6000);
-      return () => clearTimeout(timer);
-    }
-  }, [toast, courseId, editing]);
+  }, [courseId, editing]);
+
+  useEffect(() => {
+    if (!toast) return;
+
+    const timer = setTimeout(() => setToast(null), 6000);
+
+    return () => clearTimeout(timer); // cleanup if toast changes/unmounts
+  }, [toast]);
 
   const addOutline = () => {
     setOutline([...outline, { title: "", file: "" }]);
@@ -451,7 +456,7 @@ const CourseForm = ({ editing = false }) => {
 
               <input
                 placeholder="Text title"
-                value={item.setTitle}
+                value={item.title}
                 onChange={(e) =>
                   handleTextsChange(index, "title", e.target.value)
                 }
