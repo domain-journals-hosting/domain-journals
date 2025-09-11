@@ -11,6 +11,10 @@ const CourseForm = ({ editing = false }) => {
   const [outline, setOutline] = useState([{ title: "", file: "" }]);
   const [materials, setMaterials] = useState([{ text: "", link: "" }]);
   const [texts, setTexts] = useState([{ title: "", text: "" }]);
+
+  const [outlineHeading, setOutlineHeading] = useState("");
+  const [materialsHeading, setMaterialsHeading] = useState("");
+  const [textsHeading, setTextsHeading] = useState("");
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
   const [toast, setToast] = useState(null);
@@ -23,6 +27,9 @@ const CourseForm = ({ editing = false }) => {
     setPrice(course.price);
     setTexts(course.texts);
     setOriginalPrice(course.originalPrice);
+    setOutlineHeading(course.outlineHeading);
+    setMaterialsHeading(course.materialsHeading);
+    setTextsHeading(course.textsHeading);
     if (course.outline?.length) setOutline(course.outline);
     if (course.materials?.length) setMaterials(course.materials);
   };
@@ -140,6 +147,9 @@ const CourseForm = ({ editing = false }) => {
         outline,
         materials,
         texts,
+        outlineHeading,
+        materialsHeading,
+        textsHeading,
       });
       setToast({ message: "Course created successfully" });
       setTitle("");
@@ -172,6 +182,9 @@ const CourseForm = ({ editing = false }) => {
         outline,
         materials,
         texts,
+        outlineHeading,
+        materialsHeading,
+        textsHeading,
       });
       setToast({ message: "Course edited successfully" });
 
@@ -215,7 +228,9 @@ const CourseForm = ({ editing = false }) => {
 
       <form onSubmit={editing ? handleEdit : handleSubmit}>
         <div style={{ width: "100%" }}>
+          <label htmlFor="title">Title</label>
           <input
+            id="title"
             placeholder="Course Title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -224,7 +239,9 @@ const CourseForm = ({ editing = false }) => {
           />
         </div>
         <div style={{ width: "100%" }}>
+          <label htmlFor="description">Description</label>
           <textarea
+            id="description"
             placeholder="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -233,8 +250,10 @@ const CourseForm = ({ editing = false }) => {
           />
         </div>
         <div style={{ width: "100%" }}>
+          <label htmlFor="price">Price</label>
           <input
             type="number"
+            id="price"
             placeholder="Price"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
@@ -243,7 +262,9 @@ const CourseForm = ({ editing = false }) => {
           />
         </div>
         <div style={{ width: "100%" }}>
+          <label htmlFor="original">Original Price</label>
           <input
+            id="original"
             type="number"
             placeholder="Original Price (optional)"
             value={originalPrice}
@@ -251,9 +272,13 @@ const CourseForm = ({ editing = false }) => {
             style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
           />
         </div>
-
         <div>
-          <h3>Course Outline</h3>
+          <label htmlFor="outline">Outline</label>
+          <input
+            type="text"
+            value={outlineHeading || "Course Outline"}
+            onChange={(e) => setOutlineHeading(e.target.value)}
+          />
           {outline.map((item, index) => (
             <div
               key={index}
@@ -356,7 +381,13 @@ const CourseForm = ({ editing = false }) => {
           </button>
         </div>
         <div>
-          <h3>Course Materials</h3>
+          <label htmlFor="materials">Materials</label>
+
+          <input
+            type="text"
+            value={materialsHeading || "Materials"}
+            onChange={(e) => setMaterialsHeading(e.target.value)}
+          />
           {materials?.map((item, index) => (
             <div
               key={index}
@@ -428,7 +459,13 @@ const CourseForm = ({ editing = false }) => {
           </button>
         </div>
         <div>
-          <h3>Texts</h3>
+          <label htmlFor="texts">Texts</label>
+
+          <input
+            type="text"
+            value={textsHeading || "Texts"}
+            onChange={(e) => setTextsHeading(e.target.value)}
+          />
           {texts?.map((item, index) => (
             <div
               key={index}
