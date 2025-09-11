@@ -1,6 +1,6 @@
 import CourseForm from "./CourseForm";
 const NewCourse = () => {
-  <CourseForm />;
+  return <CourseForm />;
 };
 
 export default NewCourse;

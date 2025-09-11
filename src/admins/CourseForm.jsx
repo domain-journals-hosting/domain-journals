@@ -189,10 +189,11 @@ const CourseForm = ({ editing = false }) => {
     }
   };
 
-  if (fetching) return <p className="loading">Getting course details</p>;
+  if (fetching && editing)
+    return <p className="loading">Getting course details</p>;
 
   return (
-    <div style={{ maxWidth: "600px", margin: "0 auto" }}>
+    <div style={{ maxWidth: "600px", margin: "0 auto", marginTop: "50px" }}>
       <h2> {editing ? "Edit" : "Add New"} Course</h2>
       {toast && (
         <div
