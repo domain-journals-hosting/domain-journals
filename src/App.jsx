@@ -49,6 +49,13 @@ import Payments from "./components/Payments";
 import Course from "./components/Course";
 import EditCourse from "./admins/EditCourse";
 import ContentPage from "./components/ContentPage";
+import Exam from "./components/Exam";
+import ExamForm from "./admins/ExamForm";
+import EditExamForm from "./admins/EditExamForm";
+import TakeExam from "./components/TakeExam";
+import ExamResult from "./components/ExamResult";
+import AllResults from "./components/AllResults";
+import CheckResults from "./admins/CheckResults";
 
 function App() {
   const location = useLocation();
@@ -101,18 +108,25 @@ function App() {
             <Route path="/admin/invite" element={<InviteUser />} />
             <Route path="admin/audit" element={<AuditReviews />} />
             <Route path="/admin/newsletter" element={<NewsletterSender />} />
+            <Route path="/check-results" element={<CheckResults />} />
             <Route path="/admin/issue" element={<NewIssue />} />
             <Route path="/admin/payments" element={<Payments />} />
           </Route>
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/invite/:token" element={<CompleteInvite />} />
           <Route element={<RequireAuth />}>
+            <Route path="/new-exam/:courseId" element={<ExamForm />} />
+            <Route path="/edit-exam/:courseId" element={<EditExamForm />} />
+            <Route path="/take-exam/:courseId" element={<TakeExam />} />
+            <Route path="/exam/:courseId" element={<Exam />} />
+            <Route path="/result/:examId" element={<ExamResult />} />
             <Route path="/editCourse/:courseId" element={<EditCourse />} />
             <Route path="/courses" element={<Courses />} />
             <Route path="/courses/:courseId" element={<Course />} />
             <Route path="/submit" element={<ManuscriptForm />} />
             <Route path="/author" element={<AuthorProfile />} />
             <Route path="/review" element={<NewReview />} />
+            <Route path="/results" element={<AllResults />} />
           </Route>
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgot" element={<ForgotPw />} />

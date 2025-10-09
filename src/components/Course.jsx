@@ -142,6 +142,9 @@ const Course = () => {
               ))
             )}
           </div>
+          <div>
+            {course.paid && <Link href={`/exam/${course._id}`}>Exam</Link>}
+          </div>
           <div className="actions">
             {isAdmin && (
               <>

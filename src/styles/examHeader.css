@@ -1,0 +1,96 @@
+.exam-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  border-bottom: 1px solid #e6e6e6;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  gap: 12px;
+}
+
+.exam-title h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #093238;
+  font-weight: 600;
+}
+
+.exam-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Timer */
+.timer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.timer .label {
+  font-size: 12px;
+  color: #666;
+}
+
+.timer .time {
+  font-size: 18px;
+  font-weight: 700;
+  color: #063233;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(6, 50, 51, 0.04);
+  min-width: 64px;
+  text-align: center;
+}
+
+.timer.warning .time {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}
+
+/* Save status */
+.save-status {
+  min-width: 100px;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: right;
+}
+
+.save-status .saving {
+  color: #888;
+}
+
+.save-status .saved {
+  color: #1e9965;
+}
+
+.save-status .error {
+  color: #d9534f;
+}
+
+/* Submit button */
+.submit-btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  background: #659377;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.08s ease, opacity 0.12s ease;
+}
+
+.submit-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.submit-btn:disabled,
+.submit-btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}

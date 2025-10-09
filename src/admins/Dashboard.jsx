@@ -164,6 +164,7 @@ const Dashboard = () => {
             text: "Check course payments",
             access: "admin",
           },
+          { to: "/check-results", text: "Check results", access: "admin" },
         ].map(({ to, text, access }) => (
           <RequireUserAuth key={to} allowedRoles={access ? access : undefined}>
             <Link

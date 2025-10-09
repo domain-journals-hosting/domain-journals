@@ -1,0 +1,64 @@
+/* questionCard.css */
+
+.question-card {
+  border: 1px solid #ccc;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.question-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.question-header h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.flag-btn {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.flag-btn.flagged {
+  background-color: #ffd700;
+  border-color: #daa520;
+  color: #333;
+}
+
+.question-text {
+  margin-bottom: 12px;
+  font-size: 1rem;
+  color: #222;
+}
+
+.options {
+  align-items: flex-start;
+  white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.option-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.option-label input[type="radio"] {
+  cursor: pointer;
+}

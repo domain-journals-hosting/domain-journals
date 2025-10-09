@@ -1,0 +1,48 @@
+.exam-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  border-radius: 10px;
+  background: #f9f9f9;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.exam-rules h1 {
+  text-align: center;
+  color: #093238;
+  margin-bottom: 15px;
+}
+
+.exam-rules ol {
+  padding-left: 25px;
+  margin-bottom: 25px;
+}
+
+.exam-rules li {
+  margin: 10px 0;
+  line-height: 1.5;
+}
+
+.start-btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: #659377;
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.start-btn:hover {
+  background: #50785e;
+}
+
+.error {
+  color: red;
+  text-align: center;
+  margin-bottom: 15px;
+}
