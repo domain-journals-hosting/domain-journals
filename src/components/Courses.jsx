@@ -143,7 +143,9 @@ const Courses = () => {
                     </div>
                   ))}
             </div>
-
+            <div>
+              {course.paid && <Link to={`/exam/${course._id}`}>Exam</Link>}
+            </div>
             {/* Actions */}
             <div className="actions">
               {course.paid ? (

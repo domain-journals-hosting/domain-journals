@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "../api/axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const CourseForm = ({ editing = false }) => {
   const { courseId } = useParams();
@@ -11,6 +11,7 @@ const CourseForm = ({ editing = false }) => {
   const [outline, setOutline] = useState([{ title: "", file: "" }]);
   const [materials, setMaterials] = useState([{ text: "", link: "" }]);
   const [texts, setTexts] = useState([{ title: "", text: "" }]);
+  const [courseStatus, setCourseStatus] = useState(false);
 
   const [outlineHeading, setOutlineHeading] = useState("");
   const [materialsHeading, setMaterialsHeading] = useState("");
@@ -47,6 +48,11 @@ const CourseForm = ({ editing = false }) => {
         setFetching(false);
       }
     };
+    const checkCourse = async () => {
+      const response = await axios.get(`/exam/view/${courseId}`);
+      if (response.data) setCourseStatus(true);
+    };
+    checkCourse();
     if (editing) getCourse();
   }, [courseId, editing]);
 
@@ -539,6 +545,11 @@ const CourseForm = ({ editing = false }) => {
           </button>
         </div>
 
+        {editing && (
+          <Link to={`/${courseStatus ? "edit" : "new"}-exam/${courseId}`}>
+            {courseStatus ? "Edit" : "Add"} exam
+          </Link>
+        )}
         <div style={{ marginTop: "15px" }}>
           <button type="submit" disabled={loading}>
             {loading ? "Saving..." : editing ? "Save edit" : "Create Course"}
