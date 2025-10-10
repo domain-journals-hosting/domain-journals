@@ -53,7 +53,7 @@ const CheckResults = () => {
     </>
   );
   const content = (
-    <div>
+    <div className="container">
       <br />
       {select}
       <table>
