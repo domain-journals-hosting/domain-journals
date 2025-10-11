@@ -40,8 +40,8 @@ const TakeExam = () => {
         // setup answers from draft or new
         const totalQ = examData.questions.length;
         const savedAnswers =
-          draftRes?.data?.answers.map((a) =>
-            a.answerIndex === 0 ? null : a.answerIndex
+          draftRes?.data?.answers?.map((a) =>
+            isNaN(a?.answerIndex) ? null : a?.answerIndex
           ) || Array(totalQ).fill(null);
         const savedFlags = draftRes?.data?.flags || Array(totalQ).fill(false);
         const currentQ = draftRes?.data?.currentQuestion || 0;
@@ -64,6 +64,7 @@ const TakeExam = () => {
         setTimeLeft(left > 0 ? left : 0);
         console.log("Exam and draft loaded successfully (UI coming next)...");
       } catch (err) {
+        console.error(err);
         setError(err?.response?.data?.error || "Failed to load exam");
       } finally {
         setLoading(false);
