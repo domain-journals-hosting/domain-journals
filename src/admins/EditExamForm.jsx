@@ -47,7 +47,7 @@ const EditExamForm = () => {
     e.preventDefault();
     setSaving(true);
     try {
-      await axios.put(`/exam/${courseId}`, exam);
+      await axios.patch(`/exam/${exam._id}`, exam);
       alert("Exam updated successfully!");
     } catch (err) {
       console.error("Error updating exam:", err);
