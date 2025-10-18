@@ -6,15 +6,12 @@ import "../styles/examForm.css";
 
 const ExamForm = () => {
   const { courseId } = useParams();
-  const [description, setDescription] = useState(
-    "General Knowledge Practice Test"
-  );
+  const [description, setDescription] = useState("");
   const [duration, setDuration] = useState(30);
   const navigate = useNavigate();
-  const [questions, setQuestions] = useState(
-[    { text: "", options: ["", "", "", ""], correctAnswer: 0, explanation: "" },
-]   
-  );
+  const [questions, setQuestions] = useState([
+    { text: "", options: ["", "", "", ""], correctAnswer: 0, explanation: "" },
+  ]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
