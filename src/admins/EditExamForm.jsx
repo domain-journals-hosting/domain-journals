@@ -9,6 +9,7 @@ const EditExamForm = () => {
   const [exam, setExam] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+
   const navigate = useNavigate();
   useEffect(() => {
     const fetchExam = async () => {
@@ -24,12 +25,6 @@ const EditExamForm = () => {
     };
     fetchExam();
   }, [courseId]);
-
-  const handleChange = (index, field, value) => {
-    const updatedQuestions = [...exam.questions];
-    updatedQuestions[index][field] = value;
-    setExam({ ...exam, questions: updatedQuestions });
-  };
 
   const handleOptionChange = (index, options) => {
     const updated = [...exam.questions];
@@ -68,7 +63,19 @@ const EditExamForm = () => {
   return (
     <form className="exam-form" onSubmit={handleSubmit}>
       <h2>Edit Exam: {exam.description}</h2>
-
+      <div style={{ width: "100%" }}>
+        <label htmlFor="description">Description</label>
+        <textarea
+          id="description"
+          placeholder="Description"
+          value={exam.description}
+          onChange={(e) =>
+            setExam((prev) => ({ ...prev, description: e.target.value }))
+          }
+          required
+          style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
+        />
+      </div>
       {exam.questions.map((q, index) => (
         <div key={index} className="question-block">
           <div className="question-header">
