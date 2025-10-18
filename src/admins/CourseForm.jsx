@@ -13,9 +13,9 @@ const CourseForm = ({ editing = false }) => {
   const [texts, setTexts] = useState([{ title: "", text: "" }]);
   const [courseStatus, setCourseStatus] = useState(false);
 
-  const [outlineHeading, setOutlineHeading] = useState("");
-  const [materialsHeading, setMaterialsHeading] = useState("");
-  const [textsHeading, setTextsHeading] = useState("");
+  const [outlineHeading, setOutlineHeading] = useState("Course Outline");
+  const [materialsHeading, setMaterialsHeading] = useState("Materials");
+  const [textsHeading, setTextsHeading] = useState("Texts");
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
   const [toast, setToast] = useState(null);
@@ -282,7 +282,7 @@ const CourseForm = ({ editing = false }) => {
           <label htmlFor="outline">Outline</label>
           <input
             type="text"
-            value={outlineHeading || "Course Outline"}
+            value={outlineHeading}
             onChange={(e) => setOutlineHeading(e.target.value)}
           />
           {outline.map((item, index) => (
@@ -391,7 +391,7 @@ const CourseForm = ({ editing = false }) => {
 
           <input
             type="text"
-            value={materialsHeading || "Materials"}
+            value={materialsHeading}
             onChange={(e) => setMaterialsHeading(e.target.value)}
           />
           {materials?.map((item, index) => (
@@ -469,7 +469,7 @@ const CourseForm = ({ editing = false }) => {
 
           <input
             type="text"
-            value={textsHeading || "Texts"}
+            value={textsHeading}
             onChange={(e) => setTextsHeading(e.target.value)}
           />
           {texts?.map((item, index) => (

@@ -100,6 +100,8 @@ function App() {
             <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/admin/review" element={<ReviewManuscripts />} />
             <Route path="/admin/message" element={<Messages />} />
+            <Route path="/new-exam/:courseId" element={<ExamForm />} />
+            <Route path="/edit-exam/:courseId" element={<EditExamForm />} />
           </Route>
           <Route path="/admin/forgot" element={<AdminForgotPW />} />
           <Route path="/admin/reset" element={<ResetAdminPW />} />
@@ -115,8 +117,6 @@ function App() {
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/invite/:token" element={<CompleteInvite />} />
           <Route element={<RequireAuth />}>
-            <Route path="/new-exam/:courseId" element={<ExamForm />} />
-            <Route path="/edit-exam/:courseId" element={<EditExamForm />} />
             <Route path="/take-exam/:courseId" element={<TakeExam />} />
             <Route path="/exam/:courseId" element={<Exam />} />
             <Route path="/result/:examId" element={<ExamResult />} />
