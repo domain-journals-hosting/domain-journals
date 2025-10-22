@@ -26,15 +26,18 @@ const EditExamForm = () => {
     fetchExam();
   }, [courseId]);
 
-  const handleOptionChange = (index, options) => {
+  const handleOptionChange = (index, updatedQuestion) => {
     const updated = [...exam.questions];
-    updated[index].options = options;
+    updated[index] = updatedQuestion;
     setExam({ ...exam, questions: updated });
   };
 
-  const handleDeleteQuestion = (index) => {
-    const updated = exam.questions.filter((_, i) => i !== index);
-    setExam({ ...exam, questions: updated });
+  const handleDeleteQuestion = (index, updatedQuestion) => {
+    setExam((prev) => {
+      const updated = [...prev.questions];
+      updated[index] = updatedQuestion;
+      return { ...prev, questions: updated };
+    });
   };
 
   const handleDeleteExam = async () => {
@@ -126,7 +129,7 @@ const EditExamForm = () => {
           <QuestionInput
             index={index}
             data={q}
-            onChange={(options) => handleOptionChange(index, options)}
+            onChange={(updated) => handleOptionChange(index, updated)}
           />
         </div>
       ))}

@@ -17,7 +17,6 @@ const QuestionInput = ({ index, data, onChange, onDelete }) => {
     );
     if (confirmDelete && onDelete) onDelete();
   };
-  console.log(data.options);
   return (
     <div className="question-card">
       <div className="question-header">
@@ -58,11 +57,12 @@ const QuestionInput = ({ index, data, onChange, onDelete }) => {
         value={data.correctAnswer}
         onChange={(e) => handleChange("correctAnswer", Number(e.target.value))}
       >
-        {data?.options?.map((_, i) => (
-          <option key={i} value={i}>
-            Option {i + 1}
-          </option>
-        ))}
+        {data?.options?.length &&
+          data?.options?.map((_, i) => (
+            <option key={i} value={i}>
+              Option {i + 1}
+            </option>
+          ))}
       </select>
 
       <label>Explanation (optional):</label>
