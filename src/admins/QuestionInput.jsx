@@ -40,17 +40,18 @@ const QuestionInput = ({ index, data, onChange, onDelete }) => {
         required
       />
 
-      {data?.options?.map((opt, i) => (
-        <div key={i} className="option-input">
-          <input
-            type="text"
-            placeholder={`Option ${i + 1}`}
-            value={opt}
-            onChange={(e) => handleOptionChange(i, e.target.value)}
-            required
-          />
-        </div>
-      ))}
+      {data?.options?.length &&
+        data?.options?.map((opt, i) => (
+          <div key={i} className="option-input">
+            <input
+              type="text"
+              placeholder={`Option ${i + 1}`}
+              value={opt}
+              onChange={(e) => handleOptionChange(i, e.target.value)}
+              required
+            />
+          </div>
+        ))}
 
       <label>Correct Answer:</label>
       <select
