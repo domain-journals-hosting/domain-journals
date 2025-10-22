@@ -6,7 +6,7 @@ const RequireAuth = () => {
   const location = useLocation();
   console.log(user?.name, checked, error);
   return !checked ? (
-    <p>Loading...</p>
+    <p className="loading"> Loading...</p>
   ) : user?.name ? (
     <Outlet />
   ) : (

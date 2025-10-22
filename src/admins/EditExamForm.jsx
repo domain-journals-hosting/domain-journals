@@ -5,7 +5,7 @@ import QuestionInput from "./QuestionInput";
 import "../styles/examForm.css";
 
 const EditExamForm = () => {
-  const { courseId } = useParams();
+  const { examId } = useParams();
   const [exam, setExam] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -14,7 +14,7 @@ const EditExamForm = () => {
   useEffect(() => {
     const fetchExam = async () => {
       try {
-        const res = await axios.get(`/exam/send/${courseId}`);
+        const res = await axios.get(`/exam/send/${examId}`);
         console.log(res);
         setExam(res.data);
       } catch (err) {
@@ -24,7 +24,7 @@ const EditExamForm = () => {
       }
     };
     fetchExam();
-  }, [courseId]);
+  }, [examId]);
 
   const handleOptionChange = (index, updatedQuestion) => {
     const updated = [...exam.questions];

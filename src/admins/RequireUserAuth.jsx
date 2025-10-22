@@ -5,16 +5,7 @@ const RequireUserAuth = ({ allowedRoles = ["admin", "editor"], children }) => {
   const { user, checked } = useUser();
   const location = useLocation();
 
-  if (!checked)
-    return (
-      <p
-        style={{
-          margin: "50px",
-        }}
-      >
-        Loading...
-      </p>
-    );
+  if (!checked) return <p className="loading">Loading...</p>;
 
   if (!user?.name) {
     return <Navigate to="/admin/login" state={{ from: location }} replace />;
