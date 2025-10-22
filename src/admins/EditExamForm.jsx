@@ -45,6 +45,9 @@ const EditExamForm = () => {
   const setQuestions = (questions) => {
     setExam((prev) => ({ ...prev, questions }));
   };
+  const setDuration = (duration) => {
+    setExam((prev) => ({ ...prev, duration }));
+  };
   const handleAddQuestion = () => {
     setQuestions([
       ...exam.questions,
@@ -75,6 +78,7 @@ const EditExamForm = () => {
 
   return (
     <form className="exam-form" onSubmit={handleSubmit}>
+      <h2>Edit Exam: {exam.description}</h2>{" "}
       <div style={{ width: "100%" }}>
         <label htmlFor="Questions">Questions</label>
         <textarea
@@ -86,7 +90,13 @@ const EditExamForm = () => {
           style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
         />
       </div>
-      <h2>Edit Exam: {exam.description}</h2>
+      <label>Duration (minutes):</label>
+      <input
+        type="number"
+        value={exam.duration}
+        onChange={(e) => setDuration(Number(e.target.value))}
+        required
+      />
       <div style={{ width: "100%" }}>
         <label htmlFor="description">Description</label>
         <textarea
@@ -126,7 +136,6 @@ const EditExamForm = () => {
       <button onClick={handleDeleteExam} style={{ backgroundColor: "red" }}>
         Delete exam
       </button>
-
       <button type="submit" disabled={saving}>
         {saving ? "Saving..." : "Save Changes"}
       </button>
