@@ -80,7 +80,7 @@ const EditExamForm = () => {
         <textarea
           id="description"
           placeholder="Paste questions array, please use carefully"
-          value={exam.description}
+          value={exam.questions}
           onChange={(e) => setQuestions(e.target.value)}
           required
           style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
