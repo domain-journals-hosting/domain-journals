@@ -186,7 +186,7 @@ const TakeExam = () => {
         saveStatus={saveStatus}
       />
       <div className="exam-body">
-        {currentQuestions.map((q, i) => (
+        {currentQuestions?.map((q, i) => (
           <QuestionCard
             key={start + i}
             question={q}

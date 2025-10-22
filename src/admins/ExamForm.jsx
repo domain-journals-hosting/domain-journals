@@ -66,8 +66,8 @@ const ExamForm = () => {
           <textarea
             id="Questions"
             placeholder="Paste questions array, please use carefully"
-            value={questions}
-            onChange={(e) => setQuestions(e.target.value)}
+            value={JSON.stringify(questions)}
+            onChange={(e) => setQuestions(JSON.parse(e.target.value))}
             required
             style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
           />
@@ -89,7 +89,7 @@ const ExamForm = () => {
         />
 
         <h3>Questions</h3>
-        {questions.map((q, i) => (
+        {questions?.map((q, i) => (
           <QuestionInput
             key={i}
             index={i}
