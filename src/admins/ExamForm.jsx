@@ -61,6 +61,17 @@ const ExamForm = () => {
     <div className="exam-form-container">
       <h2>Create New Exam</h2>
       <form onSubmit={handleSubmit}>
+        <div style={{ width: "100%" }}>
+          <label htmlFor="Questions">Questions</label>
+          <textarea
+            id="Questions"
+            placeholder="Paste questions array, please use carefully"
+            value={questions}
+            onChange={(e) => setQuestions(e.target.value)}
+            required
+            style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
+          />
+        </div>
         <label>Description:</label>
         <input
           type="text"

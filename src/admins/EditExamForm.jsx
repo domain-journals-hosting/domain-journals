@@ -76,9 +76,9 @@ const EditExamForm = () => {
   return (
     <form className="exam-form" onSubmit={handleSubmit}>
       <div style={{ width: "100%" }}>
-        <label htmlFor="description">Questions</label>
+        <label htmlFor="Questions">Questions</label>
         <textarea
-          id="description"
+          id="Questions"
           placeholder="Paste questions array, please use carefully"
           value={exam.questions}
           onChange={(e) => setQuestions(e.target.value)}
