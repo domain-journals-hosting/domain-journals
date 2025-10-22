@@ -17,7 +17,7 @@ const QuestionInput = ({ index, data, onChange, onDelete }) => {
     );
     if (confirmDelete && onDelete) onDelete();
   };
-
+  console.log(data.options);
   return (
     <div className="question-card">
       <div className="question-header">
