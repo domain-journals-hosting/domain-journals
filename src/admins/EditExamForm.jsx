@@ -42,7 +42,20 @@ const EditExamForm = () => {
     console.log(res);
     navigate("/courses");
   };
-
+  const setQuestions = (questions) => {
+    setExam((prev) => ({ ...prev, questions }));
+  };
+  const handleAddQuestion = () => {
+    setQuestions([
+      ...exam.questions,
+      {
+        text: "",
+        options: ["", "", "", ""],
+        correctAnswer: 0,
+        explanation: "",
+      },
+    ]);
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
@@ -62,6 +75,17 @@ const EditExamForm = () => {
 
   return (
     <form className="exam-form" onSubmit={handleSubmit}>
+      <div style={{ width: "100%" }}>
+        <label htmlFor="description">Questions</label>
+        <textarea
+          id="description"
+          placeholder="Paste questions array, please use carefully"
+          value={exam.description}
+          onChange={(e) => setQuestions(e.target.value)}
+          required
+          style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
+        />
+      </div>
       <h2>Edit Exam: {exam.description}</h2>
       <div style={{ width: "100%" }}>
         <label htmlFor="description">Description</label>
@@ -96,6 +120,9 @@ const EditExamForm = () => {
           />
         </div>
       ))}
+      <button type="button" onClick={handleAddQuestion} className="add-btn">
+        + Add Question
+      </button>
       <button onClick={handleDeleteExam} style={{ backgroundColor: "red" }}>
         Delete exam
       </button>
