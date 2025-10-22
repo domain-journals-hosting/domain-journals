@@ -72,7 +72,7 @@ const Archive = () => {
       <JournalHeader slug={slug} />
       <div className="archive">
         <h1>Journal Archive</h1>
-        {loading && <p>Loading...</p>}
+        {loading && <p className="loading">Loading...</p>}
         {err && <p className="error">{err}</p>}
         {!grouped.length && <p>No items here</p>}
         {!loading &&

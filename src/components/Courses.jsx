@@ -17,7 +17,6 @@ const Courses = () => {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
-  console.log(user);
   const handleNavigate = (text) => {
     navigate("/content", {
       state: {
@@ -144,7 +143,20 @@ const Courses = () => {
                   ))}
             </div>
             <div>
-              {course.paid && <Link to={`/exam/${course._id}`}>Exam</Link>}
+              <br />
+              <h4>Exams</h4>
+              {course.paid && course.exams.length ? (
+                course.exams.map((exam) => (
+                  <Link
+                    style={{ marginTop: "20px", display: "block" }}
+                    to={`/exam/${exam._id}`}
+                  >
+                    {exam.description}
+                  </Link>
+                ))
+              ) : (
+                <p>No exams yet </p>
+              )}
             </div>
             {/* Actions */}
             <div className="actions">

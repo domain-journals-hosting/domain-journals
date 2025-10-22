@@ -42,7 +42,7 @@ const Course = () => {
       try {
         const response = await axios.get(`/course/${courseId}`);
         setCourse(response.data);
-        console.log(response.data);
+        console.log(response.data.exams);
       } catch (err) {
         console.error("Error fetching course:", err);
       } finally {
@@ -143,7 +143,20 @@ const Course = () => {
             )}
           </div>
           <div>
-            {course.paid && <Link href={`/exam/${course._id}`}>Exam</Link>}
+            <br />
+            <h4>Exams</h4>
+            {course.paid && course.exams.length ? (
+              course.exams.map((exam) => (
+                <Link
+                  style={{ marginTop: "20px", display: "block" }}
+                  to={`/exam/${exam._id}`}
+                >
+                  {exam.description}
+                </Link>
+              ))
+            ) : (
+              <p>No exams yet </p>
+            )}
           </div>
           <div className="actions">
             {isAdmin && (

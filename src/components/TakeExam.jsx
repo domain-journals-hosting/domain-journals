@@ -8,7 +8,7 @@ import QuestionMap from "./QuestionMap";
 import ExamGuard from "./ExamGuard";
 
 const TakeExam = () => {
-  const { courseId } = useParams();
+  const { examId } = useParams();
   const navigate = useNavigate();
 
   const [exam, setExam] = useState(null);
@@ -28,7 +28,7 @@ const TakeExam = () => {
     const fetchExamAndDraft = async () => {
       try {
         setLoading(true);
-        const examRes = await axios.get(`/exam/${courseId}`);
+        const examRes = await axios.get(`/exam/${examId}`);
         console.log(examRes);
         const draftRes = await axios
           .get(`/draft/${examRes.data._id}`)
@@ -71,7 +71,7 @@ const TakeExam = () => {
       }
     };
     fetchExamAndDraft();
-  }, [courseId]);
+  }, [examId]);
 
   // countdown
   useEffect(() => {
@@ -143,7 +143,7 @@ const TakeExam = () => {
     setCurrentPage(Math.floor(index / QUESTIONS_PER_PAGE));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     try {
       const result = await axios.post(`/result/${exam._id}`, {
         answers: answers.map((a, i) => ({
@@ -158,7 +158,7 @@ const TakeExam = () => {
       console.error("Submit failed:", err.message);
       setError(err?.response?.data?.error || "Failed to submit exam");
     }
-  };
+  }, []);
 
   if (loading) return <p>Loading exam...</p>;
   if (error)

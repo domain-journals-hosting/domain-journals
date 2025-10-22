@@ -56,6 +56,7 @@ import TakeExam from "./components/TakeExam";
 import ExamResult from "./components/ExamResult";
 import AllResults from "./components/AllResults";
 import CheckResults from "./admins/CheckResults";
+import ScrollToTop from "./ScrollToTop";
 
 function App() {
   const location = useLocation();
@@ -73,6 +74,8 @@ function App() {
   }, [location.pathname]);
   return (
     <div className="App">
+      <ScrollToTop />
+
       <Nav isHeroVisible={isHeroVisible} />
       <main style={{ paddingTop: !showNav ? 0 : "70px" }}>
         <Routes>
@@ -101,7 +104,7 @@ function App() {
             <Route path="/admin/review" element={<ReviewManuscripts />} />
             <Route path="/admin/message" element={<Messages />} />
             <Route path="/new-exam/:courseId" element={<ExamForm />} />
-            <Route path="/edit-exam/:courseId" element={<EditExamForm />} />
+            <Route path="/edit-exam/:examId" element={<EditExamForm />} />
           </Route>
           <Route path="/admin/forgot" element={<AdminForgotPW />} />
           <Route path="/admin/reset" element={<ResetAdminPW />} />
@@ -117,8 +120,8 @@ function App() {
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/invite/:token" element={<CompleteInvite />} />
           <Route element={<RequireAuth />}>
-            <Route path="/take-exam/:courseId" element={<TakeExam />} />
-            <Route path="/exam/:courseId" element={<Exam />} />
+            <Route path="/take-exam/:examId" element={<TakeExam />} />
+            <Route path="/exam/:examId" element={<Exam />} />
             <Route path="/result/:examId" element={<ExamResult />} />
             <Route path="/editCourse/:courseId" element={<EditCourse />} />
             <Route path="/courses" element={<Courses />} />

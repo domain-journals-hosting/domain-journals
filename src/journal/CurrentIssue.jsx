@@ -37,7 +37,7 @@ export const CurrentIssue = () => {
       <div className="current-issue">
         <h1>Current Issue</h1>
         <br />
-        {loading && <p>Loading...</p>}
+        {loading && <p className="loading">Loading...</p>}
         {err && <p className="errors">{err}</p>}
         {!loading && !err && manuscripts.length === 0 ? (
           <p>No manuscripts in this issue yet.</p>

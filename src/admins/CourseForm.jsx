@@ -11,7 +11,7 @@ const CourseForm = ({ editing = false }) => {
   const [outline, setOutline] = useState([{ title: "", file: "" }]);
   const [materials, setMaterials] = useState([{ text: "", link: "" }]);
   const [texts, setTexts] = useState([{ title: "", text: "" }]);
-  const [courseStatus, setCourseStatus] = useState(false);
+  const [exams, setExams] = useState([]);
 
   const [outlineHeading, setOutlineHeading] = useState("Course Outline");
   const [materialsHeading, setMaterialsHeading] = useState("Materials");
@@ -49,11 +49,13 @@ const CourseForm = ({ editing = false }) => {
       }
     };
     const checkCourse = async () => {
-      const response = await axios.get(`/exam/view/${courseId}`);
-      if (response.data) setCourseStatus(true);
+      const response = await axios.get(`/exam/all/${courseId}`);
+      setExams(response.data);
     };
-    checkCourse();
-    if (editing) getCourse();
+    if (editing) {
+      getCourse();
+      checkCourse();
+    }
   }, [courseId, editing]);
 
   useEffect(() => {
@@ -546,9 +548,19 @@ const CourseForm = ({ editing = false }) => {
         </div>
 
         {editing && (
-          <Link to={`/${courseStatus ? "edit" : "new"}-exam/${courseId}`}>
-            {courseStatus ? "Edit" : "Add"} exam
-          </Link>
+          <div>
+            <p>Exams</p>
+            {exams.length &&
+              exams.map((exam) => (
+                <p style={{ marginBottom: "20px" }}>
+                  <span>
+                    {exam.description}{" "}
+                    <Link to={`/edit-exam/${exam._id}`}>Edit exam</Link>
+                  </span>
+                </p>
+              ))}
+            <Link to={`/new-exam/${courseId}`}>Add exam</Link>
+          </div>
         )}
         <div style={{ marginTop: "15px" }}>
           <button type="submit" disabled={loading}>

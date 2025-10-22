@@ -34,7 +34,7 @@ const CheckResults = () => {
     }
   }, [exams]);
 
-  if (loading || !exams || !results) return <p>Loading....</p>;
+  if (loading || !exams || !results) return <p className="loading">Loading....</p>;
   const select = (
     <>
       <label htmlFor="result">Select result: </label>
