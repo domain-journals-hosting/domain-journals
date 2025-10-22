@@ -80,8 +80,8 @@ const EditExamForm = () => {
         <textarea
           id="Questions"
           placeholder="Paste questions array, please use carefully"
-          value={exam.questions}
-          onChange={(e) => setQuestions(e.target.value)}
+          value={JSON.stringify(exam.questions)}
+          onChange={(e) => setQuestions(JSON.parse(e.target.value))}
           required
           style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
         />
@@ -100,7 +100,7 @@ const EditExamForm = () => {
           style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
         />
       </div>
-      {exam.questions.map((q, index) => (
+      {exam?.questions?.map((q, index) => (
         <div key={index} className="question-block">
           <div className="question-header">
             <h3>Question {index + 1}</h3>
