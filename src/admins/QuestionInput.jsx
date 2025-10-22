@@ -40,7 +40,7 @@ const QuestionInput = ({ index, data, onChange, onDelete }) => {
         required
       />
 
-      {data.options.map((opt, i) => (
+      {data?.options?.map((opt, i) => (
         <div key={i} className="option-input">
           <input
             type="text"
@@ -57,7 +57,7 @@ const QuestionInput = ({ index, data, onChange, onDelete }) => {
         value={data.correctAnswer}
         onChange={(e) => handleChange("correctAnswer", Number(e.target.value))}
       >
-        {data.options.map((_, i) => (
+        {data?.options?.map((_, i) => (
           <option key={i} value={i}>
             Option {i + 1}
           </option>
