@@ -182,7 +182,7 @@ const CourseForm = ({ editing = false }) => {
         });
 
       setLoading(true);
-      await axios.put(`/course/${courseId}`, {
+      const res = await axios.put(`/course/${courseId}`, {
         title,
         description,
         price,
@@ -195,7 +195,7 @@ const CourseForm = ({ editing = false }) => {
         textsHeading,
       });
       setToast({ message: "Course edited successfully" });
-
+      console.log(res.data);
       setTitle("");
       setDescription("");
       setPrice("");

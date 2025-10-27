@@ -86,7 +86,7 @@ const Course = () => {
             )}
           </div>
           {/* Outline Section */}
-          <h3>Outline</h3>
+          <h3>{course.outlineHeading || "Outline"}</h3>
           {!course.outline.length
             ? "Nothing to show"
             : course.outline.map((item, i) => (
@@ -100,7 +100,9 @@ const Course = () => {
                   )}
                 </div>
               ))}
-          <h3 style={{ marginTop: "30px" }}>Materials</h3>
+          <h3 style={{ marginTop: "30px" }}>
+            {course.materialsHeading || "Materials"}
+          </h3>
           {!course.materials.length
             ? "Nothing to show"
             : course.materials.map((item, i) => (
@@ -115,7 +117,9 @@ const Course = () => {
                 </div>
               ))}
           <div>
-            <h3 style={{ marginTop: "30px" }}>Texts</h3>
+            <h3 style={{ marginTop: "30px" }}>
+              {course.textsHeading || "Texts"}
+            </h3>
             {!course.texts.length ? (
               <p>Nothing to show</p>
             ) : (
