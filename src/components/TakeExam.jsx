@@ -178,7 +178,7 @@ const TakeExam = () => {
 
   return (
     <div className="take-exam">
-      <ExamGuard warnings={3} onViolationLimit={handleSubmit} />
+      {/* <ExamGuard warnings={3} onViolationLimit={handleSubmit} /> */}
       <ExamHeader
         title={exam?.description}
         timeLeft={timeLeft}

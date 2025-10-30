@@ -83,7 +83,7 @@ const PaymentModal = ({ course, open, onClose }) => {
               </a>{" "}
               or forward your receipt to WhatsApp:{" "}
               <a
-                href="https://wa.me/2349160214795"
+                href="https://wa.me/2349046887416"
                 target="_blank"
                 rel="noreferrer"
               >
