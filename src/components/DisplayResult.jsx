@@ -33,7 +33,7 @@ const DisplayResult = ({ result }) => {
               <p className="status">
                 {isCorrect ? "✔ Correct" : "✗ Incorrect"}
               </p>
-              {q.explantion && <p>Explanation: {q.explantion}</p>}
+              {q.explanation && <p>Explanation: {q.explanation}</p>}
             </div>
           );
         })}
