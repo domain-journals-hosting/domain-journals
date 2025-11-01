@@ -83,7 +83,7 @@ const PaymentModal = ({ course, open, onClose }) => {
               </a>{" "}
               or <a
   href={`https://wa.me/2349046887416?text=${encodeURIComponent(
-    `Hello, I’ve just made a payment for ${course.title}. I’m attaching my receipt for your confirmation. Thank you.`
+    `Hello, I’ve just made a payment for *${course.title}*. I’m attaching my receipt for your confirmation. Thank you.`
   )}`}
   target="_blank"
   rel="noopener noreferrer"
