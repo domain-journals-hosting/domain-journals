@@ -87,7 +87,7 @@ const PaymentModal = ({ course, open, onClose }) => {
                 target="_blank"
                 rel="noreferrer"
               >
-                +234 916 021 4795
+                +234 904 6887 416
               </a>{" "}
               to fasten up the process.
             </p>
