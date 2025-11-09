@@ -77,11 +77,7 @@ const PaymentModal = ({ course, open, onClose }) => {
           <div className="submitted">
             <h3>We’re looking into it ✅</h3>
             <p>
-              Please send a mail to{" "}
-              <a href="mailto:nelson.ejumedia@domainjournals.com">
-                nelson.ejumedia@domainjournals.com
-              </a>{" "}
-              or <a
+           Please {" "} <a
   href={`https://wa.me/2349046887416?text=${encodeURIComponent(
     `Hello, I’ve just made a payment for *${course.title}*. I’m attaching my receipt for your confirmation. Thank you.`
   )}`}
