@@ -57,6 +57,7 @@ import ExamResult from "./components/ExamResult";
 import AllResults from "./components/AllResults";
 import CheckResults from "./admins/CheckResults";
 import ScrollToTop from "./ScrollToTop";
+import SubmitArchive from "./components/SubmitArchive";
 
 function App() {
   const location = useLocation();
@@ -109,6 +110,7 @@ function App() {
           <Route path="/admin/forgot" element={<AdminForgotPW />} />
           <Route path="/admin/reset" element={<ResetAdminPW />} />
           <Route element={<RequireUserAuth allowedRoles={["admin"]} />}>
+            <Route path="/admins/submit-archive" element={<SubmitArchive />} />
             <Route path="/admin/courses" element={<NewCourse />} />
             <Route path="/admin/invite" element={<InviteUser />} />
             <Route path="admin/audit" element={<AuditReviews />} />
