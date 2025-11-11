@@ -254,7 +254,9 @@ const AuthorProfile = () => {
             </section>
           )}
         </div>
+        <div style={{ marginTop: 40 }}>
         <Link to={"/results"}>My results</Link>
+        </div>
         <div style={{ marginTop: 40 }}>
           <Link to="/review" style={{ color: "#659377", fontWeight: 600 }}>
             Leave a review?
