@@ -77,18 +77,15 @@ const PaymentModal = ({ course, open, onClose }) => {
           <div className="submitted">
             <h3>We’re looking into it ✅</h3>
             <p>
-              Please send a mail to{" "}
-              <a href="mailto:nelson.ejumedia@domainjournals.com">
-                nelson.ejumedia@domainjournals.com
-              </a>{" "}
-              or forward your receipt to WhatsApp:{" "}
-              <a
-                href="https://wa.me/2349046887416"
-                target="_blank"
-                rel="noreferrer"
-              >
-                +234 916 021 4795
-              </a>{" "}
+           Please {" "} <a
+  href={`https://wa.me/2349046887416?text=${encodeURIComponent(
+    `Hello, I’ve just made a payment for *${course.title}*. I’m attaching my receipt for your confirmation. Thank you.`
+  )}`}
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  Forward your receipt to us on WhatsApp
+</a>{" "}
               to fasten up the process.
             </p>
           </div>

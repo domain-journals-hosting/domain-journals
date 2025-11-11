@@ -53,7 +53,7 @@ const Payments = () => {
       <table
         border="1"
         cellPadding="8"
-        style={{ borderCollapse: "collapse", width: "100%" }}
+        style={{ borderCollapse: "collapse", width: "100%", overflow: "auto" }}
       >
         <thead>
           <tr>
