@@ -158,7 +158,16 @@ const Dashboard = () => {
             access: "admin",
           },
           { to: "/admin/audit", text: "Audit reviews", access: "admin" },
-          { to: "/admin/courses", text: "Add a course", access: "admin" },
+          {
+            to: "/admins/submit-archive",
+            text: "Submit archive",
+            access: "admin",
+          },
+          {
+            to: "/admins/courses",
+            text: "Add a course",
+            access: "admin",
+          },
           {
             to: "/admin/payments",
             text: "Check course payments",

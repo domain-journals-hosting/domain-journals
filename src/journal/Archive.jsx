@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "../api/axios";
 import "../styles/archive.css";
 import JournalHeader from "./JournalHeader";
+import ArchiveDetails from "../components/ArchiveDetails";
 
 const Archive = () => {
   const { slug } = useParams();
@@ -10,18 +11,19 @@ const Archive = () => {
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState(null);
   const backendBase = import.meta.env.VITE_API_BASE_URL;
+
   const downloadLink = (file) => {
-    console.log(file);
+    if (!file) return "#";
     return file.endsWith(".doc")
       ? file
       : `${backendBase}/file?url=${encodeURIComponent(file)}`;
   };
 
   useEffect(() => {
-    const fetchManuscripts = async () => {
+    const fetchData = async () => {
       try {
         const res = await axios.get(`accepted/${slug}`);
-        const manuscripts = res.data;
+        const { archive, manuscripts } = res.data;
 
         const groupedMap = {};
 
@@ -31,13 +33,19 @@ const Archive = () => {
           const year = 2024 + vol;
           const key = `${year} | Vol. ${vol} Issue ${issue}`;
 
-          if (!groupedMap[key]) groupedMap[key] = [];
+          if (!groupedMap[key]) groupedMap[key] = { items: [], file: null };
 
-          groupedMap[key].push(m);
+          groupedMap[key].items.push(m);
+
+          // attach the archive file for this volume/issue
+          const archiveFile = archive.find(
+            (a) => a.volume === vol && a.issue === issue
+          );
+          if (archiveFile) groupedMap[key].file = archiveFile.file;
         });
 
         const sortedGroups = Object.entries(groupedMap)
-          .map(([group, items]) => {
+          .map(([group, { items, file }]) => {
             const [yearText, volText] = group.split(" | ");
             const volNumber = parseInt(volText.split(" ")[1]);
             const issueNumber = parseInt(volText.split("Issue ")[1]);
@@ -48,6 +56,7 @@ const Archive = () => {
               volume: volNumber,
               issue: issueNumber,
               items,
+              file, // include archive file
             };
           })
           .sort((a, b) => {
@@ -64,7 +73,7 @@ const Archive = () => {
       }
     };
 
-    fetchManuscripts();
+    fetchData();
   }, [slug]);
 
   return (
@@ -77,9 +86,13 @@ const Archive = () => {
         {!grouped.length && <p>No items here</p>}
         {!loading &&
           !err &&
-          grouped.map(({ group, items }) => (
+          grouped.map(({ group, items, file }) => (
             <div key={group} className="archive-group">
               <h2>{group}</h2>
+
+              {/* Archive download component */}
+              {file && <ArchiveDetails file={file} />}
+
               <ul>
                 {items.map((m) => (
                   <li key={m._id}>
