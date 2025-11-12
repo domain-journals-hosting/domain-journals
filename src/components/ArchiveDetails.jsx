@@ -12,17 +12,18 @@ const ArchiveDetails = ({ file }) => {
   const downloadUrl = `${backendBase}/files/download?url=${encodeURIComponent(
     fullUrl
   )}`;
-
+  const text = isFullUrl ? "View" : "Download Full Issue";
+  const link = isFullUrl ? downloadUrl : fullUrl;
   return (
     <div style={styles.card}>
       <div style={styles.cardHeader}>
         <a
           style={styles.downloadBtn}
-          href={downloadUrl}
+          href={link}
           target="_blank"
           rel="noopener noreferrer"
         >
-          📥 Download Full Issue <FaDownload style={{ marginLeft: "6px" }} />
+          {text} <FaDownload style={{ marginLeft: "6px" }} />
         </a>
       </div>
     </div>
