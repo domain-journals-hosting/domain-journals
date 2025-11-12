@@ -8,6 +8,8 @@ const SubmitArchive = () => {
   const fileInputRef = useRef(null);
   const [volume, setVolume] = useState(currentYear);
   const [issue, setIssue] = useState("");
+  const [uploadMethod, setUploadMethod] = useState("file");
+  const [link, setLink] = useState("");
   const [journal, setJournal] = useState(slug(journals[0]));
   const [file, setFile] = useState(null);
   const [archives, setArchives] = useState([]);
@@ -41,8 +43,12 @@ const SubmitArchive = () => {
   const handleUpload = async () => {
     if (isNaN(issue) || isNaN(volume))
       return showMessage("Invalid issue or volume entry");
-    if (!file || !issue) return showMessage("Issue and file required");
-
+    if (
+      (uploadMethod === "file" && !file) ||
+      (uploadMethod === "link" && !link) ||
+      !issue
+    )
+      return showMessage("Issue and file/link required");
     const existing = archives?.find(
       (a) =>
         Number(a.volume) === Number(volume) &&
@@ -74,27 +80,38 @@ const SubmitArchive = () => {
     setStatusText("Uploading file..., this might take a while");
 
     try {
-      if (existing?.file) {
-        await deletePdf(existing.file);
+      if (uploadMethod === "link") {
+        await axios.post("/archives", {
+          volume,
+          issue,
+          journal,
+          file: link,
+        });
+      } else {
+        if (existing?.file) {
+          await deletePdf(existing.file);
+        }
+
+        const { url, error } = await uploadPdf(file);
+        if (error) throw new Error("Upload failed");
+
+        const filePath = url.split("/").pop();
+
+        setStatusText("Saving archive...");
+
+        await axios.post("/archives", {
+          volume,
+          issue,
+          journal,
+          file: uploadMethod === "link" ? link : filePath,
+        });
       }
-
-      const { url, error } = await uploadPdf(file);
-      if (error) throw new Error("Upload failed");
-
-      const filePath = url.split("/").pop();
-
-      setStatusText("Saving archive...");
-
-      await axios.post("/archives", {
-        volume,
-        issue,
-        journal,
-        file: filePath,
-      });
 
       showMessage("Archive created");
       setIssue("");
       setFile(null);
+      setLink("");
+
       fileInputRef.current.value = null;
       fetchArchives();
     } catch (err) {
@@ -206,8 +223,8 @@ const SubmitArchive = () => {
           onChange={(e) => setIssue(e.target.value)}
         />
       </div>
-      {/* Journal */}
 
+      {/* Journal */}
       <div style={{ marginBottom: "1rem" }}>
         <label>Journal:</label>
         <select
@@ -223,19 +240,50 @@ const SubmitArchive = () => {
           ))}
         </select>
       </div>
-
-      {/* File */}
       <div style={{ marginBottom: "1rem" }}>
-        <label>Manuscript File (PDF):</label>
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept=".pdf"
+        <label>Upload method:</label>
+        <select
           disabled={uploading}
-          style={{ width: "100%", marginTop: "0.25rem" }}
-          onChange={(e) => setFile(e.target.files[0])}
-        />
+          style={{ width: "100%", padding: "0.5rem", marginTop: "0.25rem" }}
+          value={uploadMethod}
+          onChange={(e) => setUploadMethod(e.target.value)}
+        >
+          {["link", "file"].map((a) => (
+            <option key={a} value={a}>
+              {a.toUpperCase()}
+            </option>
+          ))}
+        </select>
       </div>
+
+      {/* Link */}
+      {uploadMethod === "link" && (
+        <div style={{ marginBottom: "1rem" }}>
+          <label>Link (eg. Google drive):</label>
+          <input
+            type="text"
+            disabled={uploading}
+            placeholder="Enter link..."
+            style={{ width: "100%", padding: "0.5rem", marginTop: "0.25rem" }}
+            value={link}
+            onChange={(e) => setLink(e.target.value)}
+          />
+        </div>
+      )}
+      {/* File */}
+      {uploadMethod === "file" && (
+        <div style={{ marginBottom: "1rem" }}>
+          <label>Manuscript File (PDF):</label>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".pdf"
+            disabled={uploading}
+            style={{ width: "100%", marginTop: "0.25rem" }}
+            onChange={(e) => setFile(e.target.files[0])}
+          />
+        </div>
+      )}
 
       {/* Upload button */}
       <button
