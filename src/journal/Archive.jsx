@@ -10,14 +10,6 @@ const Archive = () => {
   const [grouped, setGrouped] = useState([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState(null);
-  const backendBase = import.meta.env.VITE_API_BASE_URL;
-
-  const downloadLink = (file) => {
-    if (!file) return "#";
-    return file.endsWith(".doc")
-      ? file
-      : `${backendBase}/file?url=${encodeURIComponent(file)}`;
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,6 +19,7 @@ const Archive = () => {
 
         const groupedMap = {};
 
+        // group existing manuscripts
         manuscripts.forEach((m) => {
           const vol = m.volume;
           const issue = m.issue;
@@ -34,7 +27,6 @@ const Archive = () => {
           const key = `${year} | Vol. ${vol} Issue ${issue}`;
 
           if (!groupedMap[key]) groupedMap[key] = { items: [], file: null };
-
           groupedMap[key].items.push(m);
 
           // attach the archive file for this volume/issue
@@ -44,6 +36,43 @@ const Archive = () => {
           if (archiveFile) groupedMap[key].file = archiveFile.file;
         });
 
+        // Add missing volume/issue placeholders
+        const currentYear = new Date().getFullYear();
+        const currentVol = currentYear - 2024; // e.g. 2025 → vol 1, 2026 → vol 2, etc.
+
+        // Find all volume/issue combinations that exist in manuscripts or archive
+        const existingCombos = new Set([
+          ...manuscripts.map((m) => `${m.volume}-${m.issue}`),
+          ...archive.map((a) => `${a.volume}-${a.issue}`),
+        ]);
+
+        // find the max issue per volume from manuscripts and archive
+        const maxIssues = {};
+        [...manuscripts, ...archive].forEach((m) => {
+          if (!maxIssues[m.volume] || m.issue > maxIssues[m.volume])
+            maxIssues[m.volume] = m.issue;
+        });
+
+        for (let vol = 1; vol <= currentVol; vol++) {
+          const maxIssue = maxIssues[vol] || 1; // default to at least 1 issue
+          for (let issue = 1; issue <= maxIssue; issue++) {
+            const year = 2024 + vol;
+            const key = `${year} | Vol. ${vol} Issue ${issue}`;
+
+            if (!groupedMap[key]) {
+              const archiveFile = archive.find(
+                (a) => a.volume === vol && a.issue === issue
+              );
+
+              groupedMap[key] = {
+                items: [],
+                file: archiveFile ? archiveFile.file : null,
+              };
+            }
+          }
+        }
+
+        // sort
         const sortedGroups = Object.entries(groupedMap)
           .map(([group, { items, file }]) => {
             const [yearText, volText] = group.split(" | ");
@@ -56,7 +85,7 @@ const Archive = () => {
               volume: volNumber,
               issue: issueNumber,
               items,
-              file, // include archive file
+              file,
             };
           })
           .sort((a, b) => {
@@ -90,40 +119,44 @@ const Archive = () => {
             <div key={group} className="archive-group">
               <h2>{group}</h2>
 
-              {/* Archive download component */}
               {file && <ArchiveDetails file={file} />}
 
-              <ul>
-                {items.map((m) => (
-                  <li key={m._id}>
-                    <h3>
-                      {m.title} ({m.articleType || "Editorial"})
-                    </h3>
-                    ID: {m.customId}
-                    <p
-                      title={[m.author, ...m.coAuthors.map((a) => a.name)].join(
-                        ", "
-                      )}
-                    >
-                      <strong>Author(s):</strong>{" "}
-                      {(() => {
-                        const names = [
+              {items.length === 0 ? (
+                <p className="empty">Nothing to show</p>
+              ) : (
+                <ul>
+                  {items.map((m) => (
+                    <li key={m._id}>
+                      <h3>
+                        {m.title} ({m.articleType || "Editorial"})
+                      </h3>
+                      ID: {m.customId}
+                      <p
+                        title={[
                           m.author,
                           ...m.coAuthors.map((a) => a.name),
-                        ].join(", ");
-                        return names.length > 100
-                          ? names.slice(0, 97) + "..."
-                          : names;
-                      })()}
-                    </p>
-                    <div className="actions">
-                      <Link to="/view" state={{ manuscript: m }}>
-                        <button>📄 View Abstract</button>
-                      </Link>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+                        ].join(", ")}
+                      >
+                        <strong>Author(s):</strong>{" "}
+                        {(() => {
+                          const names = [
+                            m.author,
+                            ...m.coAuthors.map((a) => a.name),
+                          ].join(", ");
+                          return names.length > 100
+                            ? names.slice(0, 97) + "..."
+                            : names;
+                        })()}
+                      </p>
+                      <div className="actions">
+                        <Link to="/view" state={{ manuscript: m }}>
+                          <button>📄 View Abstract</button>
+                        </Link>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           ))}
       </div>
