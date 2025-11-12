@@ -6,7 +6,9 @@ const backendBase = "https://api.domainjournals.com";
 const ArchiveDetails = ({ file }) => {
   if (!file) return null;
 
-  const fullUrl = getPdfUrl(file);
+  const isFullUrl = file.startsWith("http://") || file.startsWith("https://");
+  const fullUrl = isFullUrl ? file : getPdfUrl(file);
+
   const downloadUrl = `${backendBase}/files/download?url=${encodeURIComponent(
     fullUrl
   )}`;
