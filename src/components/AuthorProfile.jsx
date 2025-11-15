@@ -12,8 +12,10 @@ const AuthorProfile = () => {
   const [allManuscripts, setAllManuscripts] = useState([]);
   const [editingName, setEditingName] = useState(false);
   const [newName, setNewName] = useState(user.name || "");
-  const [newLevel, setNewLevel] = useState(user.name || "");
-  const [newDepartment, setNewDepartment] = useState(user.name || "");
+  const [newLevel, setNewLevel] = useState(user.level || 100);
+  const [newDepartment, setNewDepartment] = useState(
+    user.department || "anatomy"
+  );
   const [acceptedManuscripts, setAcceptedManuscripts] = useState([]);
   const [toast, setToast] = useState(null);
   const navigate = useNavigate();
@@ -71,9 +73,7 @@ const AuthorProfile = () => {
     try {
       await axios.patch(
         "/author/",
-        { name: newName },
-        { department: newDepartment },
-        { level: newLevel },
+        { name: newName, department: newDepartment, level: newLevel },
         { withCredentials: true }
       );
       setUser({
@@ -159,7 +159,10 @@ const AuthorProfile = () => {
           <div>
             {!editingName ? (
               <h2 style={{ fontSize: "1.3rem", color: "#093238" }}>
-                {user.name(user.department || "", user.level || "")}
+                {user.name} (
+                {user.department.charAt(0).toUpperCase() +
+                  user.department.slice(1) || ""}
+                ), {user.level || 100} Level
                 <FaPencilAlt
                   size={14}
                   color="#659377"
@@ -185,7 +188,7 @@ const AuthorProfile = () => {
                   onChange={(e) => setNewLevel(e.target.value)}
                 >
                   {[100, 200, 300, 400, 500, 600, 700, 800].map((l) => (
-                    <option value={l}>l</option>
+                    <option value={l}>{l}</option>
                   ))}
                 </select>
                 <select
@@ -204,8 +207,10 @@ const AuthorProfile = () => {
                     "pharmacology",
                     "medicine and surgery",
                     "dentistry",
-                  ].map((l) => (
-                    <option value={l}>l</option>
+                  ].map((d) => (
+                    <option value={d}>
+                      {d.charAt(0).toUpperCase() + d.slice(1)}
+                    </option>
                   ))}
                 </select>
                 <button
