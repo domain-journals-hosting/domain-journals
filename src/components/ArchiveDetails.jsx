@@ -9,7 +9,7 @@ const ArchiveDetails = ({ file }) => {
   const isFullUrl = file.startsWith("http://") || file.startsWith("https://");
   const fullUrl = isFullUrl ? file : getPdfUrl(file);
 
-  const downloadUrl = `${backendBase}/file?url=${encodeURIComponent(fullUrl)}`;
+  const downloadUrl = `${backendBase}/file?url=${fullUrl}`;
   const text = isFullUrl ? "View" : "Download Full Issue";
   const link = isFullUrl ? fullUrl : downloadUrl;
   return (

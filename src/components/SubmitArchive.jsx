@@ -124,7 +124,7 @@ const SubmitArchive = () => {
 
   return (
     <div style={{ padding: "1rem", maxWidth: "500px", margin: "auto" }}>
-      {confirm.open && (
+      {confirm.open ? (
         <div
           style={{
             position: "fixed",
@@ -175,6 +175,8 @@ const SubmitArchive = () => {
             </div>
           </div>
         </div>
+      ) : (
+        ""
       )}
 
       {message && (
