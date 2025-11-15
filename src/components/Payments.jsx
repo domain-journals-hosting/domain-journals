@@ -48,12 +48,14 @@ const Payments = () => {
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   return (
-    <div>
+    <div style={{
+      overflow: "scroll"
+    }}>
       <h2>Payments</h2>
       <table
         border="1"
         cellPadding="8"
-        style={{ borderCollapse: "collapse", width: "100%", overflow: "auto" }}
+        style={{ borderCollapse: "collapse", width: "100%" }}
       >
         <thead>
           <tr>
