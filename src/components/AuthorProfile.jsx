@@ -72,9 +72,16 @@ const AuthorProfile = () => {
       await axios.patch(
         "/author/",
         { name: newName },
+        { department: newDepartment },
+        { level: newLevel },
         { withCredentials: true }
       );
-      setUser({ ...user, name: newName });
+      setUser({
+        ...user,
+        name: newName,
+        level: newLevel,
+        department: newDepartment,
+      });
       setEditingName(false);
     } catch (err) {
       setToast({ message: "Failed to update name", error: true });
