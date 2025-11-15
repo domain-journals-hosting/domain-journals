@@ -12,6 +12,7 @@ const AuthorProfile = () => {
   const [allManuscripts, setAllManuscripts] = useState([]);
   const [editingName, setEditingName] = useState(false);
   const [newName, setNewName] = useState(user.name || "");
+  const [newLevel, setNewLevel] = useState(user.name || "");
   const [acceptedManuscripts, setAcceptedManuscripts] = useState([]);
   const [toast, setToast] = useState(null);
   const navigate = useNavigate();
@@ -150,7 +151,7 @@ const AuthorProfile = () => {
           <div>
             {!editingName ? (
               <h2 style={{ fontSize: "1.3rem", color: "#093238" }}>
-                {user.name}
+                {user.name(user.department || "", user.level || "")}
                 <FaPencilAlt
                   size={14}
                   color="#659377"
@@ -169,6 +170,16 @@ const AuthorProfile = () => {
                     border: "1px solid #ccc",
                   }}
                 />
+                <select
+                  name="level"
+                  id="level"
+                  value={newLevel}
+                  onChange={(e) => setNewLevel(e.target.value)}
+                >
+                  {[100, 200, 300, 400, 500, 600, 700, 800].map((l) => (
+                    <option value={l}>l</option>
+                  ))}
+                </select>
                 <button
                   onClick={handleNameUpdate}
                   style={{
