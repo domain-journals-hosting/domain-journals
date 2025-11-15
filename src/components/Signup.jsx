@@ -4,7 +4,14 @@ import { useNavigate, useLocation } from "react-router-dom";
 import "../styles/signup.css";
 
 const Signup = () => {
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    department: "",
+    level: "",
+    matricNumber: "",
+  });
   const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
@@ -43,6 +50,54 @@ const Signup = () => {
       <form onSubmit={handleSubmit}>
         <label>Name:</label>
         <input name="name" value={form.name} onChange={handleChange} required />
+
+        <label>Department:</label>
+        <input
+          name="department"
+          value={form.department}
+          onChange={handleChange}
+          required
+        />
+        <label>MatricNumber:</label>
+        {/* <input
+          name="matricNumber"
+          value={form.matricNumber}
+          onChange={handleChange}
+          required
+        /> */}
+        <select
+          name="matricNumber"
+          id="matricNumber"
+          value={form.matricNumber}
+          onChange={(e) => handleChange}
+        >
+          {[
+            "anatomy",
+            "pharmacy",
+            "medical laboratory science",
+            "nursing",
+            "medical biochemistry",
+            "physiology",
+            "pharmacology",
+            "medicine and surgery",
+            "dentistry",
+          ].map((d) => (
+            <option value="d">
+              {d.charAt(0).toUpperCase() + d.slice(1).toLowerCase()}
+            </option>
+          ))}
+        </select>
+        <label htmlFor="level">Level</label>
+        <select
+          name="level"
+          id="level"
+          value={form.level}
+          onChange={handleChange}
+        >
+          {[100, 200, 300, 400, 500, 600, 700, 800].map((l) => (
+            <option value={l}>l</option>
+          ))}
+        </select>
 
         <label>Email:</label>
         <input

@@ -3,7 +3,9 @@ import axios from "../api/axios";
 import "../styles/checkResults.css";
 
 const CheckResults = () => {
-  const [selectedExam, setSelectedExam] = useState("");
+  const [selectedExam, setSelectedExam] = useState("all");
+  const [selectedLevel, setSelectedLevel] = useState("all");
+  const [selectedDepartment, setSelectedDepartment] = useState("all");
   const [exams, setExams] = useState("");
   const [results, setResults] = useState("");
   const [loading, setLoading] = useState(true);
@@ -33,20 +35,57 @@ const CheckResults = () => {
       setSelectedExam(exams[0]._id);
     }
   }, [exams]);
+  const availableDepartments = results
+    ? new Set(results.map((r) => r.user.department))
+    : [];
 
-  if (loading || !exams || !results) return <p className="loading">Loading....</p>;
+  if (loading || !exams || !results)
+    return <p className="loading">Loading....</p>;
   const select = (
     <>
-      <label htmlFor="result">Select result: </label>
+      <label htmlFor="result">Select exam: </label>
       <select
         value={selectedExam}
         onChange={(e) => setSelectedExam(e.target.value)}
         name=""
         id="result"
       >
+        <option value="all">All</option>
         {exams.map((exam) => (
           <option key={exam._id} value={exam._id}>
             {exam.description || "Exam"}
+          </option>
+        ))}
+      </select>
+
+      <label htmlFor="result">Select department: </label>
+      <select
+        value={selectedDepartment}
+        onChange={(e) => setSelectedDepartment(e.target.value)}
+        name=""
+        id="result"
+      >
+        <option value="all">All</option>
+
+        {Array.from(availableDepartments).map((d) => (
+          <option key={d} value={d}>
+            {d}
+          </option>
+        ))}
+      </select>
+
+      <label htmlFor="result">Select level: </label>
+      <select
+        value={selectedLevel}
+        onChange={(e) => setSelectedLevel(e.target.value)}
+        name=""
+        id="result"
+      >
+        <option value="all">All</option>
+
+        {[100, 200, 300, 400, 500, 600, 700, 800].map((d) => (
+          <option key={d} value={d}>
+            {d}
           </option>
         ))}
       </select>
@@ -62,7 +101,14 @@ const CheckResults = () => {
           <th>Score</th>
         </thead>
         {results
-          .filter((r) => r.exam.toString() === selectedExam.toString())
+          .filter(
+            (r) =>
+              (selectedExam === "all" ||
+                r.exam.toString() === selectedExam.toString()) &&
+              (selectedDepartment === "all" ||
+                r.user.department === selectedDepartment) &&
+              (selectedLevel === "all" || r.user.level === selectedLevel)
+          )
           .map((res) => (
             <tr key={res._id}>
               <td>{res?.user?.name}</td>
