@@ -13,6 +13,7 @@ const AuthorProfile = () => {
   const [editingName, setEditingName] = useState(false);
   const [newName, setNewName] = useState(user.name || "");
   const [newLevel, setNewLevel] = useState(user.name || "");
+  const [newDepartment, setNewDepartment] = useState(user.name || "");
   const [acceptedManuscripts, setAcceptedManuscripts] = useState([]);
   const [toast, setToast] = useState(null);
   const navigate = useNavigate();
@@ -177,6 +178,26 @@ const AuthorProfile = () => {
                   onChange={(e) => setNewLevel(e.target.value)}
                 >
                   {[100, 200, 300, 400, 500, 600, 700, 800].map((l) => (
+                    <option value={l}>l</option>
+                  ))}
+                </select>
+                <select
+                  name="department"
+                  id="department"
+                  value={newDepartment}
+                  onChange={(e) => setNewDepartment(e.target.value)}
+                >
+                  {[
+                    "anatomy",
+                    "pharmacy",
+                    "medical laboratory science",
+                    "nursing",
+                    "medical biochemistry",
+                    "physiology",
+                    "pharmacology",
+                    "medicine and surgery",
+                    "dentistry",
+                  ].map((l) => (
                     <option value={l}>l</option>
                   ))}
                 </select>
