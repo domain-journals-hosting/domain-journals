@@ -160,8 +160,10 @@ const AuthorProfile = () => {
             {!editingName ? (
               <h2 style={{ fontSize: "1.3rem", color: "#093238" }}>
                 {user.name} (
-                {user.department.charAt(0).toUpperCase() +
-                  user.department.slice(1) || ""}
+                {user.department
+                  ? user.department.charAt(0).toUpperCase() +
+                    user.department.slice(1)
+                  : ""}
                 ), {user.level || 100} Level
                 <FaPencilAlt
                   size={14}
@@ -188,7 +190,9 @@ const AuthorProfile = () => {
                   onChange={(e) => setNewLevel(e.target.value)}
                 >
                   {[100, 200, 300, 400, 500, 600, 700, 800].map((l) => (
-                    <option value={l}>{l}</option>
+                    <option key={l} value={l}>
+                      {l}
+                    </option>
                   ))}
                 </select>
                 <select
@@ -208,7 +212,7 @@ const AuthorProfile = () => {
                     "medicine and surgery",
                     "dentistry",
                   ].map((d) => (
-                    <option value={d}>
+                    <option key={d} value={d}>
                       {d.charAt(0).toUpperCase() + d.slice(1)}
                     </option>
                   ))}
