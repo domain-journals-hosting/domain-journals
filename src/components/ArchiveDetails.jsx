@@ -13,7 +13,7 @@ const ArchiveDetails = ({ file }) => {
     fullUrl
   )}`;
   const text = isFullUrl ? "View" : "Download Full Issue";
-  const link = isFullUrl ? downloadUrl : fullUrl;
+  const link = isFullUrl ? fullUrl : downloadUrl;
   return (
     <div style={styles.card}>
       <div style={styles.cardHeader}>
