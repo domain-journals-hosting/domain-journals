@@ -173,7 +173,9 @@ const AuthorProfile = () => {
                 />
               </h2>
             ) : (
-              <div style={{ display: "flex", gap: 10 }}>
+              <div
+                style={{ display: "flex", gap: 10, flexDirection: "column" }}
+              >
                 <input
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
