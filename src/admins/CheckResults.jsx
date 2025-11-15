@@ -69,17 +69,17 @@ const CheckResults = () => {
 
         {Array.from(availableDepartments).map((d) => (
           <option key={d} value={d}>
-            {d}
+            {d && d.charAt(0).toUpperCase() + d.slice(1)}
           </option>
         ))}
       </select>
 
-      <label htmlFor="result">Select level: </label>
+      <label htmlFor="level">Select level: </label>
       <select
         value={selectedLevel}
         onChange={(e) => setSelectedLevel(e.target.value)}
         name=""
-        id="result"
+        id="level"
       >
         <option value="all">All</option>
 
@@ -107,7 +107,8 @@ const CheckResults = () => {
                 r.exam.toString() === selectedExam.toString()) &&
               (selectedDepartment === "all" ||
                 r.user.department === selectedDepartment) &&
-              (selectedLevel === "all" || r.user.level === selectedLevel)
+              (selectedLevel === "all" ||
+                Number(r.user.level) === Number(selectedLevel))
           )
           .map((res) => (
             <tr key={res._id}>
