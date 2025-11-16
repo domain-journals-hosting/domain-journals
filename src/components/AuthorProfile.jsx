@@ -16,6 +16,7 @@ const AuthorProfile = () => {
   const [newDepartment, setNewDepartment] = useState(
     user.department || "anatomy"
   );
+  const [newMatricNumber, setNewMatricNumber] = useState(user.matricNumber || "")
   const [acceptedManuscripts, setAcceptedManuscripts] = useState([]);
   const [toast, setToast] = useState(null);
   const navigate = useNavigate();
@@ -81,6 +82,7 @@ const AuthorProfile = () => {
         name: newName,
         level: newLevel,
         department: newDepartment,
+        matricNumber: newMatricNumber
       });
       setEditingName(false);
     } catch (err) {
@@ -185,6 +187,16 @@ const AuthorProfile = () => {
                     border: "1px solid #ccc",
                   }}
                 />
+               <input
+                  value={newMatricNumber}
+                  onChange={(e) => setNewMatricNumber(e.target.value)}
+                  style={{
+                    padding: 8,
+                    borderRadius: 6,
+                    border: "1px solid #ccc",
+                  }}
+                />
+
                 <select
                   name="level"
                   id="level"
