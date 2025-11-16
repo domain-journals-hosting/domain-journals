@@ -179,7 +179,7 @@ const Dashboard = () => {
         </div>
 
         {/* SIDEBAR LINKS */}
-        {sidebarOpen && (
+        {
           <nav className="sidebar-menu">
             {[
               { to: "/admin/invite", text: "Invite Member", access: "admin" },
@@ -220,7 +220,7 @@ const Dashboard = () => {
               </RequireUserAuth>
             ))}
           </nav>
-        )}
+        }
 
         {/* SIDEBAR FOOTER BUTTONS */}
         <div className="sidebar-footer">
