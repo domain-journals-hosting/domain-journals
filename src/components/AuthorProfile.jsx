@@ -160,7 +160,7 @@ const AuthorProfile = () => {
           </div>
           <div>
             {!editingName ? (
-              <section style={{ fontSize: "1.3rem", color: "#093238" }}>
+              <section style={{ fontSize: "2rem", color: "#093238" fontWeight: "800" }}>
                 <p> Name: {user.name} </p>
                 <p> Department: {user.department || "Unknown" } </p>
                 <p> Level: {user.level || "Unspecified" } </p>
