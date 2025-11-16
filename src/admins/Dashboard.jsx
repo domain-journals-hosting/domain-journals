@@ -199,7 +199,7 @@ const Dashboard = () => {
                 access: "admin",
               },
               {
-                to: "/admins/courses",
+                to: "/admin/courses",
                 text: "Add a course",
                 access: "admin",
               },
