@@ -74,7 +74,7 @@ const AuthorProfile = () => {
     try {
       await axios.patch(
         "/author/",
-        { name: newName, department: newDepartment, level: newLevel },
+        { name: newName, department: newDepartment, level: newLevel, matricNumber: newMatricNumber },
         { withCredentials: true }
       );
       setUser({
@@ -189,7 +189,8 @@ const AuthorProfile = () => {
                 />
                <input
                   value={newMatricNumber}
-                  onChange={(e) => setNewMatricNumber(e.target.value)}
+                 placeholder={"Matric number"}
+                 onChange={(e) => setNewMatricNumber(e.target.value)}
                   style={{
                     padding: 8,
                     borderRadius: 6,
