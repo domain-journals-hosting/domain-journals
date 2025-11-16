@@ -161,10 +161,10 @@ const AuthorProfile = () => {
           <div>
             {!editingName ? (
               <section style={{ fontSize: "2rem", color: "#093238" fontWeight: "800" }}>
-                <p> Name: {user.name} </p>
-                <p> Department: {user.department || "Unknown" } </p>
-                <p> Level: {user.level || "Unspecified" } </p>
-                <p> Matric number: {user.matricNumber || "Unspecified" } </p>
+                <p style={{ fontSize: "2rem", color: "#093238" fontWeight: "800" }}> Name: {user.name} </p>
+                <p style={{ fontSize: "2rem", color: "#093238" fontWeight: "800" }}> Department: {user.department || "Unknown" } </p>
+                <p style={{ fontSize: "2rem", color: "#093238" fontWeight: "800" }}> Level: {user.level || "Unspecified" } </p>
+                <p style={{ fontSize: "2rem", color: "#093238" fontWeight: "800" }}> Matric number: {user.matricNumber || "Unspecified" } </p>
                 
                 <FaPencilAlt
                   size={14}
