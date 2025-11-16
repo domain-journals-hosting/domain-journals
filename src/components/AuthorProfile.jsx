@@ -160,20 +160,19 @@ const AuthorProfile = () => {
           </div>
           <div>
             {!editingName ? (
-              <h2 style={{ fontSize: "1.3rem", color: "#093238" }}>
-                {user.name} (
-                {user.department
-                  ? user.department.charAt(0).toUpperCase() +
-                    user.department.slice(1)
-                  : ""}
-                ), {user.level || 100} Level
+              <section style={{ fontSize: "1.3rem", color: "#093238" }}>
+                <p> Name: {user.name} </p>
+                <p> Department: {user.department || "Unknown" } </p>
+                <p> Level: {user.level || "Unspecified" } </p>
+                <p> Matric number: {user.matricNumber || "Unspecified" } </p>
+                
                 <FaPencilAlt
                   size={14}
                   color="#659377"
                   style={{ cursor: "pointer" }}
                   onClick={() => setEditingName(true)}
                 />
-              </h2>
+              </section>
             ) : (
               <div
                 style={{ display: "flex", gap: 10, flexDirection: "column" }}
