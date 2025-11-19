@@ -16,7 +16,9 @@ const AuthorProfile = () => {
   const [newDepartment, setNewDepartment] = useState(
     user.department || "anatomy"
   );
-  const [newMatricNumber, setNewMatricNumber] = useState(user.matricNumber || "")
+  const [newMatricNumber, setNewMatricNumber] = useState(
+    user.matricNumber || ""
+  );
   const [acceptedManuscripts, setAcceptedManuscripts] = useState([]);
   const [toast, setToast] = useState(null);
   const navigate = useNavigate();
@@ -74,7 +76,12 @@ const AuthorProfile = () => {
     try {
       await axios.patch(
         "/author/",
-        { name: newName, department: newDepartment, level: newLevel, matricNumber: newMatricNumber },
+        {
+          name: newName,
+          department: newDepartment,
+          level: newLevel,
+          matricNumber: newMatricNumber,
+        },
         { withCredentials: true }
       );
       setUser({
@@ -82,7 +89,7 @@ const AuthorProfile = () => {
         name: newName,
         level: newLevel,
         department: newDepartment,
-        matricNumber: newMatricNumber
+        matricNumber: newMatricNumber,
       });
       setEditingName(false);
     } catch (err) {
@@ -160,12 +167,54 @@ const AuthorProfile = () => {
           </div>
           <div>
             {!editingName ? (
-              <section style={{ fontSize: "2rem", color: "#093238" fontWeight: "800" }}>
-                <p style={{ fontSize: "2rem", color: "#093238" fontWeight: "800" }}> Name: {user.name} </p>
-                <p style={{ fontSize: "2rem", color: "#093238" fontWeight: "800" }}> Department: {user.department || "Unknown" } </p>
-                <p style={{ fontSize: "2rem", color: "#093238" fontWeight: "800" }}> Level: {user.level || "Unspecified" } </p>
-                <p style={{ fontSize: "2rem", color: "#093238" fontWeight: "800" }}> Matric number: {user.matricNumber || "Unspecified" } </p>
-                
+              <section
+                style={{
+                  fontSize: "1.3rem",
+                  color: "#093238",
+                  fontWeight: "500",
+                }}
+              >
+                <p
+                  style={{
+                    fontSize: "1.3rem",
+                    color: "#093238",
+                    fontWeight: "500",
+                  }}
+                >
+                  {" "}
+                  Name: {user.name}{" "}
+                </p>
+                <p
+                  style={{
+                    fontSize: "1.3rem",
+                    color: "#093238",
+                    fontWeight: "500",
+                  }}
+                >
+                  {" "}
+                  Department: {user.department || "Unknown"}{" "}
+                </p>
+                <p
+                  style={{
+                    fontSize: "1.3rem",
+                    color: "#093238",
+                    fontWeight: "500",
+                  }}
+                >
+                  {" "}
+                  Level: {user.level || "Unspecified"}{" "}
+                </p>
+                <p
+                  style={{
+                    fontSize: "1.3rem",
+                    color: "#093238",
+                    fontWeight: "500",
+                  }}
+                >
+                  {" "}
+                  Matric number: {user.matricNumber || "Unspecified"}{" "}
+                </p>
+
                 <FaPencilAlt
                   size={14}
                   color="#659377"
@@ -186,10 +235,10 @@ const AuthorProfile = () => {
                     border: "1px solid #ccc",
                   }}
                 />
-               <input
+                <input
                   value={newMatricNumber}
-                 placeholder={"Matric number"}
-                 onChange={(e) => setNewMatricNumber(e.target.value)}
+                  placeholder={"Matric number"}
+                  onChange={(e) => setNewMatricNumber(e.target.value)}
                   style={{
                     padding: 8,
                     borderRadius: 6,
