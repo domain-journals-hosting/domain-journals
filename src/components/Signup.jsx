@@ -20,7 +20,13 @@ const Signup = () => {
   console.log(from);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm({
+      ...form,
+      [e.target.name]:
+        e.target.name === "matricNumber"
+          ? Number(e.target.value)
+          : e.target.value,
+    });
   };
 
   const handleSubmit = async (e) => {
