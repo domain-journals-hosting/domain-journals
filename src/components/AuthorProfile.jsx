@@ -16,6 +16,7 @@ const AuthorProfile = () => {
   const [newDepartment, setNewDepartment] = useState(
     user.department || "anatomy"
   );
+  const [newMatricNumber, setNewMatricNumber] = useState(user.matricNumber || "")
   const [acceptedManuscripts, setAcceptedManuscripts] = useState([]);
   const [toast, setToast] = useState(null);
   const navigate = useNavigate();
@@ -73,7 +74,7 @@ const AuthorProfile = () => {
     try {
       await axios.patch(
         "/author/",
-        { name: newName, department: newDepartment, level: newLevel },
+        { name: newName, department: newDepartment, level: newLevel, matricNumber: newMatricNumber },
         { withCredentials: true }
       );
       setUser({
@@ -81,6 +82,7 @@ const AuthorProfile = () => {
         name: newName,
         level: newLevel,
         department: newDepartment,
+        matricNumber: newMatricNumber
       });
       setEditingName(false);
     } catch (err) {
@@ -158,20 +160,19 @@ const AuthorProfile = () => {
           </div>
           <div>
             {!editingName ? (
-              <h2 style={{ fontSize: "1.3rem", color: "#093238" }}>
-                {user.name} (
-                {user.department
-                  ? user.department.charAt(0).toUpperCase() +
-                    user.department.slice(1)
-                  : ""}
-                ), {user.level || 100} Level
+              <section style={{ fontSize: "2rem", color: "#093238" fontWeight: "800" }}>
+                <p style={{ fontSize: "2rem", color: "#093238" fontWeight: "800" }}> Name: {user.name} </p>
+                <p style={{ fontSize: "2rem", color: "#093238" fontWeight: "800" }}> Department: {user.department || "Unknown" } </p>
+                <p style={{ fontSize: "2rem", color: "#093238" fontWeight: "800" }}> Level: {user.level || "Unspecified" } </p>
+                <p style={{ fontSize: "2rem", color: "#093238" fontWeight: "800" }}> Matric number: {user.matricNumber || "Unspecified" } </p>
+                
                 <FaPencilAlt
                   size={14}
                   color="#659377"
                   style={{ cursor: "pointer" }}
                   onClick={() => setEditingName(true)}
                 />
-              </h2>
+              </section>
             ) : (
               <div
                 style={{ display: "flex", gap: 10, flexDirection: "column" }}
@@ -185,6 +186,17 @@ const AuthorProfile = () => {
                     border: "1px solid #ccc",
                   }}
                 />
+               <input
+                  value={newMatricNumber}
+                 placeholder={"Matric number"}
+                 onChange={(e) => setNewMatricNumber(e.target.value)}
+                  style={{
+                    padding: 8,
+                    borderRadius: 6,
+                    border: "1px solid #ccc",
+                  }}
+                />
+
                 <select
                   name="level"
                   id="level"
