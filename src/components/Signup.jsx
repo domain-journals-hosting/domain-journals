@@ -22,10 +22,7 @@ const Signup = () => {
   const handleChange = (e) => {
     setForm({
       ...form,
-      [e.target.name]:
-        e.target.name === "matricNumber"
-          ? Number(e.target.value)
-          : e.target.value,
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -62,10 +59,10 @@ const Signup = () => {
             {" "}
             <label>Department:</label>
             <select
-              name="matricNumber"
-              id="matricNumber"
-              value={form.matricNumber}
-              onChange={(e) => handleChange}
+              name="department"
+              id="department"
+              value={form.department}
+              onChange={handleChange}
             >
               {[
                 "anatomy",
