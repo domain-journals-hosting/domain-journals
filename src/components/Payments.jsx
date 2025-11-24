@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "../api/axios";
+import { FaCheck, FaTrashAlt } from "react-icons/fa";
 
 const Payments = () => {
   const [payments, setPayments] = useState([]);
@@ -9,7 +10,8 @@ const Payments = () => {
   const [nameFilter, setNameFilter] = useState("");
   const [filteredPayments, setFilteredPayments] = useState([]);
   const [error, setError] = useState("");
-
+  const isMobile = window.matchMedia("(max-width: 450px)").matches;
+  console.log(isMobile);
   useEffect(() => {
     fetchPayments();
   }, []);
@@ -92,7 +94,17 @@ const Payments = () => {
     }
   };
 
-  const confirmPayment = async (id) => {
+  const confirmPayment = async (id, name, title) => {
+    if (
+      !window.confirm(
+        "Are you sure you want to confirm this payment " +
+          "made by " +
+          name +
+          " for " +
+          title
+      )
+    )
+      return;
     try {
       const response = await axios.patch(`course/${id}`);
       console.log(response.data);
@@ -102,8 +114,16 @@ const Payments = () => {
     }
   };
 
-  const deletePayment = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this payment?"))
+  const deletePayment = async (id, name, title) => {
+    if (
+      !window.confirm(
+        "Are you sure you want to delete this payment " +
+          "made by " +
+          name +
+          " for " +
+          title
+      )
+    )
       return;
     try {
       await axios.delete(`/course/payment/${id}`);
@@ -192,22 +212,34 @@ const Payments = () => {
                 <td>{new Date(p.createdAt).toLocaleString()}</td>
                 <td>
                   {!p.confirmed && (
-                    <button onClick={() => confirmPayment(p._id)}>
-                      Confirm
-                    </button>
+                    <FaCheck
+                      style={{
+                        color: "green",
+                        marginRight: "20px",
+                        marginBottom: isMobile ? "40px" : 0,
+                        fontSize: "20",
+                      }}
+                      onClick={() =>
+                        confirmPayment(p._id, p.user.name, p.course?.title)
+                      }
+                    />
                   )}
-                  <button
-                    onClick={() => deletePayment(p._id)}
-                    style={{ marginLeft: "10px" }}
-                  >
-                    Delete
-                  </button>
+                  <FaTrashAlt
+                    onClick={() =>
+                      deletePayment(p._id, p.user.name, p.course?.title)
+                    }
+                    style={{
+                      fontSize: "20",
+                      color: "red",
+                      cursor: "pointer",
+                    }}
+                  />
                 </td>
               </tr>
             ))}
-          {payments.length === 0 && (
+          {filteredPayments.length === 0 && (
             <tr>
-              <td colSpan="4">No payments yet</td>
+              <td colSpan="4">No payments for this category</td>
             </tr>
           )}
         </tbody>
