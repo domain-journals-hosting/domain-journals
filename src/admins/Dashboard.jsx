@@ -52,7 +52,7 @@ const Dashboard = () => {
 
   const resetPassword = async () => {
     await sendResetMail();
-    navigate("/admin/reset");
+    navigate("/admin/forgot");
   };
 
   const handleFileChange = async (e) => {
