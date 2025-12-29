@@ -209,6 +209,11 @@ const Dashboard = () => {
                 access: "admin",
               },
               { to: "/check-results", text: "Check results", access: "admin" },
+              {
+                to: "/admin/reset-author",
+                text: "Reset author",
+                access: "admin",
+              },
             ].map(({ to, text, access }) => (
               <RequireUserAuth
                 key={to}
