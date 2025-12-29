@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuthor";
 
@@ -6,8 +6,13 @@ const ForgotPw = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
-  const { sendResetMail, setUser } = useAuth();
+  const { sendResetMail, setUser, user } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) return;
+    setEmail(user.email);
+  }, [user]);
 
   const handleReset = async (e) => {
     e.preventDefault();
