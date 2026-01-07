@@ -210,6 +210,7 @@ const Payments = () => {
                 <td>{p.user?.name || "Unknown"}</td>
                 <td>{p.course?.title || "Unknown Course"}</td>
                 <td>{new Date(p.createdAt).toLocaleString()}</td>
+
                 <td>
                   {!p.confirmed && (
                     <FaCheck

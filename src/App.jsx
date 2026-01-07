@@ -60,6 +60,7 @@ import ScrollToTop from "./ScrollToTop";
 import SubmitArchive from "./components/SubmitArchive";
 import { ResetAuthor } from "./admins/ResetAuthor";
 import CompleteReset from "./components/CompleteReset";
+import ReviewPayments from "./components/ReviewPayments";
 
 function App() {
   const location = useLocation();
@@ -121,6 +122,7 @@ function App() {
             <Route path="/check-results" element={<CheckResults />} />
             <Route path="/admin/issue" element={<NewIssue />} />
             <Route path="/admin/payments" element={<Payments />} />
+            <Route path="/admin/payments/r" element={<ReviewPayments />} />
           </Route>
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/invite/:token" element={<CompleteInvite />} />
