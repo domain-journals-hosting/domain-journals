@@ -1,17 +1,40 @@
-import React from "react";
 import { FaCheck, FaTrashAlt } from "react-icons/fa";
 
 const PaymentItem = ({ payment, confirmPayment, deletePayment }) => {
   const isMobile = window.matchMedia("(max-width: 450px)").matches;
 
   return (
-    <div>
-      <p>{payment.user?.name || "Unknown"}</p>
+    <div
+      style={{
+        padding: 10,
+      }}
+    >
+      <h3>{payment.user?.name || "Unknown"}</h3>
+      <p>Account Name: {payment.accountName}</p>
       <p>{payment.course?.title || "Unknown Course"}</p>
       <p>{new Date(payment.createdAt).toLocaleString()}</p>
-      <img src={payment.receipt} alt="receipt" width={280} />
-      <p>{payment.accountName}</p>
-      <p>
+      {payment.receipt ? (
+        <img
+          src={payment.receipt}
+          alt="receipt"
+          width={280}
+          style={{
+            borderRadius: 20,
+            marginTop: 10,
+          }}
+        />
+      ) : (
+        "No receipt"
+      )}
+      <div
+        style={{
+          margin: 20,
+          display: "flex",
+          gap: 30,
+          maxWidth: 300,
+          justifyContent: "space-evenly",
+        }}
+      >
         {!payment.confirmed ? (
           <FaCheck
             style={{
@@ -41,7 +64,7 @@ const PaymentItem = ({ payment, confirmPayment, deletePayment }) => {
             cursor: "pointer",
           }}
         />
-      </p>
+      </div>
     </div>
   );
 };
