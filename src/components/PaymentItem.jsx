@@ -65,6 +65,8 @@ const PaymentItem = ({ payment, confirmPayment, deletePayment }) => {
           }}
         />
       </div>
+
+      <hr />
     </div>
   );
 };

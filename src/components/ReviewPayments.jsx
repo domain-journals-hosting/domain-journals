@@ -5,7 +5,7 @@ const ReviewPayments = () => {
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [courseFilter, setCourseFilter] = useState("all");
-  const [statusFilter, setStatusFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState(false);
   const [nameFilter, setNameFilter] = useState("");
   const [filteredPayments, setFilteredPayments] = useState([]);
   const [error, setError] = useState("");
