@@ -1,12 +1,20 @@
 import { useState } from "react";
 import "../styles/paymentModal.css";
 import axios from "../api/axios";
+import { useAuth } from "../hooks/useAuthor";
+import SubmitReceipt from "./SubmitReceipt";
+import { useNavigate } from "react-router-dom";
 
 const PaymentModal = ({ course, open, onClose }) => {
-  const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [receipt, setReceipt] = useState(false);
+  const [accountName, setAccountName] = useState("");
+  const [showSubmitForm, setShowSubmitForm] = useState(false);
   const [error, setError] = useState("");
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
+  const openForm = () => setShowSubmitForm(true);
   if (!open) return null;
 
   const paymentURL = `/course/pay/${course._id}`;
@@ -15,9 +23,10 @@ const PaymentModal = ({ course, open, onClose }) => {
     try {
       setLoading(true);
       setError("");
-      const response = await axios.post(paymentURL);
+      const response = await axios.post(paymentURL, { receipt, accountName });
       console.log(response);
-      setSubmitted(true);
+      alert("Submission success");
+      navigate("/courses");
     } catch (err) {
       if (err.response?.data?.error) {
         setError(err.response.data.error);
@@ -29,14 +38,37 @@ const PaymentModal = ({ course, open, onClose }) => {
     }
   };
 
+  const message = `${user.name} payment for ${course.title}`;
+  const copyMessage = () => {
+    navigator.clipboard.writeText(message);
+    window.alert("Copied");
+  };
+
   return (
     <div className="modal-overlay">
       <div className="modal">
         <button className="close-btn" onClick={onClose}>
           ×
         </button>
+        {showSubmitForm && (
+          <>
+            <SubmitReceipt
+              message={message}
+              setReceipt={setReceipt}
+              setAccountName={setAccountName}
+              accountName={accountName}
+            />
+            <button
+              className="submit-btn"
+              onClick={sendPayment}
+              disabled={loading}
+            >
+              {loading ? "Processing..." : "Submit"}
+            </button>
+          </>
+        )}
 
-        {!submitted ? (
+        {!showSubmitForm && (
           <>
             <h2>{course.title}</h2>
             <p className="price">Price: ₦{course.price}</p>
@@ -60,36 +92,40 @@ const PaymentModal = ({ course, open, onClose }) => {
               <p>
                 Account Name: <b>Domain Publishers Limited</b>
               </p>
-              <p>Include your name in the narration while transfering</p>
             </div>
 
+            <p>Include this in the narration while transfering</p>
+
+            <div
+              style={{
+                border: "2px solid #333",
+                padding: "10px",
+                borderRadius: "10px",
+              }}
+            >
+              <button
+                style={{
+                  width: "50px",
+                  marginLeft: "calc(100% - 50px)",
+                  backgroundColor: "#333",
+                  color: "white",
+                }}
+                onClick={copyMessage}
+              >
+                Copy
+              </button>
+              {message}
+            </div>
+            <p>
+              Please do not use the same account to pay for more than one
+              person!!!
+            </p>
             {error && <p className="error">{error}</p>}
 
-            <button
-              className="submit-btn"
-              onClick={sendPayment}
-              disabled={loading}
-            >
+            <button className="submit-btn" onClick={openForm}>
               {loading ? "Processing..." : "I have sent the money"}
             </button>
           </>
-        ) : (
-          <div className="submitted">
-            <h3>We’re looking into it ✅</h3>
-            <p>
-              Please{" "}
-              <a
-                href={`https://wa.me/2349046887416?text=${encodeURIComponent(
-                  `Hello, I’ve just made a payment for *${course.title}*. I’m attaching my receipt for your confirmation. Thank you.`
-                )}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Forward your receipt to us on WhatsApp
-              </a>{" "}
-              to fasten up the process.
-            </p>
-          </div>
         )}
       </div>
     </div>

@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "../api/axios";
-import { FaCheck, FaTrashAlt } from "react-icons/fa";
-
-const Payments = () => {
+import PaymentItem from "./PaymentItem";
+const ReviewPayments = () => {
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [courseFilter, setCourseFilter] = useState("all");
@@ -10,8 +9,6 @@ const Payments = () => {
   const [nameFilter, setNameFilter] = useState("");
   const [filteredPayments, setFilteredPayments] = useState([]);
   const [error, setError] = useState("");
-  const isMobile = window.matchMedia("(max-width: 450px)").matches;
-  console.log(isMobile);
   useEffect(() => {
     fetchPayments();
   }, []);
@@ -184,69 +181,28 @@ const Payments = () => {
     <div
       style={{
         overflow: "scroll",
+        padding: 10,
       }}
     >
       <h2>Payments</h2>
       {searchNameFilter}
       {selectCourseFilter}
       {selectStatusFilter}
-      <table
-        border="1"
-        cellPadding="8"
-        style={{ borderCollapse: "collapse", width: "100%" }}
-      >
-        <thead>
-          <tr>
-            <th>User</th>
-            <th>Course</th>
-            <th>Paid At</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredPayments.length &&
-            filteredPayments.map((p) => (
-              <tr key={p._id}>
-                <td>{p.user?.name || "Unknown"}</td>
-                <td>{p.course?.title || "Unknown Course"}</td>
-                <td>{new Date(p.createdAt).toLocaleString()}</td>
 
-                <td>
-                  {!p.confirmed && (
-                    <FaCheck
-                      style={{
-                        color: "green",
-                        marginRight: "20px",
-                        marginBottom: isMobile ? "40px" : 0,
-                        fontSize: "20",
-                      }}
-                      onClick={() =>
-                        confirmPayment(p._id, p.user.name, p.course?.title)
-                      }
-                    />
-                  )}
-                  <FaTrashAlt
-                    onClick={() =>
-                      deletePayment(p._id, p.user.name, p.course?.title)
-                    }
-                    style={{
-                      fontSize: "20",
-                      color: "red",
-                      cursor: "pointer",
-                    }}
-                  />
-                </td>
-              </tr>
-            ))}
-          {filteredPayments.length === 0 && (
-            <tr>
-              <td colSpan="4">No payments for this category</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+      {filteredPayments.length &&
+        filteredPayments.map((p) => (
+          <PaymentItem
+            key={p._id}
+            payment={p}
+            confirmPayment={confirmPayment}
+            deletePayment={deletePayment}
+          />
+        ))}
+      {filteredPayments.length === 0 && (
+        <p colSpan="4">No payments for this category</p>
+      )}
     </div>
   );
 };
 
-export default Payments;
+export default ReviewPayments;

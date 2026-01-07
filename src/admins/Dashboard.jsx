@@ -208,6 +208,11 @@ const Dashboard = () => {
                 text: "Check course payments",
                 access: "admin",
               },
+              {
+                to: "/admin/payments/r",
+                text: "Check course payments (With receipts)",
+                access: "admin",
+              },
               { to: "/check-results", text: "Check results", access: "admin" },
               {
                 to: "/admin/reset-author",
