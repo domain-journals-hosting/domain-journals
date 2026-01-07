@@ -35,6 +35,17 @@ const PaymentItem = ({ payment, confirmPayment, deletePayment }) => {
           justifyContent: "space-evenly",
         }}
       >
+        <FaTrashAlt
+          onClick={() =>
+            deletePayment(payment._id, payment.user.name, payment.course?.title)
+          }
+          style={{
+            fontSize: "20",
+            color: "red",
+            cursor: "pointer",
+          }}
+        />
+        
         {!payment.confirmed ? (
           <FaCheck
             style={{
@@ -54,16 +65,6 @@ const PaymentItem = ({ payment, confirmPayment, deletePayment }) => {
         ) : (
           "Confirmed"
         )}
-        <FaTrashAlt
-          onClick={() =>
-            deletePayment(payment._id, payment.user.name, payment.course?.title)
-          }
-          style={{
-            fontSize: "20",
-            color: "red",
-            cursor: "pointer",
-          }}
-        />
       </div>
 
       <hr />
