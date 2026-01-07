@@ -24,9 +24,10 @@ const PaymentModal = ({ course, open, onClose }) => {
       setLoading(true);
       setError("");
       const response = await axios.post(paymentURL, { receipt, accountName });
+      console.log({ receipt, accountName });
       console.log(response);
       alert("Submission success");
-      navigate("/courses");
+      onclose();
     } catch (err) {
       if (err.response?.data?.error) {
         setError(err.response.data.error);
@@ -51,21 +52,15 @@ const PaymentModal = ({ course, open, onClose }) => {
           ×
         </button>
         {showSubmitForm && (
-          <>
-            <SubmitReceipt
-              message={message}
-              setReceipt={setReceipt}
-              setAccountName={setAccountName}
-              accountName={accountName}
-            />
-            <button
-              className="submit-btn"
-              onClick={sendPayment}
-              disabled={loading}
-            >
-              {loading ? "Processing..." : "Submit"}
-            </button>
-          </>
+          <SubmitReceipt
+            message={message}
+            setReceipt={setReceipt}
+            setAccountName={setAccountName}
+            accountName={accountName}
+            sendPayment={sendPayment}
+            loading={loading}
+            error={error}
+          />
         )}
 
         {!showSubmitForm && (

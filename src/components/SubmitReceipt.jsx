@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "../api/axios";
 
 const SubmitReceipt = ({
@@ -6,12 +6,21 @@ const SubmitReceipt = ({
   setReceipt,
   accountName,
   setAccountName,
+  sendPayment,
+  loading,
+  error,
 }) => {
   const [uploading, setUploading] = useState(false);
   const [url, setUrl] = useState("");
   const [err, setErr] = useState("");
 
+  useEffect(() => {
+    if (!error) return;
+    setErr(error);
+  }, [error]);
+
   const handleFileChange = async (e) => {
+    setErr("");
     const file = e.target.files[0];
     if (!file) return;
 
@@ -40,13 +49,16 @@ const SubmitReceipt = ({
   return (
     <form
       style={{
-        padding: "10px",
+        maxHeight: "80vh",
+        overflow: "scroll",
       }}
     >
       <p
         style={{
-          borderColor: "#333",
+          borderColor: "rgba(51, 51, 51, 1)",
           color: "#333",
+          marginTop: 30,
+          whiteSpace: "nowrap",
         }}
       >
         {message}
@@ -90,8 +102,18 @@ const SubmitReceipt = ({
       >
         Please enter the exact sender name shown in the receipt
       </label>
-      {err && <p>{err}</p>}
+      {err && <p className="error">{err}</p>}
       {uploading && uploadingMessage}
+      <button
+        className="submit-btn"
+        onClick={() => {
+          setErr("");
+          sendPayment();
+        }}
+        disabled={uploading || loading}
+      >
+        {loading ? "Processing..." : uploading ? "Wait" : "Send"}
+      </button>
     </form>
   );
 };

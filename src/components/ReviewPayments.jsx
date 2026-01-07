@@ -105,7 +105,7 @@ const ReviewPayments = () => {
     try {
       const response = await axios.patch(`course/${id}`);
       console.log(response.data);
-      fetchPayments();
+      approvePayment(id);
     } catch (err) {
       alert(err.response?.data?.error || "Failed to confirm payment");
     }
@@ -124,10 +124,27 @@ const ReviewPayments = () => {
       return;
     try {
       await axios.delete(`/course/payment/${id}`);
-      fetchPayments();
+      removePayment(id);
     } catch (err) {
       alert(err.response?.data?.error || "Failed to delete payment");
     }
+  };
+
+  // remove payment after delete
+  const removePayment = (id) => {
+    setPayments((prev) => prev.filter((p) => p._id !== id));
+    setFilteredPayments((prev) => prev.filter((p) => p._id !== id));
+  };
+
+  // update payment after confirm
+  const approvePayment = (id) => {
+    setPayments((prev) =>
+      prev.map((p) => (p._id === id ? { ...p, confirmed: true } : p))
+    );
+
+    setFilteredPayments((prev) =>
+      prev.map((p) => (p._id === id ? { ...p, confirmed: true } : p))
+    );
   };
 
   if (loading) return <p>Loading payments...</p>;
@@ -180,7 +197,6 @@ const ReviewPayments = () => {
   return (
     <div
       style={{
-        overflow: "scroll",
         padding: 10,
       }}
     >
