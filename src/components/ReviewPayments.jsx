@@ -78,7 +78,8 @@ const ReviewPayments = () => {
     try {
       setLoading(true);
       const res = await axios.get("/course/payments");
-      const prepared = res.data.map((p) => ({
+      const allPayments = res.data.reverse();
+      const prepared = allPayments.map((p) => ({
         ...p,
         _normalizedName: normalize(p.user?.name),
       }));

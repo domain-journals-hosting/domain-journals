@@ -89,7 +89,9 @@ const PaymentModal = ({ course, open, onClose }) => {
               </p>
             </div>
 
-            <p>Include this in the narration while transfering</p>
+            <p style={{ color: "crimson" }}>
+              Include this in the narration while transfering
+            </p>
 
             <div
               style={{

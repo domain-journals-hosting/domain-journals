@@ -102,6 +102,11 @@ const SubmitReceipt = ({
       >
         Please enter the exact sender name shown in the receipt
       </label>
+      <p>
+        Payments will be reviewed and confirmed (if authentic) within 5 days of
+        submission, keep checking the website to see if you can access the
+        course, although you should get an email notification on confirmation
+      </p>
       {err && <p className="error">{err}</p>}
       {uploading && uploadingMessage}
       <button
