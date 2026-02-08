@@ -9,7 +9,7 @@ import "../styles/footer.css";
 
 const Footer = () => {
   return (
-    <footer className="footer">
+    <footer className="footer no-print">
       <section className="footer-links">
         <h3 style={{ marginBottom: "0.5rem", color: "#f1f8e9" }}>
           Relevant Links
