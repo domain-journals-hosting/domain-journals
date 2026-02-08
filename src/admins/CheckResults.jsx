@@ -43,8 +43,9 @@ const CheckResults = () => {
     return <p className="loading">Loading....</p>;
   const select = (
     <>
-      <label htmlFor="result">Select exam: </label>
+      <label htmlFor="result">Exam: </label>
       <select
+        style={{ marginRight: "20px" }}
         value={selectedExam}
         onChange={(e) => setSelectedExam(e.target.value)}
         name=""
@@ -58,9 +59,10 @@ const CheckResults = () => {
         ))}
       </select>
 
-      <label htmlFor="result">Select department: </label>
+      <label htmlFor="result">Department: </label>
       <select
         value={selectedDepartment}
+        style={{ marginRight: "20px" }}
         onChange={(e) => setSelectedDepartment(e.target.value)}
         name=""
         id="result"
@@ -74,9 +76,10 @@ const CheckResults = () => {
         ))}
       </select>
 
-      <label htmlFor="level">Select level: </label>
+      <label htmlFor="level">Level: </label>
       <select
         value={selectedLevel}
+        style={{ marginRight: "20px" }}
         onChange={(e) => setSelectedLevel(e.target.value)}
         name=""
         id="level"
@@ -93,12 +96,19 @@ const CheckResults = () => {
   );
   const content = (
     <div className="container">
+      <button className="no-print" onClick={() => window.print()}>
+        Print
+      </button>
       <br />
       {select}
       <table>
         <thead>
           <th>Name</th>
+          <th>Matric No.</th>
+          <th>Level</th>
+          <th>Department</th>
           <th>Score</th>
+          <th>Percentage</th>
         </thead>
         {results
           .filter(
@@ -108,16 +118,26 @@ const CheckResults = () => {
               (selectedDepartment === "all" ||
                 r.user.department === selectedDepartment) &&
               (selectedLevel === "all" ||
-                Number(r.user.level) === Number(selectedLevel))
+                Number(r.user.level) === Number(selectedLevel)),
           )
-          .map((res) => (
-            <tr key={res._id}>
-              <td>{res?.user?.name}</td>
-              <td>
-                Score: {res.score} / {res.totalScore}
-              </td>
-            </tr>
-          ))}
+          .map((res) => {
+            console.log(res);
+            return (
+              <tr key={res._id}>
+                <td>{res?.user?.name}</td>
+                <td>{res?.user?.level}</td>
+                <td>{res?.user?.matricNumber}</td>
+                <td>
+                  {res?.user?.department?.charAt(0).toUpperCase() +
+                    res?.user?.department?.slice(1)}
+                </td>
+                <td style={{ whiteSpace: "noWrap" }}>
+                  {res.score} / {res.totalScore}
+                </td>
+                <td> ({Math.round((res.score / res.totalScore) * 100)}%)</td>
+              </tr>
+            );
+          })}
       </table>
     </div>
   );

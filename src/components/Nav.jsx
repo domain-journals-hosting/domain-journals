@@ -39,10 +39,13 @@ const Nav = ({ isHeroVisible }) => {
     if (opening) {
       let current = [];
       links.forEach((_, i) => {
-        setTimeout(() => {
-          current = [...links.slice(0, i + 1)];
-          setVisibleLinks(current);
-        }, (300 / links.length) * i);
+        setTimeout(
+          () => {
+            current = [...links.slice(0, i + 1)];
+            setVisibleLinks(current);
+          },
+          (300 / links.length) * i,
+        );
       });
     } else {
       setVisibleLinks([]);
@@ -59,7 +62,7 @@ const Nav = ({ isHeroVisible }) => {
   return (
     <>
       <div
-        className="nav-wrapper"
+        className="nav-wrapper no-print"
         style={{
           position: "fixed",
           top: 0,

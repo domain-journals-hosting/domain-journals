@@ -20,3 +20,9 @@ main {
   flex-direction: column;
   overflow-x: hidden;
 }
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
