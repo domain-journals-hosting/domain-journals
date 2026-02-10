@@ -62,11 +62,13 @@ const EditExamForm = () => {
       },
     ]);
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
     try {
       await axios.patch(`/exam/${exam._id}`, exam);
+      console.log(exam);
       alert("Exam updated successfully!");
     } catch (err) {
       console.error("Error updating exam:", err);
@@ -133,6 +135,26 @@ const EditExamForm = () => {
           />
         </div>
       ))}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          width: "100%",
+        }}
+      >
+        <input
+          type="checkbox"
+          name="review"
+          id="review"
+          checked={exam.canReview}
+          onChange={(e) =>
+            setExam((prev) => ({ ...prev, canReview: e.target.checked }))
+          }
+        />
+        <label style={{ whiteSpace: "nowrap" }} htmlFor="review">
+          Allow users to review after exam?
+        </label>
+      </div>
       <button type="button" onClick={handleAddQuestion} className="add-btn">
         + Add Question
       </button>

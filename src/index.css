@@ -25,4 +25,8 @@ main {
   .no-print {
     display: none !important;
   }
+
+  main {
+    padding-top: 10px !important;
+  }
 }

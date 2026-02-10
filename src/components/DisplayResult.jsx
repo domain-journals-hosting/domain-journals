@@ -5,7 +5,12 @@ const DisplayResult = ({ result }) => {
     return options[index];
   };
   return (
-    <div className="result-page">
+    <div
+      className="result-page"
+      style={{
+        marginTop: 20,
+      }}
+    >
       <h2>
         Score: {result.score} / {result.totalScore} (
         {Math.round((result.score / result.totalScore) * 100)}%)

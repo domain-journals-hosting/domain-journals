@@ -96,49 +96,52 @@ const CheckResults = () => {
   );
   const content = (
     <div className="container">
-      <button className="no-print" onClick={() => window.print()}>
-        Print
-      </button>
       <br />
       {select}
-      <table>
-        <thead>
-          <th>Name</th>
-          <th>Matric No.</th>
-          <th>Level</th>
-          <th>Department</th>
-          <th>Score</th>
-          <th>Percentage</th>
-        </thead>
-        {results
-          .filter(
-            (r) =>
-              (selectedExam === "all" ||
-                r.exam.toString() === selectedExam.toString()) &&
-              (selectedDepartment === "all" ||
-                r.user.department === selectedDepartment) &&
-              (selectedLevel === "all" ||
-                Number(r.user.level) === Number(selectedLevel)),
-          )
-          .map((res) => {
-            console.log(res);
-            return (
-              <tr key={res._id}>
-                <td>{res?.user?.name}</td>
-                <td>{res?.user?.level}</td>
-                <td>{res?.user?.matricNumber}</td>
-                <td>
-                  {res?.user?.department?.charAt(0).toUpperCase() +
-                    res?.user?.department?.slice(1)}
-                </td>
-                <td style={{ whiteSpace: "noWrap" }}>
-                  {res.score} / {res.totalScore}
-                </td>
-                <td> ({Math.round((res.score / res.totalScore) * 100)}%)</td>
-              </tr>
-            );
-          })}
-      </table>
+      <button className="btn no-print" onClick={() => window.print()}>
+        Print
+      </button>
+      <div style={{ overflow: "scroll" }}>
+        {" "}
+        <table border={1}>
+          <thead>
+            <th>Name</th>
+            <th>Matric No.</th>
+            <th>Level</th>
+            <th>Department</th>
+            <th>Score</th>
+            <th>/30</th>
+          </thead>
+          {results
+            .filter(
+              (r) =>
+                (selectedExam === "all" ||
+                  r.exam.toString() === selectedExam.toString()) &&
+                (selectedDepartment === "all" ||
+                  r.user.department === selectedDepartment) &&
+                (selectedLevel === "all" ||
+                  Number(r.user.level) === Number(selectedLevel)),
+            )
+            .sort((a, b) => a.user.name.localeCompare(b.user.name))
+            .map((res) => {
+              console.log(res);
+              return (
+                <tr key={res._id}>
+                  <td>{res?.user?.name}</td>
+                  <td>{res?.user?.matricNumber}</td> <td>{res?.user?.level}</td>
+                  <td>
+                    {res?.user?.department?.charAt(0).toUpperCase() +
+                      res?.user?.department?.slice(1)}
+                  </td>
+                  <td style={{ whiteSpace: "noWrap" }}>
+                    {res.score} / {res.totalScore}
+                  </td>
+                  <td> ({Math.round((res.score / res.totalScore) * 30)}/30)</td>
+                </tr>
+              );
+            })}
+        </table>
+      </div>
     </div>
   );
   return content;
