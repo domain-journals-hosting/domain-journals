@@ -10,6 +10,7 @@ const PaymentItem = ({ payment, confirmPayment, deletePayment }) => {
       }}
     >
       <h3>{payment.user?.name || "Unknown"}</h3>
+      <p>{payment.user?.email}</p>
       <p>Account Name: {payment.accountName}</p>
       <p>{payment.course?.title || "Unknown Course"}</p>
       <p>{new Date(payment.createdAt).toLocaleString()}</p>
@@ -45,7 +46,7 @@ const PaymentItem = ({ payment, confirmPayment, deletePayment }) => {
             cursor: "pointer",
           }}
         />
-        
+
         {!payment.confirmed ? (
           <FaCheck
             style={{
@@ -58,7 +59,7 @@ const PaymentItem = ({ payment, confirmPayment, deletePayment }) => {
               confirmPayment(
                 payment._id,
                 payment.user.name,
-                payment.course?.title
+                payment.course?.title,
               )
             }
           />
