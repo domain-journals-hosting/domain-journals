@@ -41,7 +41,7 @@ const TakeExam = () => {
         const totalQ = examData.questions.length;
         const savedAnswers =
           draftRes?.data?.answers?.map((a) =>
-            isNaN(a?.answerIndex) ? null : a?.answerIndex
+            isNaN(a?.answerIndex) ? null : a?.answerIndex,
           ) || Array(totalQ).fill(null);
         const savedFlags = draftRes?.data?.flags || Array(totalQ).fill(false);
         const currentQ = draftRes?.data?.currentQuestion || 0;
@@ -145,6 +145,8 @@ const TakeExam = () => {
 
   const handleSubmit = useCallback(async () => {
     try {
+      if (!exam) return;
+      console.log(exam);
       const result = await axios.post(`/result/${exam._id}`, {
         answers: answers.map((a, i) => ({
           questionIndex: i,
@@ -158,7 +160,7 @@ const TakeExam = () => {
       console.error("Submit failed:", err.message);
       setError(err?.response?.data?.error || "Failed to submit exam");
     }
-  }, []);
+  }, [answers, exam, navigate]);
 
   if (loading) return <p>Loading exam...</p>;
   if (error)
@@ -173,7 +175,7 @@ const TakeExam = () => {
   const start = currentPage * QUESTIONS_PER_PAGE;
   const currentQuestions = exam.questions.slice(
     start,
-    start + QUESTIONS_PER_PAGE
+    start + QUESTIONS_PER_PAGE,
   );
 
   return (

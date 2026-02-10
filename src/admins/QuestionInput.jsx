@@ -13,7 +13,7 @@ const QuestionInput = ({ index, data, onChange, onDelete }) => {
 
   const handleDelete = () => {
     const confirmDelete = window.confirm(
-      `Delete Question ${index + 1}? This action cannot be undone.`
+      `Delete Question ${index + 1}? This action cannot be undone.`,
     );
     if (confirmDelete && onDelete) onDelete();
   };
@@ -60,7 +60,7 @@ const QuestionInput = ({ index, data, onChange, onDelete }) => {
         {data?.options?.length &&
           data?.options?.map((_, i) => (
             <option key={i} value={i}>
-              Option {i + 1}
+              Option {i + 1} ({data?.options[i]})
             </option>
           ))}
       </select>

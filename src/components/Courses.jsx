@@ -27,7 +27,6 @@ const Courses = () => {
     });
   };
   const downloadLink = (file) => {
-    console.log(file);
     return file.endsWith(".doc")
       ? file
       : `${backendBase}/file?url=${encodeURIComponent(file)}`;
