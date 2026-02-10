@@ -14,10 +14,10 @@ const AuthorProfile = () => {
   const [newName, setNewName] = useState(user.name || "");
   const [newLevel, setNewLevel] = useState(user.level || 100);
   const [newDepartment, setNewDepartment] = useState(
-    user.department || "anatomy"
+    user.department || "anatomy",
   );
   const [newMatricNumber, setNewMatricNumber] = useState(
-    user.matricNumber || ""
+    user.matricNumber || "",
   );
   const [acceptedManuscripts, setAcceptedManuscripts] = useState([]);
   const [toast, setToast] = useState(null);
@@ -60,7 +60,7 @@ const AuthorProfile = () => {
       await axios.patch(
         "/author/avatar",
         { authorId: user._id, avatarUrl: data.url },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       setUser({ ...user, profilePicture: data.url });
     } catch (err) {
@@ -82,7 +82,7 @@ const AuthorProfile = () => {
           level: newLevel,
           matricNumber: newMatricNumber,
         },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       setUser({
         ...user,
@@ -181,8 +181,16 @@ const AuthorProfile = () => {
                     fontWeight: "500",
                   }}
                 >
-                  {" "}
-                  Name: {user.name}{" "}
+                  Name: {user.name}
+                </p>
+                <p
+                  style={{
+                    fontSize: "1.3rem",
+                    color: "#093238",
+                    fontWeight: "500",
+                  }}
+                >
+                  Email: {user.email}
                 </p>
                 <p
                   style={{
