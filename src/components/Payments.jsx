@@ -37,33 +37,34 @@ const Payments = () => {
         statusFilter,
         nameFilter,
         normalize,
-        setFiltered
+        setFiltered,
       ) => {
         let result = payments;
 
         if (courseFilter !== "all") {
           result = result.filter(
-            (p) => p.course?.title?.toLowerCase() === courseFilter.toLowerCase()
+            (p) =>
+              p.course?.title?.toLowerCase() === courseFilter.toLowerCase(),
           );
         }
 
         if (statusFilter !== "all") {
           result = result.filter(
-            (p) => p.confirmed.toString() === statusFilter
+            (p) => p.confirmed.toString() === statusFilter,
           );
         }
 
         if (nameFilter.trim() !== "") {
           const normalizedQuery = normalize(nameFilter);
           result = result.filter((p) =>
-            p._normalizedName.includes(normalizedQuery)
+            p._normalizedName.includes(normalizedQuery),
           );
         }
 
         setFiltered(result);
       },
-      250
-    )
+      250,
+    ),
   ).current;
 
   useEffect(() => {
@@ -73,7 +74,7 @@ const Payments = () => {
       statusFilter,
       nameFilter,
       normalize,
-      setFilteredPayments
+      setFilteredPayments,
     );
   }, [payments, courseFilter, statusFilter, nameFilter]);
 
@@ -101,7 +102,7 @@ const Payments = () => {
           "made by " +
           name +
           " for " +
-          title
+          title,
       )
     )
       return;
@@ -121,7 +122,7 @@ const Payments = () => {
           "made by " +
           name +
           " for " +
-          title
+          title,
       )
     )
       return;
@@ -137,7 +138,7 @@ const Payments = () => {
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   const allCourses = [...new Set(payments.map((p) => p.course?.title))].filter(
-    Boolean
+    Boolean,
   );
 
   const selectCourseFilter = (
@@ -198,6 +199,7 @@ const Payments = () => {
         <thead>
           <tr>
             <th>User</th>
+            <th>Email</th>
             <th>Course</th>
             <th>Paid At</th>
             <th>Actions</th>
@@ -207,7 +209,8 @@ const Payments = () => {
           {filteredPayments.length &&
             filteredPayments.map((p) => (
               <tr key={p._id}>
-                <td>{p.user?.name || "Unknown"}</td>
+                <td>{p.user?.name || "Unknown user"}</td>
+                <td>{p.user?.email || "Unknown email"}</td>
                 <td>{p.course?.title || "Unknown Course"}</td>
                 <td>{new Date(p.createdAt).toLocaleString()}</td>
 
