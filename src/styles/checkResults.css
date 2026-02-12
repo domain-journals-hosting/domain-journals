@@ -28,7 +28,7 @@ thead {
   background-color: #f2f2f2;
 }
 
-th,
+.head,
 td {
   padding: 12px 15px;
   text-align: left;
@@ -39,7 +39,7 @@ tr:hover {
   background-color: #f9f9f9;
 }
 
-th {
+.head {
   font-weight: bold;
 }
 

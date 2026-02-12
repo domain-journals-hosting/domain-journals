@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "../api/axios";
 import "../styles/checkResults.css";
+import { BiTrash } from "react-icons/bi";
 
 const CheckResults = () => {
   const [selectedExam, setSelectedExam] = useState("all");
@@ -9,6 +10,29 @@ const CheckResults = () => {
   const [exams, setExams] = useState("");
   const [results, setResults] = useState("");
   const [loading, setLoading] = useState(true);
+  const [divisor, setDivisor] = useState(30);
+
+  useEffect(() => {
+    const savedDivisors = JSON.parse(localStorage.getItem("divisors"));
+    console.log(savedDivisors);
+    if (!savedDivisors) return;
+    const savedDivisor = savedDivisors[selectedExam];
+    console.log(savedDivisor);
+    if (savedDivisor) setDivisor(+savedDivisor);
+  }, [selectedExam]);
+
+  const saveDivisors = (e) => {
+    const newValue = +e.target.value;
+    setDivisor(+e.target.value);
+    const savedDivisors = JSON.parse(localStorage.getItem("divisors")) || {};
+    console.log(savedDivisors);
+    const divisors = {
+      ...savedDivisors,
+      ...{ [selectedExam]: newValue },
+    };
+    localStorage.setItem("divisors", JSON.stringify(divisors));
+  };
+
   const getExams = async () => {
     const response = await axios.get("exam/all");
     console.log(response.data);
@@ -105,12 +129,23 @@ const CheckResults = () => {
         {" "}
         <table border={1}>
           <thead>
-            <th>Name</th>
-            <th>Matric No.</th>
-            <th>Level</th>
-            <th>Department</th>
-            <th>Score</th>
-            <th>/30</th>
+            <tr>
+              <th>Name</th>
+              <th>Matric No.</th>
+              <th>Level</th>
+              <th>Department</th>
+              <th>Score</th>
+              <th>
+                CA{" "}
+                <input
+                  className="no-print"
+                  type="text"
+                  value={divisor}
+                  onChange={saveDivisors}
+                />{" "}
+              </th>
+              <th>Delete</th>
+            </tr>
           </thead>
           {results
             .filter(
@@ -136,7 +171,14 @@ const CheckResults = () => {
                   <td style={{ whiteSpace: "noWrap" }}>
                     {res.score} / {res.totalScore}
                   </td>
-                  <td> ({Math.round((res.score / res.totalScore) * 30)}/30)</td>
+                  <td>
+                    {" "}
+                    {Math.round((res.score / res.totalScore) * divisor)}/
+                    {divisor}
+                  </td>
+                  <td>
+                    <BiTrash />
+                  </td>
                 </tr>
               );
             })}
