@@ -199,8 +199,9 @@ const AuthorProfile = () => {
                     fontWeight: "500",
                   }}
                 >
-                  {" "}
-                  Department: {user.department || "Unknown"}{" "}
+                  Department:{" "}
+                  {user.department.charAt(0).toUpperCase() +
+                    user.department.slice(1) || "Unknown"}{" "}
                 </p>
                 <p
                   style={{
