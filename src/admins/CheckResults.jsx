@@ -45,6 +45,18 @@ const CheckResults = () => {
     setResults(res.data);
   };
 
+  const deleteResult = async (result) => {
+    const id = result._id;
+    const canDelete = window.confirm(
+      "Are you sure you want to delete this result?\nName: " +
+        result.user?.name,
+    );
+    if (!canDelete) return;
+    const res = await axios.delete("/result/" + id);
+    console.log(res);
+    setResults(res.data.results);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -177,7 +189,9 @@ const CheckResults = () => {
                     {divisor}
                   </td>
                   <td>
-                    <BiTrash />
+                    <span onClick={() => deleteResult(res)}>
+                      <BiTrash />
+                    </span>
                   </td>
                 </tr>
               );
