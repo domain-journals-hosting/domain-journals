@@ -1,5 +1,4 @@
 /* questionCard.css */
-
 .question-card {
   border: 1px solid #ccc;
   padding: 16px;
@@ -28,6 +27,7 @@
   padding: 4px 8px;
   cursor: pointer;
   font-size: 0.9rem;
+  flex-shrink: 0;
 }
 
 .flag-btn.flagged {
@@ -40,11 +40,10 @@
   margin-bottom: 12px;
   font-size: 1rem;
   color: #222;
+  word-wrap: break-word;
 }
 
 .options {
-  align-items: flex-start;
-  white-space: nowrap;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -52,14 +51,24 @@
 
 .option-label {
   display: flex;
-  align-items: left;
-  text-align: left;
+  align-items: flex-start;
   gap: 8px;
   cursor: pointer;
   font-size: 0.95rem;
   color: #333;
+  width: 100%;
 }
 
 .option-label input[type="radio"] {
+  width: 20px;
   cursor: pointer;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.option-label span {
+  flex: 1;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
