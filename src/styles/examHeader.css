@@ -7,6 +7,11 @@
   background: #ffffff;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
   gap: 12px;
+  flex-wrap: wrap; /* Allow wrapping on small screens */
+}
+
+.exam-title {
+  flex-shrink: 0; /* Prevent title from shrinking */
 }
 
 .exam-title h2 {
@@ -14,12 +19,20 @@
   font-size: 18px;
   color: #093238;
   font-weight: 600;
+  white-space: nowrap; /* Prevent title from wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px; /* Limit title width on small screens */
 }
 
 .exam-controls {
   display: flex;
   align-items: center;
   gap: 14px;
+  flex-wrap: wrap; /* Allow controls to wrap if needed */
+  justify-content: flex-end;
+  flex: 1; /* Take remaining space */
+  min-width: 0; /* Allow shrinking */
 }
 
 /* Timer */
@@ -28,11 +41,13 @@
   flex-direction: column;
   align-items: flex-end;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  flex-shrink: 0; /* Prevent timer from shrinking */
 }
 
 .timer .label {
   font-size: 12px;
   color: #666;
+  white-space: nowrap;
 }
 
 .timer .time {
@@ -44,6 +59,7 @@
   background: rgba(6, 50, 51, 0.04);
   min-width: 64px;
   text-align: center;
+  white-space: nowrap;
 }
 
 .timer.warning .time {
@@ -58,6 +74,13 @@
   font-size: 13px;
   font-weight: 500;
   text-align: right;
+  flex-shrink: 1; /* Allow to shrink if needed */
+}
+
+.save-status .saving,
+.save-status .saved,
+.save-status .error {
+  white-space: nowrap;
 }
 
 .save-status .saving {
@@ -81,7 +104,11 @@
   color: #fff;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.08s ease, opacity 0.12s ease;
+  transition:
+    transform 0.08s ease,
+    opacity 0.12s ease;
+  white-space: nowrap;
+  flex-shrink: 0; /* Prevent button from shrinking */
 }
 
 .submit-btn:hover:not(:disabled) {
@@ -93,4 +120,65 @@
   opacity: 0.5;
   cursor: not-allowed;
   transform: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .exam-header {
+    padding: 10px 12px;
+  }
+
+  .exam-title h2 {
+    font-size: 16px;
+    max-width: 150px;
+  }
+
+  .exam-controls {
+    gap: 10px;
+  }
+
+  .timer .time {
+    font-size: 16px;
+    min-width: 56px;
+  }
+
+  .save-status {
+    min-width: 80px;
+    font-size: 12px;
+  }
+
+  .submit-btn {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .exam-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .exam-title {
+    text-align: center;
+  }
+
+  .exam-title h2 {
+    max-width: 100%;
+  }
+
+  .exam-controls {
+    justify-content: space-between;
+  }
+
+  .timer {
+    align-items: flex-start;
+  }
+
+  .save-status {
+    text-align: center;
+    order: 3; /* Move to bottom on very small screens */
+    width: 100%;
+  }
 }
