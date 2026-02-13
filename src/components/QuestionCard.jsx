@@ -33,7 +33,7 @@ const QuestionCard = ({
               checked={selectedAnswer === i}
               onChange={() => onAnswer(questionIndex, i)}
             />
-            {opt}
+            <span className="option-text"> {opt}</span>{" "}
           </label>
         ))}
       </div>
