@@ -200,8 +200,10 @@ const AuthorProfile = () => {
                   }}
                 >
                   Department:{" "}
-                  {user.department.charAt(0).toUpperCase() +
-                    user.department.slice(1) || "Unknown"}{" "}
+                  {user.department
+                    ? user.department?.charAt(0).toUpperCase() +
+                      user.department.slice(1)
+                    : "Please update profile, click the pencil button"}
                 </p>
                 <p
                   style={{
