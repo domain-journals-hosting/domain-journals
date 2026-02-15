@@ -61,6 +61,8 @@ import SubmitArchive from "./components/SubmitArchive";
 import { ResetAuthor } from "./admins/ResetAuthor";
 import CompleteReset from "./components/CompleteReset";
 import ReviewPayments from "./components/ReviewPayments";
+import Results from "./admins/Results";
+import ReviseExam from "./admins/ReviseExam";
 
 function App() {
   const location = useLocation();
@@ -120,6 +122,7 @@ function App() {
             <Route path="admin/audit" element={<AuditReviews />} />
             <Route path="/admin/newsletter" element={<NewsletterSender />} />
             <Route path="/check-results" element={<CheckResults />} />
+            <Route path="/results/:examId" element={<Results />} />
             <Route path="/admin/issue" element={<NewIssue />} />
             <Route path="/admin/payments" element={<Payments />} />
             <Route path="/admin/payments/r" element={<ReviewPayments />} />
@@ -129,6 +132,7 @@ function App() {
           <Route element={<RequireAuth />}>
             <Route path="/complete/:token" element={<CompleteReset />} />
             <Route path="/take-exam/:examId" element={<TakeExam />} />
+            <Route path="/revise-exam/:examId" element={<ReviseExam />} />
             <Route path="/exam/:examId" element={<Exam />} />
             <Route path="/result/:examId" element={<ExamResult />} />
             <Route path="/editCourse/:courseId" element={<EditCourse />} />

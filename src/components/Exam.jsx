@@ -3,6 +3,7 @@ import axios from "../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
 import ConfirmDialog from "../components/ConfirmDialog";
 import "../styles/exam.css";
+import { FaLock } from "react-icons/fa";
 
 const Exam = () => {
   const { examId } = useParams();
@@ -49,10 +50,20 @@ const Exam = () => {
           <button
             className="start-btn"
             onClick={() => setConfirmOpen(true)}
-            disabled={loading}
+            disabled={loading || exam.locked}
           >
-            {loading ? "Starting your exam..." : "Start Attempt"}
+            {loading ? "Starting your exam..." : "Start Attempt"} <FaLock />
           </button>
+
+          {exam.locked && (
+            <button
+              onClick={() => navigate("/revise-exam/" + examId)}
+              className="revise-btn"
+            >
+              {" "}
+              Revise{" "}
+            </button>
+          )}
         </div>
       )}
 

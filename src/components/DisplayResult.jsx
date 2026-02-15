@@ -1,19 +1,21 @@
-const DisplayResult = ({ result }) => {
+const DisplayResult = ({ result, isRevising = false }) => {
   const getOption = (index, options) => {
     return options?.[index] ?? "Not answered";
   };
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.score}>
-        Score: {result.score} / {result.totalScore} (
-        {Math.round((result.score / result.totalScore) * 100)}%)
-      </h2>
+      {!isRevising && (
+        <h2 style={styles.score}>
+          Score: {result.score} / {result.totalScore} (
+          {Math.round((result.score / result.totalScore) * 100)}%)
+        </h2>
+      )}
 
       {result.questions ? (
         <div>
           {result.questions.map((q, i) => {
-            const isCorrect = q.answer === q.correctAnswer;
+            const isCorrect = isRevising ? true : q.answer === q.correctAnswer;
 
             return (
               <div key={q._id} style={styles.questionCard(isCorrect)}>
@@ -21,18 +23,21 @@ const DisplayResult = ({ result }) => {
                   <strong>Q{i + 1}:</strong> {q.text}
                 </p>
 
-                <p>
-                  Your answer: <span>{getOption(q.answer, q.options)}</span>
-                </p>
-
+                {!isRevising && (
+                  <p>
+                    Your answer: <span>{getOption(q.answer, q.options)}</span>
+                  </p>
+                )}
                 <p>
                   Correct answer:{" "}
                   <span>{getOption(q.correctAnswer, q.options)}</span>
                 </p>
 
-                <p style={styles.status(isCorrect)}>
-                  {isCorrect ? "✔ Correct" : "✗ Incorrect"}
-                </p>
+                {!isRevising && (
+                  <p style={styles.status(isCorrect)}>
+                    {isCorrect ? "✔ Correct" : "✗ Incorrect"}
+                  </p>
+                )}
 
                 {q.explanation && (
                   <p style={styles.explanation}>Explanation: {q.explanation}</p>

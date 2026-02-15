@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "../api/axios";
 import QuestionInput from "./QuestionInput";
 import "../styles/examForm.css";
@@ -7,6 +7,7 @@ import "../styles/examForm.css";
 const EditExamForm = () => {
   const { examId } = useParams();
   const [exam, setExam] = useState(null);
+  const [originalLocked, setOriginalLocked] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -17,6 +18,7 @@ const EditExamForm = () => {
         const res = await axios.get(`/exam/send/${examId}`);
         console.log(res);
         setExam(res.data);
+        setOriginalLocked(res.data.locked);
       } catch (err) {
         console.error("Error fetching exam:", err);
       } finally {
@@ -32,16 +34,15 @@ const EditExamForm = () => {
     setExam({ ...exam, questions: updated });
   };
 
-  const handleDeleteQuestion = (index, updatedQuestion) => {
+  const handleDeleteQuestion = (index) => {
     setExam((prev) => {
-      const updated = [...prev.questions];
-      updated[index] = updatedQuestion;
+      const updated = prev.questions.filter((_, i) => i !== index);
       return { ...prev, questions: updated };
     });
   };
 
   const handleDeleteExam = async () => {
-    const res = axios.delete(`/exam/${exam._id}`);
+    const res = await axios.delete(`/exam/${exam._id}`);
     console.log(res);
     navigate("/courses");
   };
@@ -66,8 +67,23 @@ const EditExamForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
+
+    if (originalLocked && !exam.locked) {
+      const confirm = window.confirm(
+        "Warning: You are unlocking this exam. Students may be able to retake it, and every result related to this exam will be deleted... Click cancel and use the button at the bottom of the page to print all results. Continue?",
+      );
+      if (!confirm) return setSaving(false);
+    } else if (!originalLocked && exam.locked) {
+      const confirm = window.confirm(
+        "Warning: You are locking this exam. Students will not be able to take it. Continue?",
+      );
+      if (!confirm) return setSaving(false);
+    }
+
     try {
-      await axios.patch(`/exam/${exam._id}`, exam);
+      const result = await axios.patch(`/exam/${exam._id}`, exam);
+      setExam(result.data);
+      setOriginalLocked(result.data.locked);
       console.log(exam);
       alert("Exam updated successfully!");
     } catch (err) {
@@ -140,9 +156,11 @@ const EditExamForm = () => {
           display: "flex",
           flexDirection: "row",
           width: "100%",
+          gap: 20,
         }}
       >
         <input
+          style={{ width: 20 }}
           type="checkbox"
           name="review"
           id="review"
@@ -155,6 +173,31 @@ const EditExamForm = () => {
           Allow users to review after exam?
         </label>
       </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          width: "100%",
+          gap: 20,
+        }}
+      >
+        <input
+          type="checkbox"
+          name="locked"
+          id="locked"
+          checked={exam.locked}
+          style={{ width: 20 }}
+          onChange={(e) =>
+            setExam((prev) => ({ ...prev, locked: e.target.checked }))
+          }
+        />
+        <label style={{ whiteSpace: "nowrap" }} htmlFor="locked">
+          Lock Exam?
+        </label>
+      </div>
+      <Link to={`/results/${exam._id}`} style={{ fontSize: 20 }}>
+        Results
+      </Link>
       <button type="button" onClick={handleAddQuestion} className="add-btn">
         + Add Question
       </button>
