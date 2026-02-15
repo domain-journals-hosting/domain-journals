@@ -156,7 +156,7 @@ const CheckResults = () => {
                   onChange={saveDivisors}
                 />{" "}
               </th>
-              <th>Delete</th>
+              <th className="no-print">Delete</th>
             </tr>
           </thead>
           {results
@@ -188,7 +188,7 @@ const CheckResults = () => {
                     {Math.round((res.score / res.totalScore) * divisor)}/
                     {divisor}
                   </td>
-                  <td>
+                  <td className="no-print">
                     <span onClick={() => deleteResult(res)}>
                       <BiTrash />
                     </span>
