@@ -33,7 +33,7 @@ const AllResults = () => {
 
   if (loading) return <p>Loading result...</p>;
   if (error) return <p className="error">{error}</p>;
-  if (!results) return <p>No result found.</p>;
+  if (!results.length) return <p>No result found.</p>;
 
   const select = (
     <>
