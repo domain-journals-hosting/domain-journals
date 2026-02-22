@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import axios from "../api/axios";
 import "../styles/checkResults.css";
 import { BiTrash } from "react-icons/bi";
 
 const CheckResults = () => {
-  const [selectedExam, setSelectedExam] = useState("all");
+  const [selectedExam, setSelectedExam] = useState("");
   const [selectedLevel, setSelectedLevel] = useState("all");
   const [selectedDepartment, setSelectedDepartment] = useState("all");
   const [exams, setExams] = useState("");
-  const [results, setResults] = useState("");
+  const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const [divisor, setDivisor] = useState(30);
 
@@ -39,11 +39,12 @@ const CheckResults = () => {
     setExams(response.data);
   };
 
-  const getResults = async () => {
-    const res = await axios.get("/result");
+  const getResults = useCallback(async () => {
+    if (!selectedExam) return;
+    const res = await axios.get("/result/" + selectedExam);
     console.log(res.data);
-    setResults(res.data);
-  };
+    setResults(res.data.results);
+  }, [selectedExam]);
 
   const deleteResult = async (result) => {
     const id = result._id;
@@ -65,18 +66,18 @@ const CheckResults = () => {
       setLoading(false);
     };
     fetchData();
-  }, []);
+  }, [getResults]);
   useEffect(() => {
-    if (exams && exams.length > 0) {
+    if (exams && exams.length && !selectedExam > 0) {
       setSelectedExam(exams[0]._id);
     }
-  }, [exams]);
-  const availableDepartments = results
+  }, [exams, selectedExam]);
+
+  const availableDepartments = results.length
     ? new Set(results.map((r) => r.user.department))
     : [];
 
-  if (loading || !exams || !results)
-    return <p className="loading">Loading....</p>;
+  if (loading) return <p className="loading">Loading....</p>;
   const select = (
     <>
       <label htmlFor="result">Exam: </label>
@@ -87,7 +88,6 @@ const CheckResults = () => {
         name=""
         id="result"
       >
-        <option value="all">All</option>
         {exams.map((exam) => (
           <option key={exam._id} value={exam._id}>
             {exam.description || "Exam"}
@@ -142,11 +142,12 @@ const CheckResults = () => {
         <table border={1}>
           <thead>
             <tr>
+              <th>S/N</th>
               <th>Name</th>
               <th>Matric No.</th>
               <th>Level</th>
               <th>Department</th>
-              <th>Score</th>
+              <th className="no-print">Score</th>
               <th>
                 CA{" "}
                 <input
@@ -159,43 +160,49 @@ const CheckResults = () => {
               <th className="no-print">Delete</th>
             </tr>
           </thead>
-          {results
-            .filter(
-              (r) =>
-                (selectedExam === "all" ||
-                  r.exam.toString() === selectedExam.toString()) &&
-                (selectedDepartment === "all" ||
-                  r.user.department === selectedDepartment) &&
-                (selectedLevel === "all" ||
-                  Number(r.user.level) === Number(selectedLevel)),
-            )
-            .sort((a, b) => a.user.name.localeCompare(b.user.name))
-            .map((res) => {
-              console.log(res);
-              return (
-                <tr key={res._id}>
-                  <td>{res?.user?.name}</td>
-                  <td>{res?.user?.matricNumber}</td> <td>{res?.user?.level}</td>
-                  <td>
-                    {res?.user?.department?.charAt(0).toUpperCase() +
-                      res?.user?.department?.slice(1)}
-                  </td>
-                  <td style={{ whiteSpace: "noWrap" }}>
-                    {res.score} / {res.totalScore}
-                  </td>
-                  <td>
-                    {" "}
-                    {Math.round((res.score / res.totalScore) * divisor)}/
-                    {divisor}
-                  </td>
-                  <td className="no-print">
-                    <span onClick={() => deleteResult(res)}>
-                      <BiTrash />
-                    </span>
-                  </td>
-                </tr>
-              );
-            })}
+          {results.length > 0 ? (
+            results
+              .filter((r) => {
+                console.log(results);
+                return (
+                  (selectedDepartment === "all" ||
+                    r.user.department === selectedDepartment) &&
+                  (selectedLevel === "all" ||
+                    Number(r.user.level) === Number(selectedLevel))
+                );
+              })
+              .sort((a, b) => a.user.name.localeCompare(b.user.name))
+              .map((res, i) => {
+                console.log(res);
+                return (
+                  <tr key={res._id}>
+                    <td style={{ padding: 5 }}>{i + 1}</td>
+                    <td>{res?.user?.name}</td>
+                    <td>{res?.user?.matricNumber}</td>{" "}
+                    <td>{res?.user?.level}</td>
+                    <td>
+                      {res?.user?.department?.charAt(0).toUpperCase() +
+                        res?.user?.department?.slice(1)}
+                    </td>
+                    <td className="no-print" style={{ whiteSpace: "noWrap" }}>
+                      {res.score} / {res.totalScore}
+                    </td>
+                    <td>
+                      {" "}
+                      {Math.round((res.score / res.totalScore) * divisor)}/
+                      {divisor}
+                    </td>
+                    <td className="no-print">
+                      <span onClick={() => deleteResult(res)}>
+                        <BiTrash />
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })
+          ) : (
+            <p>No results for this category</p>
+          )}
         </table>
       </div>
     </div>
