@@ -138,7 +138,6 @@ const CheckResults = () => {
         Print
       </button>
       <div style={{ overflow: "scroll" }}>
-        {" "}
         <table border={1}>
           <thead>
             <tr>
@@ -149,13 +148,13 @@ const CheckResults = () => {
               <th>Department</th>
               <th className="no-print">Score</th>
               <th>
-                CA{" "}
+                CA
                 <input
                   className="no-print"
                   type="text"
                   value={divisor}
                   onChange={saveDivisors}
-                />{" "}
+                />
               </th>
               <th className="no-print">Delete</th>
             </tr>
@@ -178,7 +177,7 @@ const CheckResults = () => {
                   <tr key={res._id}>
                     <td style={{ padding: 5 }}>{i + 1}</td>
                     <td>{res?.user?.name}</td>
-                    <td>{res?.user?.matricNumber}</td>{" "}
+                    <td>{res?.user?.matricNumber}</td>
                     <td>{res?.user?.level}</td>
                     <td>
                       {res?.user?.department?.charAt(0).toUpperCase() +
@@ -188,7 +187,6 @@ const CheckResults = () => {
                       {res.score} / {res.totalScore}
                     </td>
                     <td>
-                      {" "}
                       {Math.round((res.score / res.totalScore) * divisor)}/
                       {divisor}
                     </td>
