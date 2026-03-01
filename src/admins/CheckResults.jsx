@@ -13,14 +13,24 @@ const CheckResults = () => {
   const [divisor, setDivisor] = useState(30);
 
   useEffect(() => {
-    const savedDivisors = JSON.parse(localStorage.getItem("divisors"));
-    console.log(savedDivisors);
-    if (!savedDivisors) return;
-    const savedDivisor = savedDivisors[selectedExam];
-    console.log(savedDivisor);
-    if (savedDivisor) setDivisor(+savedDivisor);
-  }, [selectedExam]);
+  if (!selectedExam || !exams?.length) return;
 
+  const exam = exams.find((e) => e._id === selectedExam);
+  if (!exam) return;
+
+  let title = exam.description || "Exam Results";
+
+  if (selectedDepartment !== "all") {
+    title += ` - ${selectedDepartment}`;
+  }
+
+  if (selectedLevel !== "all") {
+    title += ` - ${selectedLevel}L`;
+  }
+
+  document.title = title;
+}, [selectedExam, selectedDepartment, selectedLevel, exams]);
+  
   const saveDivisors = (e) => {
     const newValue = +e.target.value;
     setDivisor(+e.target.value);
