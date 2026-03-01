@@ -175,7 +175,7 @@ const CheckResults = () => {
                 console.log(results);
                 return (
                   (selectedDepartment === "all" ||
-                    r.user.department === selectedDepartment) &&
+                    r.user.department || "" === selectedDepartment) &&
                   (selectedLevel === "all" ||
                     Number(r.user.level) === Number(selectedLevel))
                 );
