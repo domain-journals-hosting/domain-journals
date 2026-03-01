@@ -120,8 +120,6 @@ const CheckResults = () => {
     {d ? d.charAt(0).toUpperCase() + d.slice(1) : "No Dept"}
   </option>
 ))}
-          </option>
-        ))}
       </select>
 
       <label htmlFor="level">Level: </label>
