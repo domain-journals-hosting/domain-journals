@@ -78,7 +78,7 @@ const CheckResults = () => {
     fetchData();
   }, [getResults]);
   useEffect(() => {
-    if (exams && exams.length && !selectedExam > 0) {
+    if (exams && exams.length && !selectedExam) {
       setSelectedExam(exams[0]._id);
     }
   }, [exams, selectedExam]);
