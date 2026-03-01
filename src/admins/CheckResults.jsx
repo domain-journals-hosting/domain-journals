@@ -84,9 +84,9 @@ const CheckResults = () => {
   }, [exams, selectedExam]);
 
   const availableDepartments = results.length
-    ? new Set(results.map((r) => r.user.department))
-    : [];
-
+  ? new Set(results.map((r) => r.user.department || ""))
+  : [];
+  
   if (loading) return <p className="loading">Loading....</p>;
   const select = (
     <>
@@ -116,8 +116,10 @@ const CheckResults = () => {
         <option value="all">All</option>
 
         {Array.from(availableDepartments).map((d) => (
-          <option key={d} value={d}>
-            {d && d.charAt(0).toUpperCase() + d.slice(1)}
+  <option key={d || "no-dept"} value={d}>
+    {d ? d.charAt(0).toUpperCase() + d.slice(1) : "No Dept"}
+  </option>
+))}
           </option>
         ))}
       </select>
@@ -190,9 +192,10 @@ const CheckResults = () => {
                     <td>{res?.user?.matricNumber}</td>
                     <td>{res?.user?.level}</td>
                     <td>
-                      {res?.user?.department?.charAt(0).toUpperCase() +
-                        res?.user?.department?.slice(1)}
-                    </td>
+  {res?.user?.department
+    ? res.user.department.charAt(0).toUpperCase() + res.user.department.slice(1)
+    : "No Dept"}
+</td>
                     <td className="no-print" style={{ whiteSpace: "noWrap" }}>
                       {res.score} / {res.totalScore}
                     </td>
