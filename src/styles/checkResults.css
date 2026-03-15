@@ -22,6 +22,7 @@ table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
+  border: 1px solid black;
 }
 
 thead {
@@ -30,9 +31,14 @@ thead {
 
 .head,
 td {
-  padding: 12px 15px;
+  padding: 7px;
   text-align: left;
   border-bottom: 1px solid #ddd;
+}
+
+th,
+td {
+  border: 1px solid black;
 }
 
 tr:hover {
@@ -45,4 +51,19 @@ tr:hover {
 
 p {
   font-size: 1rem;
+}
+
+@media print {
+  .container div {
+    overflow: visible !important;
+  }
+
+  table {
+    border-collapse: collapse !important;
+  }
+
+  th,
+  td {
+    border: 1px solid black !important;
+  }
 }

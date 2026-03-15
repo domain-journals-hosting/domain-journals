@@ -138,7 +138,7 @@ const CheckResults = () => {
         Print
       </button>
       <div style={{ overflow: "scroll" }}>
-        <table border={1}>
+        <table>
           <thead>
             <tr>
               <th>S/N</th>
@@ -187,8 +187,7 @@ const CheckResults = () => {
                       {res.score} / {res.totalScore}
                     </td>
                     <td>
-                      {Math.round((res.score / res.totalScore) * divisor)}/
-                      {divisor}
+                      {Math.round((res.score / res.totalScore) * divisor)}
                     </td>
                     <td className="no-print">
                       <span onClick={() => deleteResult(res)}>
