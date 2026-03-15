@@ -13,14 +13,24 @@ const CheckResults = () => {
   const [divisor, setDivisor] = useState(30);
 
   useEffect(() => {
-    const savedDivisors = JSON.parse(localStorage.getItem("divisors"));
-    console.log(savedDivisors);
-    if (!savedDivisors) return;
-    const savedDivisor = savedDivisors[selectedExam];
-    console.log(savedDivisor);
-    if (savedDivisor) setDivisor(+savedDivisor);
-  }, [selectedExam]);
+  if (!selectedExam || !exams?.length) return;
 
+  const exam = exams.find((e) => e._id === selectedExam);
+  if (!exam) return;
+
+  let title = exam.description || "Exam Results";
+
+  if (selectedDepartment !== "all") {
+    title += ` - ${selectedDepartment}`;
+  }
+
+  if (selectedLevel !== "all") {
+    title += ` - ${selectedLevel}L`;
+  }
+
+  document.title = title;
+}, [selectedExam, selectedDepartment, selectedLevel, exams]);
+  
   const saveDivisors = (e) => {
     const newValue = +e.target.value;
     setDivisor(+e.target.value);
@@ -68,15 +78,15 @@ const CheckResults = () => {
     fetchData();
   }, [getResults]);
   useEffect(() => {
-    if (exams && exams.length && !selectedExam > 0) {
+    if (exams && exams.length && !selectedExam) {
       setSelectedExam(exams[0]._id);
     }
   }, [exams, selectedExam]);
 
   const availableDepartments = results.length
-    ? new Set(results.map((r) => r.user.department))
-    : [];
-
+  ? new Set(results.map((r) => r.user.department || ""))
+  : [];
+  
   if (loading) return <p className="loading">Loading....</p>;
   const select = (
     <>
@@ -106,10 +116,10 @@ const CheckResults = () => {
         <option value="all">All</option>
 
         {Array.from(availableDepartments).map((d) => (
-          <option key={d} value={d}>
-            {d && d.charAt(0).toUpperCase() + d.slice(1)}
-          </option>
-        ))}
+  <option key={d || "no-dept"} value={d}>
+    {d ? d.charAt(0).toUpperCase() + d.slice(1) : "No Dept"}
+  </option>
+))}
       </select>
 
       <label htmlFor="level">Level: </label>
@@ -165,7 +175,7 @@ const CheckResults = () => {
                 console.log(results);
                 return (
                   (selectedDepartment === "all" ||
-                    r.user.department === selectedDepartment) &&
+                    (r.user.department || "") === selectedDepartment) &&
                   (selectedLevel === "all" ||
                     Number(r.user.level) === Number(selectedLevel))
                 );
@@ -180,9 +190,10 @@ const CheckResults = () => {
                     <td>{res?.user?.matricNumber}</td>
                     <td>{res?.user?.level}</td>
                     <td>
-                      {res?.user?.department?.charAt(0).toUpperCase() +
-                        res?.user?.department?.slice(1)}
-                    </td>
+  {res?.user?.department
+    ? res.user.department.charAt(0).toUpperCase() + res.user.department.slice(1)
+    : "No Dept"}
+</td>
                     <td className="no-print" style={{ whiteSpace: "noWrap" }}>
                       {res.score} / {res.totalScore}
                     </td>
