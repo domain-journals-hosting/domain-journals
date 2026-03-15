@@ -22,7 +22,7 @@ const SubmitArchive = () => {
     text: "",
   });
 
-  const showMessage = (msg, duration = 3000) => {
+  const showMessage = (msg, duration = 10000) => {
     setMessage(msg);
     setTimeout(() => setMessage(""), duration);
   };
@@ -187,13 +187,13 @@ const SubmitArchive = () => {
       {message && (
         <div
           style={{
-            position: "absolute",
             top: "10px",
             right: "10px",
             padding: "10px",
             backgroundColor: "#333",
             color: "white",
             borderRadius: "4px",
+            zIndex: 9999,
           }}
         >
           {message}
