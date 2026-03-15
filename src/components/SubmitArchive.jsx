@@ -53,7 +53,7 @@ const SubmitArchive = () => {
       (a) =>
         Number(a.volume) === Number(volume) &&
         Number(a.issue) === Number(issue.trim()) &&
-        journal === a.journal
+        journal === a.journal,
     );
 
     if (existing) {
@@ -70,7 +70,7 @@ const SubmitArchive = () => {
   const currentVolume = new Date().getFullYear() - 2024;
   const volumeArray = Array.from(
     { length: currentVolume },
-    (_, i) => currentVolume - i
+    (_, i) => currentVolume - i,
   );
 
   volumeArray.unshift(null);
@@ -117,6 +117,11 @@ const SubmitArchive = () => {
     } catch (err) {
       showMessage(err?.message || "Upload failed");
     } finally {
+      setConfirm({
+        open: false,
+        action: null,
+        text: "",
+      });
       setUploading(false);
       setStatusText("");
     }
