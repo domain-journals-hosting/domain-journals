@@ -3,7 +3,7 @@ import { supabase } from "../api/supabase";
 const uploadPdf = async (file) => {
   if (!file) return { error: "No file selected" };
 
-  const fileName = `${Date.now()}_${file.name}`;
+  const fileName = `${Date.now()}_${file.name.replace(/\s+/g, "_").replace(/[^a-zA-Z0-9._-]/g, "")}`;
   const filePath = fileName;
 
   console.log("Uploading:", fileName);
