@@ -16,6 +16,7 @@ const SubmitArchive = () => {
   const [uploading, setUploading] = useState(false);
   const [statusText, setStatusText] = useState("");
   const [message, setMessage] = useState("");
+  const [progress, setProgress] = useState(100);
   const [confirm, setConfirm] = useState({
     open: false,
     action: null,
@@ -24,7 +25,24 @@ const SubmitArchive = () => {
 
   const showMessage = (msg, duration = 10000) => {
     setMessage(msg);
-    setTimeout(() => setMessage(""), duration);
+    setProgress(100);
+    const durationPercentage = duration / 100;
+    const ticksAmt = 100 / durationPercentage;
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev <= 0) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - ticksAmt;
+      });
+    }, 100);
+
+    setTimeout(() => {
+      setMessage("");
+      setProgress(100);
+      clearInterval(interval);
+    }, duration);
   };
 
   const fetchArchives = async () => {
@@ -194,6 +212,11 @@ const SubmitArchive = () => {
             color: "white",
             borderRadius: "4px",
             zIndex: 9999,
+            borderBottom: `3px solid #3b82f6`,
+            backgroundImage: `linear-gradient(to left, #3b82f6 ${progress}%, transparent ${progress}%)`,
+            backgroundPosition: "bottom",
+            backgroundSize: "100% 3px",
+            backgroundRepeat: "no-repeat",
           }}
         >
           {message}
