@@ -4,10 +4,9 @@ import { uploadPdf, deletePdf } from "../components/supabaseUpload";
 import journals, { slug } from "../data/journals";
 
 const SubmitArchive = () => {
-  const currentYear = new Date().getFullYear();
   const fileInputRef = useRef(null);
-  const [volume, setVolume] = useState(currentYear);
   const [issue, setIssue] = useState("");
+  const [year, setYear] = useState("");
   const [uploadMethod, setUploadMethod] = useState("file");
   const [link, setLink] = useState("");
   const [journal, setJournal] = useState(slug(journals[0]));
@@ -37,7 +36,6 @@ const SubmitArchive = () => {
         return prev - ticksAmt;
       });
     }, 100);
-
     setTimeout(() => {
       setMessage("");
       setProgress(100);
@@ -59,17 +57,19 @@ const SubmitArchive = () => {
   }, []);
 
   const handleUpload = async () => {
-    if (isNaN(issue) || isNaN(volume))
-      return showMessage("Invalid issue or volume entry");
+    if (isNaN(issue) || isNaN(year))
+      return showMessage("Invalid issue or year entry");
     if (
       (uploadMethod === "file" && !file) ||
       (uploadMethod === "link" && !link) ||
-      !issue
+      !issue ||
+      !year
     )
-      return showMessage("Issue and file/link required");
+      return showMessage("Year, issue and file/link required");
+
     const existing = archives?.find(
       (a) =>
-        Number(a.volume) === Number(volume) &&
+        Number(a.year) === Number(year) &&
         Number(a.issue) === Number(issue.trim()) &&
         journal === a.journal,
     );
@@ -77,7 +77,7 @@ const SubmitArchive = () => {
     if (existing) {
       setConfirm({
         open: true,
-        text: `Archive for volume ${volume}, issue ${issue} already exists. Overwrite?`,
+        text: `Archive for year ${year}, issue ${issue} already exists. Overwrite?`,
         action: () => doUpload(existing),
       });
     } else {
@@ -85,61 +85,36 @@ const SubmitArchive = () => {
     }
   };
 
-  const currentVolume = new Date().getFullYear() - 2024;
-  const volumeArray = Array.from(
-    { length: currentVolume },
-    (_, i) => currentVolume - i,
-  );
-
-  volumeArray.unshift(null);
-
   const doUpload = async (existing) => {
     setUploading(true);
     setStatusText("Uploading file..., this might take a while");
 
     try {
       if (uploadMethod === "link") {
-        await axios.post("/archives", {
-          volume,
-          issue,
-          journal,
-          file: link,
-        });
+        await axios.post("/archives", { year, issue, journal, file: link });
       } else {
-        if (existing?.file) {
-          await deletePdf(existing.file);
-        }
+        if (existing?.file) await deletePdf(existing.file);
 
         const { url, error } = await uploadPdf(file);
         if (error) throw new Error("Upload failed");
 
         const filePath = url.split("/").pop();
-
         setStatusText("Saving archive...");
 
-        await axios.post("/archives", {
-          volume,
-          issue,
-          journal,
-          file: uploadMethod === "link" ? link : filePath,
-        });
+        await axios.post("/archives", { year, issue, journal, file: filePath });
       }
 
       showMessage("Archive created");
       setIssue("");
       setFile(null);
       setLink("");
-
+      setYear("");
       fileInputRef.current.value = null;
       fetchArchives();
     } catch (err) {
       showMessage(err?.message || "Upload failed");
     } finally {
-      setConfirm({
-        open: false,
-        action: null,
-        text: "",
-      });
+      setConfirm({ open: false, action: null, text: "" });
       setUploading(false);
       setStatusText("");
     }
@@ -147,7 +122,7 @@ const SubmitArchive = () => {
 
   return (
     <div style={{ padding: "1rem", maxWidth: "500px", margin: "auto" }}>
-      {confirm.open ? (
+      {confirm.open && (
         <div
           style={{
             position: "fixed",
@@ -198,8 +173,6 @@ const SubmitArchive = () => {
             </div>
           </div>
         </div>
-      ) : (
-        ""
       )}
 
       {message && (
@@ -225,22 +198,19 @@ const SubmitArchive = () => {
 
       <h2 style={{ marginBottom: "1rem" }}>Upload Archive</h2>
 
-      {/* Volume */}
+      {/* Year */}
       <div style={{ marginBottom: "1rem" }}>
-        <label>Volume:</label>
-        <select
+        <label>Year:</label>
+        <input
+          type="number"
           disabled={uploading}
+          placeholder="Enter year..."
           style={{ width: "100%", padding: "0.5rem", marginTop: "0.25rem" }}
-          value={volume}
-          onChange={(e) => setVolume(e.target.value)}
-        >
-          {volumeArray.map((v) => (
-            <option key={v} value={v}>
-              {v}
-            </option>
-          ))}
-        </select>
+          value={year}
+          onChange={(e) => setYear(e.target.value)}
+        />
       </div>
+
       {/* Issue */}
       <div style={{ marginBottom: "1rem" }}>
         <label>Issue:</label>
@@ -270,6 +240,8 @@ const SubmitArchive = () => {
           ))}
         </select>
       </div>
+
+      {/* Upload Method */}
       <div style={{ marginBottom: "1rem" }}>
         <label>Upload method:</label>
         <select
@@ -286,7 +258,6 @@ const SubmitArchive = () => {
         </select>
       </div>
 
-      {/* Link */}
       {uploadMethod === "link" && (
         <div style={{ marginBottom: "1rem" }}>
           <label>Link (eg. Google drive):</label>
@@ -300,7 +271,7 @@ const SubmitArchive = () => {
           />
         </div>
       )}
-      {/* File */}
+
       {uploadMethod === "file" && (
         <div style={{ marginBottom: "1rem" }}>
           <label>Manuscript File (PDF):</label>
@@ -315,7 +286,6 @@ const SubmitArchive = () => {
         </div>
       )}
 
-      {/* Upload button */}
       <button
         onClick={handleUpload}
         disabled={uploading}

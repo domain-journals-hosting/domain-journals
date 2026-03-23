@@ -7,7 +7,6 @@ import "../styles/reviewManuscripts.css";
 import { useUser } from "../hooks/useUser";
 const backendBase = import.meta.env.VITE_API_BASE_URL;
 const downloadLink = (file) => {
-  console.log(file);
   return file.endsWith(".doc")
     ? file
     : `${backendBase}/file?url=${encodeURIComponent(file)}`;
@@ -35,6 +34,7 @@ const ReviewManuscripts = () => {
 
     return tabs;
   };
+
   const STATUS_TABS = getStatusTabs();
   const [selectedValues, setSelectedValues] = useState({});
   const [manuscripts, setManuscripts] = useState([]);
@@ -141,10 +141,7 @@ const ReviewManuscripts = () => {
                     onChange={(e) =>
                       setSelectedValues((prev) => ({
                         ...prev,
-                        [m._id]: {
-                          ...prev[m._id],
-                          journal: e.target.value,
-                        },
+                        [m._id]: { ...prev[m._id], journal: e.target.value },
                       }))
                     }
                   >
@@ -174,7 +171,7 @@ const ReviewManuscripts = () => {
                         <option key={n} value={n}>
                           {n}
                         </option>
-                      )
+                      ),
                     )}
                   </select>
                 </>
@@ -182,9 +179,6 @@ const ReviewManuscripts = () => {
                 <>
                   <p>
                     <strong>Journal:</strong> {m.journal}
-                  </p>
-                  <p>
-                    <strong>Volume:</strong> {m.volume}
                   </p>
                   <p>
                     <strong>Issue:</strong> {m.issue}
@@ -201,9 +195,7 @@ const ReviewManuscripts = () => {
 
               <div className="review-actions">
                 <a
-                  href={`https://docs.google.com/viewer?url=${encodeURIComponent(
-                    m.file
-                  )}&embedded=true`}
+                  href={`https://docs.google.com/viewer?url=${encodeURIComponent(m.file)}&embedded=true`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
