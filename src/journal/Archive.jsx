@@ -17,77 +17,59 @@ const Archive = () => {
         const res = await axios.get(`accepted/${slug}`);
         const { archive, manuscripts } = res.data;
 
+        // derive volume ranking from distinct years across both collections
+        const allYears = [
+          ...new Set([
+            ...manuscripts.map((m) => m.year),
+            ...archive.map((a) => a.year),
+          ]),
+        ]
+          .filter(Boolean)
+          .sort((a, b) => a - b);
+
+        const yearToVol = {};
+        allYears.forEach((y, i) => (yearToVol[y] = i + 1));
+
         const groupedMap = {};
 
-        // group existing manuscripts
         manuscripts.forEach((m) => {
-          const vol = m.volume;
+          const year = m.year;
           const issue = m.issue;
-          const year = 2024 + vol;
+          const vol = yearToVol[year];
           const key = `${year} | Vol. ${vol} Issue ${issue}`;
 
-          if (!groupedMap[key]) groupedMap[key] = { items: [], file: null };
+          if (!groupedMap[key])
+            groupedMap[key] = { items: [], file: null, year, vol, issue };
           groupedMap[key].items.push(m);
 
-          // attach the archive file for this volume/issue
+          // match archive file by year + issue
           const archiveFile = archive.find(
-            (a) => a.volume === vol && a.issue === issue
+            (a) => a.year === year && a.issue === issue,
           );
           if (archiveFile) groupedMap[key].file = archiveFile.file;
         });
 
-        // Add missing volume/issue placeholders
-        const currentYear = new Date().getFullYear();
-        const currentVol = currentYear - 2024; // e.g. 2025 → vol 1, 2026 → vol 2, etc.
+        // placeholders for archive entries with no manuscripts
+        archive.forEach((a) => {
+          const year = a.year;
+          const issue = a.issue;
+          const vol = yearToVol[year];
+          const key = `${year} | Vol. ${vol} Issue ${issue}`;
 
-        // Find all volume/issue combinations that exist in manuscripts or archive
-        const existingCombos = new Set([
-          ...manuscripts.map((m) => `${m.volume}-${m.issue}`),
-          ...archive.map((a) => `${a.volume}-${a.issue}`),
-        ]);
-
-        // find the max issue per volume from manuscripts and archive
-        const maxIssues = {};
-        [...manuscripts, ...archive].forEach((m) => {
-          if (!maxIssues[m.volume] || m.issue > maxIssues[m.volume])
-            maxIssues[m.volume] = m.issue;
+          if (!groupedMap[key]) {
+            groupedMap[key] = { items: [], file: a.file, year, vol, issue };
+          }
         });
 
-        for (let vol = 1; vol <= currentVol; vol++) {
-          const maxIssue = maxIssues[vol] || 1; // default to at least 1 issue
-          for (let issue = 1; issue <= maxIssue; issue++) {
-            const year = 2024 + vol;
-            const key = `${year} | Vol. ${vol} Issue ${issue}`;
-
-            if (!groupedMap[key]) {
-              const archiveFile = archive.find(
-                (a) => a.volume === vol && a.issue === issue
-              );
-
-              groupedMap[key] = {
-                items: [],
-                file: archiveFile ? archiveFile.file : null,
-              };
-            }
-          }
-        }
-
-        // sort
         const sortedGroups = Object.entries(groupedMap)
-          .map(([group, { items, file }]) => {
-            const [yearText, volText] = group.split(" | ");
-            const volNumber = parseInt(volText.split(" ")[1]);
-            const issueNumber = parseInt(volText.split("Issue ")[1]);
-
-            return {
-              group,
-              year: yearText,
-              volume: volNumber,
-              issue: issueNumber,
-              items,
-              file,
-            };
-          })
+          .map(([group, { items, file, year, vol, issue }]) => ({
+            group,
+            year,
+            volume: vol,
+            issue,
+            items,
+            file,
+          }))
           .sort((a, b) => {
             if (a.volume !== b.volume) return b.volume - a.volume;
             return b.issue - a.issue;

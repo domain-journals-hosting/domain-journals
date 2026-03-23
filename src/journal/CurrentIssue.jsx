@@ -60,7 +60,7 @@ export const CurrentIssue = () => {
                 ID: {m.customId}
                 <p
                   title={[m.author, ...m.coAuthors.map((a) => a.name)].join(
-                    ", "
+                    ", ",
                   )}
                 >
                   <strong>Author(s): </strong>
