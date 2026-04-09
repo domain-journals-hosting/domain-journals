@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "../api/axios";
-import { uploadPdf, deletePdf } from "../components/supabaseUpload";
 import journals, { slug } from "../data/journals";
 
 const SubmitArchive = () => {
@@ -85,6 +84,29 @@ const SubmitArchive = () => {
     }
   };
 
+  const handleDelete = async (archive) => {
+    setConfirm({
+      open: true,
+      text: `Delete archive year ${archive.year}, issue ${archive.issue}?`,
+      action: async () => {
+        try {
+          if (archive.file && !archive.file.startsWith("http")) {
+            await axios.delete("/supabase/delete", {
+              data: { filePath: archive.file },
+            });
+          }
+          await axios.delete(`/archives/${archive._id}`);
+          showMessage("Archive deleted");
+          fetchArchives();
+        } catch (err) {
+          showMessage("Delete failed");
+        } finally {
+          setConfirm({ open: false, action: null, text: "" });
+        }
+      },
+    });
+  };
+
   const doUpload = async (existing) => {
     setUploading(true);
     setStatusText("Uploading file..., this might take a while");
@@ -93,9 +115,15 @@ const SubmitArchive = () => {
       if (uploadMethod === "link") {
         await axios.post("/archives", { year, issue, journal, file: link });
       } else {
-        if (existing?.file) await deletePdf(existing.file);
-
-        const { url, error } = await uploadPdf(file);
+        if (existing?.file && !existing.file.startsWith("http")) {
+          await axios.delete("/supabase/delete", {
+            data: { filePath: existing.file },
+          });
+        }
+        const formData = new FormData();
+        formData.append("file", file);
+        const { data, error } = await axios.post("/supabase/upload", formData);
+        const url = data?.url;
         if (error) throw new Error("Upload failed");
 
         const filePath = url.split("/").pop();
@@ -314,6 +342,40 @@ const SubmitArchive = () => {
           {statusText}
         </p>
       )}
+
+      <div style={{ marginTop: "2rem" }}>
+        <h3>Existing Archives</h3>
+        {archives.length === 0 && <p>No archives found.</p>}
+        {archives.map((a) => (
+          <div
+            key={a._id}
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "0.5rem",
+              borderBottom: "1px solid #eee",
+            }}
+          >
+            <span>
+              {a.journal} — Year {a.year}, Issue {a.issue}
+            </span>
+            <button
+              onClick={() => handleDelete(a)}
+              style={{
+                backgroundColor: "#d9534f",
+                color: "white",
+                border: "none",
+                padding: "4px 10px",
+                borderRadius: "4px",
+                cursor: "pointer",
+              }}
+            >
+              Delete
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

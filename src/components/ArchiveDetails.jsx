@@ -1,17 +1,26 @@
+import { useEffect, useState } from "react";
 import { getPdfUrl } from "../components/supabaseUpload";
 import { FaDownload } from "react-icons/fa";
+import axios from "../api/axios";
 
 const backendBase = "https://api.domainjournals.com";
 
 const ArchiveDetails = ({ file }) => {
-  if (!file) return null;
-
   const isFullUrl = file.startsWith("http://") || file.startsWith("https://");
-  const fullUrl = isFullUrl ? file : getPdfUrl(file);
-
+  const [fullUrl, setFullUrl] = useState(isFullUrl ? file : null);
   const downloadUrl = `${backendBase}/file?url=${fullUrl}`;
   const text = isFullUrl ? "View" : "Download Full Issue";
   const link = isFullUrl ? fullUrl : downloadUrl;
+
+  useEffect(() => {
+    if (!isFullUrl) {
+      axios.get(`/supabase/url?filePath=${file}`).then((res) => {
+        setFullUrl(res.data.url);
+      });
+    }
+  }, [file, isFullUrl]);
+  if (!file) return null;
+
   return (
     <div style={styles.card}>
       <div style={styles.cardHeader}>
