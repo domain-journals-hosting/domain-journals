@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { getPdfUrl } from "../components/supabaseUpload";
 import { FaDownload } from "react-icons/fa";
 import axios from "../api/axios";
 
