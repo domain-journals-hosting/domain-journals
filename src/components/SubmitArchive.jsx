@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "../api/axios";
 import journals, { slug } from "../data/journals";
+const backendBase = import.meta.env.VITE_API_BASE_URL;
 
 const SubmitArchive = () => {
   const fileInputRef = useRef(null);
@@ -365,11 +366,25 @@ const SubmitArchive = () => {
             }}
           >
             <span>
-              {a.journal} — Year {a.year}, Issue {a.issue}
-            </span>
-            <span>
               {a.journal} — Vol {getVolume(a.year)}, Issue {a.issue} ({a.year})
             </span>
+            <a
+              href={
+                a.file?.startsWith("http")
+                  ? a.file
+                  : `${backendBase}/file?url=https://your-supabase-url/storage/v1/object/public/archive/${a.file}`
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontSize: "0.8rem",
+                color: "#3b82f6",
+                textDecoration: "none",
+                marginRight: "8px",
+              }}
+            >
+              View
+            </a>
             <button
               onClick={() => handleDelete(a)}
               style={{
