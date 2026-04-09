@@ -1,36 +1,34 @@
-import { useEffect, useState } from "react";
-import { FaDownload } from "react-icons/fa";
-import axios from "../api/axios";
+import { FaDownload, FaEye } from "react-icons/fa";
 
 const backendBase = "https://api.domainjournals.com";
 
-const ArchiveDetails = ({ file }) => {
-  const isFullUrl = file.startsWith("http://") || file.startsWith("https://");
-  const [fullUrl, setFullUrl] = useState(isFullUrl ? file : null);
-  const downloadUrl = `${backendBase}/file?url=${fullUrl}`;
-  const text = isFullUrl ? "View" : "Download Full Issue";
-  const link = isFullUrl ? fullUrl : downloadUrl;
-
-  useEffect(() => {
-    if (!isFullUrl) {
-      axios.get(`/supabase/url?filePath=${file}`).then((res) => {
-        setFullUrl(res.data.url);
-      });
-    }
-  }, [file, isFullUrl]);
+const ArchiveDetails = ({ file, fileUrl }) => {
   if (!file) return null;
+
+  const isLink = file.startsWith("http://") || file.startsWith("https://");
+  const downloadUrl = `${backendBase}/file?url=${fileUrl}`;
 
   return (
     <div style={styles.card}>
       <div style={styles.cardHeader}>
         <a
-          style={styles.downloadBtn}
-          href={link}
+          style={styles.btn("#3b82f6")}
+          href={fileUrl}
           target="_blank"
           rel="noopener noreferrer"
         >
-          {text} <FaDownload style={{ marginLeft: "6px" }} />
+          View <FaEye style={{ marginLeft: "6px" }} />
         </a>
+        {!isLink && (
+          <a
+            style={styles.btn("#34a853")}
+            href={downloadUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Download <FaDownload style={{ marginLeft: "6px" }} />
+          </a>
+        )}
       </div>
     </div>
   );
@@ -38,8 +36,8 @@ const ArchiveDetails = ({ file }) => {
 
 const styles = {
   card: {
-    background: "#e6f4ea", // light green background
-    border: "1px solid #a7d7a3", // soft green border
+    background: "#e6f4ea",
+    border: "1px solid #a7d7a3",
     borderRadius: "10px",
     padding: "1rem",
     marginBottom: "1.5rem",
@@ -49,11 +47,12 @@ const styles = {
     display: "flex",
     justifyContent: "flex-end",
     alignItems: "center",
+    gap: "8px",
   },
-  downloadBtn: {
+  btn: (bg) => ({
     display: "inline-flex",
     alignItems: "center",
-    backgroundColor: "#34a853", // strong green
+    backgroundColor: bg,
     color: "#fff",
     padding: "8px 16px",
     borderRadius: "6px",
@@ -61,12 +60,7 @@ const styles = {
     fontSize: "0.95rem",
     textDecoration: "none",
     cursor: "pointer",
-    transition: "background-color 0.3s ease, transform 0.2s ease",
-  },
-  downloadBtnHover: {
-    backgroundColor: "#2c8e44",
-    transform: "translateY(-1px)",
-  },
+  }),
 };
 
 export default ArchiveDetails;
