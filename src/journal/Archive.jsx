@@ -74,7 +74,7 @@ const Archive = () => {
             if (a.volume !== b.volume) return b.volume - a.volume;
             return b.issue - a.issue;
           })
-          .map((g) => g.issue > 0);
+          ?.filter((g) => g.issue > 0);
 
         setGrouped(sortedGroups);
       } catch (error) {
@@ -98,7 +98,7 @@ const Archive = () => {
         {!grouped?.length && <p>No items here</p>}
         {!loading &&
           !err &&
-          grouped.map(({ group, items, file }) => (
+          grouped?.map(({ group, items, file }) => (
             <div key={group} className="archive-group">
               <h2>{group}</h2>
 
@@ -108,7 +108,7 @@ const Archive = () => {
                 <p className="empty">Nothing to show</p>
               ) : (
                 <ul>
-                  {items.map((m) => (
+                  {items?.map((m) => (
                     <li key={m._id}>
                       <h3>
                         {m.title} ({m.articleType || "Editorial"})
