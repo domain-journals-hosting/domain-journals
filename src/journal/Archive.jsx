@@ -95,7 +95,7 @@ const Archive = () => {
         <h1>Journal Archive</h1>
         {loading && <p className="loading">Loading...</p>}
         {err && <p className="error">{err}</p>}
-        {!grouped.length && <p>No items here</p>}
+        {!grouped?.length && <p>No items here</p>}
         {!loading &&
           !err &&
           grouped.map(({ group, items, file }) => (
