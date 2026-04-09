@@ -104,7 +104,7 @@ const Archive = () => {
 
               {file && <ArchiveDetails file={file} />}
 
-              {items.length === 0 ? (
+              {items?.length === 0 ? (
                 <p className="empty">Nothing to show</p>
               ) : (
                 <ul>
