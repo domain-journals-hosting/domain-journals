@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "../api/axios";
 import journals, { slug } from "../data/journals";
-const backendBase = import.meta.env.VITE_API_BASE_URL;
 
 const SubmitArchive = () => {
   const fileInputRef = useRef(null);
@@ -118,7 +117,6 @@ const SubmitArchive = () => {
   const doUpload = async (existing) => {
     setUploading(true);
     setStatusText("Uploading file..., this might take a while");
-
     try {
       if (uploadMethod === "link") {
         await axios.post("/archives", { year, issue, journal, file: link });
@@ -130,16 +128,12 @@ const SubmitArchive = () => {
         }
         const formData = new FormData();
         formData.append("file", file);
-        const { data, error } = await axios.post("/supabase/upload", formData);
-        const url = data?.url;
-        if (error) throw new Error("Upload failed");
-
-        const filePath = url.split("/").pop();
+        const { data } = await axios.post("/supabase/upload", formData);
+        if (!data?.url) throw new Error("Upload failed");
+        const filePath = data.url.split("/").pop();
         setStatusText("Saving archive...");
-
         await axios.post("/archives", { year, issue, journal, file: filePath });
       }
-
       showMessage("Archive created");
       setIssue("");
       setFile(null);
@@ -214,14 +208,11 @@ const SubmitArchive = () => {
       {message && (
         <div
           style={{
-            top: "10px",
-            right: "10px",
             padding: "10px",
             backgroundColor: "#333",
             color: "white",
             borderRadius: "4px",
             zIndex: 9999,
-            borderBottom: `3px solid #3b82f6`,
             backgroundImage: `linear-gradient(to left, #3b82f6 ${progress}%, transparent ${progress}%)`,
             backgroundPosition: "bottom",
             backgroundSize: "100% 3px",
@@ -234,7 +225,6 @@ const SubmitArchive = () => {
 
       <h2 style={{ marginBottom: "1rem" }}>Upload Archive</h2>
 
-      {/* Year */}
       <div style={{ marginBottom: "1rem" }}>
         <label>Year:</label>
         <input
@@ -247,7 +237,6 @@ const SubmitArchive = () => {
         />
       </div>
 
-      {/* Issue */}
       <div style={{ marginBottom: "1rem" }}>
         <label>Issue:</label>
         <input
@@ -260,7 +249,6 @@ const SubmitArchive = () => {
         />
       </div>
 
-      {/* Journal */}
       <div style={{ marginBottom: "1rem" }}>
         <label>Journal:</label>
         <select
@@ -277,7 +265,6 @@ const SubmitArchive = () => {
         </select>
       </div>
 
-      {/* Upload Method */}
       <div style={{ marginBottom: "1rem" }}>
         <label>Upload method:</label>
         <select
@@ -368,36 +355,33 @@ const SubmitArchive = () => {
             <span>
               {a.journal} — Vol {getVolume(a.year)}, Issue {a.issue} ({a.year})
             </span>
-            <a
-              href={
-                a.file?.startsWith("http")
-                  ? a.file
-                  : `${backendBase}/file?url=https://your-supabase-url/storage/v1/object/public/archive/${a.file}`
-              }
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                fontSize: "0.8rem",
-                color: "#3b82f6",
-                textDecoration: "none",
-                marginRight: "8px",
-              }}
-            >
-              View
-            </a>
-            <button
-              onClick={() => handleDelete(a)}
-              style={{
-                backgroundColor: "#d9534f",
-                color: "white",
-                border: "none",
-                padding: "4px 10px",
-                borderRadius: "4px",
-                cursor: "pointer",
-              }}
-            >
-              Delete
-            </button>
+            <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+              <a
+                href={a.fileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  fontSize: "0.8rem",
+                  color: "#3b82f6",
+                  textDecoration: "none",
+                }}
+              >
+                View
+              </a>
+              <button
+                onClick={() => handleDelete(a)}
+                style={{
+                  backgroundColor: "#d9534f",
+                  color: "white",
+                  border: "none",
+                  padding: "4px 10px",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                }}
+              >
+                Delete
+              </button>
+            </div>
           </div>
         ))}
       </div>
