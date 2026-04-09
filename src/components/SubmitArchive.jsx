@@ -21,6 +21,13 @@ const SubmitArchive = () => {
     text: "",
   });
 
+  const getVolume = (targetYear) => {
+    const sortedYears = [...new Set(archives.map((a) => Number(a.year)))].sort(
+      (a, b) => a - b,
+    );
+    return sortedYears.indexOf(Number(targetYear)) + 1;
+  };
+
   const showMessage = (msg, duration = 10000) => {
     setMessage(msg);
     setProgress(100);
@@ -359,6 +366,9 @@ const SubmitArchive = () => {
           >
             <span>
               {a.journal} — Year {a.year}, Issue {a.issue}
+            </span>
+            <span>
+              {a.journal} — Vol {getVolume(a.year)}, Issue {a.issue} ({a.year})
             </span>
             <button
               onClick={() => handleDelete(a)}
