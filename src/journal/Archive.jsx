@@ -73,7 +73,8 @@ const Archive = () => {
           .sort((a, b) => {
             if (a.volume !== b.volume) return b.volume - a.volume;
             return b.issue - a.issue;
-          });
+          })
+          .map((g) => g.issue > 0);
 
         setGrouped(sortedGroups);
       } catch (error) {
