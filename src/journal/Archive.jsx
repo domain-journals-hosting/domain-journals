@@ -46,7 +46,10 @@ const Archive = () => {
           const archiveFile = archive.find(
             (a) => a.year === year && a.issue === issue,
           );
-          if (archiveFile) groupedMap[key].file = archiveFile.file;
+          if (archiveFile) {
+            groupedMap[key].file = archiveFile.file;
+            groupedMap[key].fileUrl = archiveFile.fileUrl;
+          }
         });
 
         // placeholders for archive entries with no manuscripts
@@ -57,18 +60,26 @@ const Archive = () => {
           const key = `${year} | Vol. ${vol} Issue ${issue}`;
 
           if (!groupedMap[key]) {
-            groupedMap[key] = { items: [], file: a.file, year, vol, issue };
+            groupedMap[key] = {
+              items: [],
+              file: a.file,
+              fileUrl: a.fileUrl,
+              year,
+              vol,
+              issue,
+            };
           }
         });
 
         const sortedGroups = Object.entries(groupedMap)
-          .map(([group, { items, file, year, vol, issue }]) => ({
+          .map(([group, { items, file, fileUrl, year, vol, issue }]) => ({
             group,
             year,
             volume: vol,
             issue,
             items,
             file,
+            fileUrl,
           }))
           .sort((a, b) => {
             if (a.volume !== b.volume) return b.volume - a.volume;
