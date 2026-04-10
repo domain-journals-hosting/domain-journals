@@ -98,11 +98,11 @@ const Archive = () => {
         {!grouped?.length && <p>No items here</p>}
         {!loading &&
           !err &&
-          grouped?.map(({ group, items, file }) => (
+          grouped?.map(({ group, items, file, fileUrl }) => (
             <div key={group} className="archive-group">
               <h2>{group}</h2>
 
-              {file && <ArchiveDetails file={file} />}
+              {file && <ArchiveDetails file={file} fileUrl={fileUrl} />}
 
               {items?.length === 0 ? (
                 <p className="empty">Nothing to show</p>
