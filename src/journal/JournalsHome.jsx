@@ -1,4 +1,3 @@
-import React from "react";
 import { Link, useParams } from "react-router-dom";
 import journals from "../data/journals.json";
 import "../styles/journalsHome.css";
@@ -12,10 +11,10 @@ const source = (string) =>
   string === "health"
     ? health
     : string === "biological"
-    ? biological
-    : string === "multidisciplinary"
-    ? multidisciplinary
-    : scienceImage;
+      ? biological
+      : string === "multidisciplinary"
+        ? multidisciplinary
+        : scienceImage;
 
 const JournalsHome = () => {
   const { slug } = useParams();
