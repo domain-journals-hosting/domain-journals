@@ -81,23 +81,24 @@ function App() {
   return (
     <div className="App">
       <ScrollToTop />
-      {/* Maintenance Banner */}
-      <div
-        style={{
-          background: "#35b40f",
-          color: "#000",
-          textAlign: "center",
-          padding: "10px",
-          fontWeight: "500",
-          fontSize: "14px",
-        }}
-      >
-        We're currently performing scheduled maintenance. The site, email
-        services, and some features may be temporarily unavailable. We'll be
-        back shortly — thank you for your patience.
-      </div>
       <Nav isHeroVisible={isHeroVisible} />
       <main style={{ paddingTop: !showNav ? 0 : "70px" }}>
+        {/* Maintenance Banner */}
+        <div
+          style={{
+            background: "#35b40f",
+            color: "#000",
+            textAlign: "center",
+            padding: "10px",
+            fontWeight: "500",
+            fontSize: "14px",
+            zIndex: 1000000,
+          }}
+        >
+          We're currently performing scheduled maintenance. The site, email
+          services, and some features may be temporarily unavailable. We'll be
+          back shortly — thank you for your patience.
+        </div>
         <Routes>
           <Route
             path="/"
