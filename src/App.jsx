@@ -84,7 +84,7 @@ function App() {
       {/* Maintenance Banner */}
       <div
         style={{
-          background: "#f59e0b",
+          background: "#35b40f",
           color: "#000",
           textAlign: "center",
           padding: "10px",
