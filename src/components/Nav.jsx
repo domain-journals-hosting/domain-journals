@@ -65,7 +65,7 @@ const Nav = ({ isHeroVisible }) => {
         className="nav-wrapper no-print"
         style={{
           position: "fixed",
-          top: 0,
+          top: isMobile ? 70 : 30,
           left: 0,
           right: 0,
           zIndex: 999,
