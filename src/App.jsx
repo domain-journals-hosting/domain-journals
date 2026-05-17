@@ -92,7 +92,9 @@ function App() {
           fontSize: "14px",
         }}
       >
-        We'll be right back — we're currently updating the site.
+        We're currently performing scheduled maintenance. The site, email
+        services, and some features may be temporarily unavailable. We'll be
+        back shortly — thank you for your patience.
       </div>
       <Nav isHeroVisible={isHeroVisible} />
       <main style={{ paddingTop: !showNav ? 0 : "70px" }}>
