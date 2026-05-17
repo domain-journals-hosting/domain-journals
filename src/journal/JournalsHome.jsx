@@ -32,8 +32,6 @@ const JournalsHome = () => {
           rel="canonical"
           href={`https://domainjournals.com/journals/${slug}`}
         />
-        <meta name="citation_journal_title" content={journal.title} />
-        <meta name="citation_publisher" content="Domain Journals" />
       </Helmet>
       <JournalHeader slug={slug} />
       <div className="journal-container-home">
