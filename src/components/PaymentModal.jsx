@@ -41,6 +41,7 @@ const PaymentModal = ({ course, open, onClose }) => {
 
   const message = `${user.name} payment for ${course.title}`;
   const copyMessage = () => {
+    if (typeof window === "undefined") return;
     navigator.clipboard.writeText(message);
     window.alert("Copied");
   };

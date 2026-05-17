@@ -10,8 +10,10 @@ const Payments = () => {
   const [nameFilter, setNameFilter] = useState("");
   const [filteredPayments, setFilteredPayments] = useState([]);
   const [error, setError] = useState("");
-  const isMobile = window.matchMedia("(max-width: 450px)").matches;
-  console.log(isMobile);
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    setIsMobile(window.matchMedia("(max-width: 450px)").matches);
+  }, []);
   useEffect(() => {
     fetchPayments();
   }, []);

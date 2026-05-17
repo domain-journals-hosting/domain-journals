@@ -1,8 +1,11 @@
+import { useEffect, useState } from "react";
 import { FaCheck, FaTrashAlt } from "react-icons/fa";
 
 const PaymentItem = ({ payment, confirmPayment, deletePayment }) => {
-  const isMobile = window.matchMedia("(max-width: 450px)").matches;
-
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    setIsMobile(window.matchMedia("(max-width: 450px)").matches);
+  }, []);
   return (
     <div
       style={{

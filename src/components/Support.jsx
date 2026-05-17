@@ -1,6 +1,16 @@
+import { Helmet } from "react-helmet";
+
 const Support = () => {
   return (
     <div style={{ padding: "20px" }}>
+      <Helmet>
+        <title>Support Domain Journals</title>
+        <meta
+          name="description"
+          content="Support Domain Journals and help us continue providing free open access publishing for researchers worldwide."
+        />
+        <link rel="canonical" href="https://www.domainjournals.com/support" />
+      </Helmet>
       <h1>Support</h1>
       <p>Sources of support for the journal include:</p>
 

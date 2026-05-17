@@ -13,33 +13,30 @@ const CheckResults = () => {
   const [divisor, setDivisor] = useState(30);
 
   useEffect(() => {
-  if (!selectedExam || !exams?.length) return;
+    if (!selectedExam || !exams?.length) return;
 
-  const exam = exams.find((e) => e._id === selectedExam);
-  if (!exam) return;
+    const exam = exams.find((e) => e._id === selectedExam);
+    if (!exam) return;
 
-  let title = exam.description || "Exam Results";
+    let title = exam.description || "Exam Results";
 
-  if (selectedDepartment !== "all") {
-    title += ` - ${selectedDepartment}`;
-  }
+    if (selectedDepartment !== "all") {
+      title += ` - ${selectedDepartment}`;
+    }
 
-  if (selectedLevel !== "all") {
-    title += ` - ${selectedLevel}L`;
-  }
+    if (selectedLevel !== "all") {
+      title += ` - ${selectedLevel}L`;
+    }
 
-  document.title = title;
-}, [selectedExam, selectedDepartment, selectedLevel, exams]);
-  
+    document.title = title;
+  }, [selectedExam, selectedDepartment, selectedLevel, exams]);
+
   const saveDivisors = (e) => {
     const newValue = +e.target.value;
-    setDivisor(+e.target.value);
+    setDivisor(newValue);
+    if (typeof window === "undefined") return;
     const savedDivisors = JSON.parse(localStorage.getItem("divisors")) || {};
-    console.log(savedDivisors);
-    const divisors = {
-      ...savedDivisors,
-      ...{ [selectedExam]: newValue },
-    };
+    const divisors = { ...savedDivisors, [selectedExam]: newValue };
     localStorage.setItem("divisors", JSON.stringify(divisors));
   };
 
@@ -84,9 +81,9 @@ const CheckResults = () => {
   }, [exams, selectedExam]);
 
   const availableDepartments = results.length
-  ? new Set(results.map((r) => r.user.department || ""))
-  : [];
-  
+    ? new Set(results.map((r) => r.user.department || ""))
+    : [];
+
   if (loading) return <p className="loading">Loading....</p>;
   const select = (
     <>
@@ -116,10 +113,10 @@ const CheckResults = () => {
         <option value="all">All</option>
 
         {Array.from(availableDepartments).map((d) => (
-  <option key={d || "no-dept"} value={d}>
-    {d ? d.charAt(0).toUpperCase() + d.slice(1) : "No Dept"}
-  </option>
-))}
+          <option key={d || "no-dept"} value={d}>
+            {d ? d.charAt(0).toUpperCase() + d.slice(1) : "No Dept"}
+          </option>
+        ))}
       </select>
 
       <label htmlFor="level">Level: </label>
@@ -190,10 +187,11 @@ const CheckResults = () => {
                     <td>{res?.user?.matricNumber}</td>
                     <td>{res?.user?.level}</td>
                     <td>
-  {res?.user?.department
-    ? res.user.department.charAt(0).toUpperCase() + res.user.department.slice(1)
-    : "No Dept"}
-</td>
+                      {res?.user?.department
+                        ? res.user.department.charAt(0).toUpperCase() +
+                          res.user.department.slice(1)
+                        : "No Dept"}
+                    </td>
                     <td className="no-print" style={{ whiteSpace: "noWrap" }}>
                       {res.score} / {res.totalScore}
                     </td>
