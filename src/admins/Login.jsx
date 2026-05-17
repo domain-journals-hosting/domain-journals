@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "../api/axios";
 import { useUser } from "../hooks/useUser";
+import "../styles/auth.css";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
@@ -9,24 +10,22 @@ const AdminLogin = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { setUser, login } = useUser();
+  const { login } = useUser();
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
     if (!email || !password) {
       setError("Fill in all fields");
       return;
     }
-
+    setError("");
+    setLoading(true);
     try {
-      setLoading(true);
-      setError("");
-
       const res = await axios.post(
         "/admin/login",
         { email, password },
-        { withCredentials: true }
+        { withCredentials: true },
       );
-      console.log(res);
       login(res.data.user);
       navigate("/admin/dashboard");
     } catch (err) {
@@ -37,90 +36,51 @@ const AdminLogin = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.heading}>Login</h2>
+    <div className="auth-page">
+      <div className="auth-card">
+        <h1 className="auth-title">Admin sign in</h1>
+        <p className="auth-subtitle">Domain Journals admin portal</p>
 
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        style={styles.input}
-        autoComplete="username"
-      />
+        {error && <p className="auth-error">{error}</p>}
 
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        style={styles.input}
-        autoComplete="current-password"
-      />
+        <form onSubmit={handleLogin} className="auth-form">
+          <div className="auth-field">
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              placeholder="admin@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete="username"
+              required
+            />
+          </div>
+          <div className="auth-field">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              placeholder="Your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
+              required
+            />
+          </div>
+          <button type="submit" className="auth-btn" disabled={loading}>
+            {loading ? "Signing in..." : "Sign in"}
+          </button>
+        </form>
 
-      <button
-        onClick={handleLogin}
-        disabled={loading}
-        style={{
-          ...styles.button,
-          opacity: loading ? 0.7 : 1,
-          cursor: loading ? "not-allowed" : "pointer",
-        }}
-      >
-        {loading ? "Logging in..." : "Login"}
-      </button>
-
-      <p>
-        <Link to="/admin/forgot">Fogotten pasword?</Link>{" "}
-      </p>
-
-      {error && <p style={styles.error}>{error}</p>}
+        <div className="auth-links">
+          <Link to="/admin/forgot" className="auth-link-btn">
+            Forgotten password?
+          </Link>
+        </div>
+      </div>
     </div>
   );
 };
 
 export default AdminLogin;
-
-const styles = {
-  container: {
-    maxWidth: 400,
-    margin: "50px auto",
-    padding: 20,
-    borderRadius: 10,
-    boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-    backgroundColor: "#fff",
-    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-  },
-  heading: {
-    marginBottom: 20,
-    textAlign: "center",
-    color: "#333",
-  },
-  input: {
-    width: "100%",
-    padding: "10px 12px",
-    marginBottom: 15,
-    borderRadius: 6,
-    border: "1px solid #ccc",
-    fontSize: 16,
-    outline: "none",
-    boxSizing: "border-box",
-    transition: "border-color 0.3s",
-  },
-  button: {
-    width: "100%",
-    padding: "12px",
-    borderRadius: 6,
-    border: "none",
-    backgroundColor: "#007bff",
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "600",
-    transition: "background-color 0.3s",
-  },
-  error: {
-    color: "crimson",
-    marginTop: 10,
-    textAlign: "center",
-  },
-};

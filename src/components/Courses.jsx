@@ -151,6 +151,7 @@ const Courses = () => {
               {course.paid && course.exams.length ? (
                 course.exams.map((exam) => (
                   <Link
+                    key={exam._id}
                     style={{ marginTop: "20px", display: "block" }}
                     to={`/exam/${exam._id}`}
                   >

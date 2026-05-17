@@ -1,0 +1,45 @@
+.archive-details {
+  margin-bottom: 1.2rem;
+  padding: 1rem 0;
+  border-bottom: 0.5px solid #e8f5e9;
+}
+
+.archive-details__actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.archive-details__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.archive-details__btn--view {
+  background-color: #659377;
+  color: #f1f8e9;
+}
+
+.archive-details__btn--view:hover {
+  background-color: #4e745b;
+}
+
+.archive-details__btn--download {
+  background-color: transparent;
+  color: #659377;
+  border: 1px solid #659377;
+}
+
+.archive-details__btn--download:hover {
+  background-color: #659377;
+  color: #f1f8e9;
+}

@@ -339,7 +339,7 @@ const CourseForm = ({ editing = false }) => {
                     if (fileInputRefs.current[index]?.files[0]) {
                       handleFileUpload(
                         fileInputRefs.current[index].files[0],
-                        index
+                        index,
                       );
                     } else {
                       setToast({
@@ -552,7 +552,7 @@ const CourseForm = ({ editing = false }) => {
             <p>Exams</p>
             {exams.length &&
               exams.map((exam) => (
-                <p style={{ marginBottom: "20px" }}>
+                <p key={exam._id} style={{ marginBottom: "20px" }}>
                   <span>
                     {exam.description}{" "}
                     <Link to={`/edit-exam/${exam._id}`}>Edit exam</Link>

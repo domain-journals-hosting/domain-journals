@@ -7,18 +7,17 @@ import biological from "../assets/biological.jpg";
 import multidisciplinary from "../assets/multidisciplinary.jpg";
 import scienceImage from "../assets/science.jpg";
 import { Helmet } from "react-helmet";
-const source = (string) =>
-  string === "health"
-    ? health
-    : string === "biological"
-      ? biological
-      : string === "multidisciplinary"
-        ? multidisciplinary
-        : scienceImage;
+
+const imageMap = {
+  health,
+  biological,
+  multidisciplinary,
+  science: scienceImage,
+};
 
 const JournalsHome = () => {
   const { slug } = useParams();
-  const journal = journals.find((journal) => journal.slug === slug);
+  const journal = journals.find((j) => j.slug === slug);
 
   return (
     <>
@@ -33,13 +32,20 @@ const JournalsHome = () => {
           href={`https://domainjournals.com/journals/${slug}`}
         />
       </Helmet>
-      <JournalHeader slug={slug} />
-      <div className="journal-container-home">
-        <img src={source(journal.image)} alt="" />
-        <h1 className="journal-title">{journal.title}</h1>
-        <p className="journal-description">{journal.description}</p>
 
-        <Link to="archive">View archive</Link>
+      <JournalHeader slug={slug} />
+
+      <div className="journal-home">
+        <div className="journal-home__hero">
+          <img src={imageMap[journal.image]} alt={journal.title} />
+          <div className="journal-home__hero-text">
+            <h1>{journal.title}</h1>
+            <p>{journal.description}</p>
+            <Link to="archive" className="journal-home__archive-link">
+              <i className="ti ti-archive" aria-hidden="true" /> View archive
+            </Link>
+          </div>
+        </div>
       </div>
     </>
   );

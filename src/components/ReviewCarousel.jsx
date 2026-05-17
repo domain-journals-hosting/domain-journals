@@ -85,7 +85,7 @@ const ReviewCarousel = () => {
           alt={review?.name || "Author"}
           className="review-avatar"
         />
-        <p className="review-text">"{review?.text}"</p>
+        <p className="review-text">&quot;{review?.text}&quot;</p>
         <span className="review-name">— {review?.name}</span>
       </div>
 

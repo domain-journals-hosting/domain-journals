@@ -34,33 +34,34 @@ const ReviewPayments = () => {
         statusFilter,
         nameFilter,
         normalize,
-        setFiltered
+        setFiltered,
       ) => {
         let result = payments;
 
         if (courseFilter !== "all") {
           result = result.filter(
-            (p) => p.course?.title?.toLowerCase() === courseFilter.toLowerCase()
+            (p) =>
+              p.course?.title?.toLowerCase() === courseFilter.toLowerCase(),
           );
         }
 
         if (statusFilter !== "all") {
           result = result.filter(
-            (p) => p.confirmed.toString() === statusFilter
+            (p) => p.confirmed.toString() === statusFilter,
           );
         }
 
         if (nameFilter.trim() !== "") {
           const normalizedQuery = normalize(nameFilter);
           result = result.filter((p) =>
-            p._normalizedName.includes(normalizedQuery)
+            p._normalizedName.includes(normalizedQuery),
           );
         }
 
         setFiltered(result);
       },
-      250
-    )
+      250,
+    ),
   ).current;
 
   useEffect(() => {
@@ -70,7 +71,7 @@ const ReviewPayments = () => {
       statusFilter,
       nameFilter,
       normalize,
-      setFilteredPayments
+      setFilteredPayments,
     );
   }, [payments, courseFilter, statusFilter, nameFilter]);
 
@@ -99,7 +100,7 @@ const ReviewPayments = () => {
           "made by " +
           name +
           " for " +
-          title
+          title,
       )
     )
       return;
@@ -119,7 +120,7 @@ const ReviewPayments = () => {
           "made by " +
           name +
           " for " +
-          title
+          title,
       )
     )
       return;
@@ -140,11 +141,11 @@ const ReviewPayments = () => {
   // update payment after confirm
   const approvePayment = (id) => {
     setPayments((prev) =>
-      prev.map((p) => (p._id === id ? { ...p, confirmed: true } : p))
+      prev.map((p) => (p._id === id ? { ...p, confirmed: true } : p)),
     );
 
     setFilteredPayments((prev) =>
-      prev.map((p) => (p._id === id ? { ...p, confirmed: true } : p))
+      prev.map((p) => (p._id === id ? { ...p, confirmed: true } : p)),
     );
   };
 
@@ -152,7 +153,7 @@ const ReviewPayments = () => {
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   const allCourses = [...new Set(payments.map((p) => p.course?.title))].filter(
-    Boolean
+    Boolean,
   );
 
   const selectCourseFilter = (
@@ -164,7 +165,9 @@ const ReviewPayments = () => {
     >
       <option value="all">All</option>
       {allCourses.map((c) => (
-        <option value={c.toLowerCase()}>{c}</option>
+        <option key={c} value={c.toLowerCase()}>
+          {c}
+        </option>
       ))}
     </select>
   );
@@ -177,7 +180,9 @@ const ReviewPayments = () => {
     >
       <option value="all">All</option>
       {[true, false].map((c) => (
-        <option value={c}>{c ? "Confirmed" : "Unconfirmed"}</option>
+        <option key={c} value={c}>
+          {c ? "Confirmed" : "Unconfirmed"}
+        </option>
       ))}
     </select>
   );

@@ -5,6 +5,7 @@ import "../styles/archive.css";
 import JournalHeader from "./JournalHeader";
 import ArchiveDetails from "../components/ArchiveDetails";
 import journals from "../data/journals";
+import { Helmet } from "react-helmet";
 
 const Archive = () => {
   const { slug } = useParams();
@@ -18,7 +19,6 @@ const Archive = () => {
         const res = await axios.get(`accepted/${slug}`);
         const { archive, manuscripts } = res.data;
 
-        // derive volume ranking from distinct years across both collections
         const allYears = [
           ...new Set([
             ...manuscripts.map((m) => m.year),
@@ -34,16 +34,12 @@ const Archive = () => {
         const groupedMap = {};
 
         manuscripts.forEach((m) => {
-          const year = m.year;
-          const issue = m.issue;
+          const { year, issue } = m;
           const vol = yearToVol[year];
           const key = `${year} | Vol. ${vol} Issue ${issue}`;
-
           if (!groupedMap[key])
             groupedMap[key] = { items: [], file: null, year, vol, issue };
           groupedMap[key].items.push(m);
-
-          // match archive file by year + issue
           const archiveFile = archive.find(
             (a) => a.year === year && a.issue === issue,
           );
@@ -53,13 +49,10 @@ const Archive = () => {
           }
         });
 
-        // placeholders for archive entries with no manuscripts
         archive.forEach((a) => {
-          const year = a.year;
-          const issue = a.issue;
+          const { year, issue } = a;
           const vol = yearToVol[year];
           const key = `${year} | Vol. ${vol} Issue ${issue}`;
-
           if (!groupedMap[key]) {
             groupedMap[key] = {
               items: [],
@@ -86,7 +79,7 @@ const Archive = () => {
             if (a.volume !== b.volume) return b.volume - a.volume;
             return b.issue - a.issue;
           })
-          ?.filter((g) => g.issue > 0);
+          .filter((g) => g.issue > 0);
 
         setGrouped(sortedGroups);
       } catch (error) {
@@ -96,12 +89,12 @@ const Archive = () => {
         setLoading(false);
       }
     };
-
     fetchData();
   }, [slug]);
 
   const journal = journals.find((j) => j.slug === slug);
   const journalTitle = journal?.title || "Journal";
+
   return (
     <>
       <Helmet>
@@ -115,54 +108,63 @@ const Archive = () => {
           href={`https://www.domainjournals.com/journals/${slug}/archive`}
         />
       </Helmet>
+
       <JournalHeader slug={slug} />
-      <div className="archive">
+
+      <div className="archive-page">
         <h1>Journal Archive</h1>
-        {loading && <p className="loading">Loading...</p>}
-        {err && <p className="error">{err}</p>}
-        {!grouped?.length && <p>No items here</p>}
+
+        {loading && <p className="archive__status">Loading...</p>}
+        {err && <p className="archive__error">{err}</p>}
+        {!loading && !err && grouped.length === 0 && (
+          <p className="archive__status">No archived issues yet.</p>
+        )}
+
         {!loading &&
           !err &&
-          grouped?.map(({ group, items, file, fileUrl }) => (
+          grouped.map(({ group, items, file, fileUrl }) => (
             <div key={group} className="archive-group">
-              <h2>{group}</h2>
+              <h2 className="archive-group__title">{group}</h2>
 
               {file && <ArchiveDetails file={file} fileUrl={fileUrl} />}
 
-              {items?.length === 0 ? (
-                <p className="empty">Nothing to show</p>
+              {items.length === 0 ? (
+                <p className="archive-group__empty">
+                  No articles in this issue.
+                </p>
               ) : (
-                <ul>
-                  {items?.map((m) => (
-                    <li key={m._id}>
-                      <h3>
-                        {m.title} ({m.articleType || "Editorial"})
-                      </h3>
-                      ID: {m.customId}
-                      <p
-                        title={[
-                          m.author,
-                          ...m.coAuthors.map((a) => a.name),
-                        ].join(", ")}
-                      >
-                        <strong>Author(s):</strong>{" "}
-                        {(() => {
-                          const names = [
-                            m.author,
-                            ...m.coAuthors.map((a) => a.name),
-                          ].join(", ");
-                          return names.length > 100
-                            ? names.slice(0, 97) + "..."
-                            : names;
-                        })()}
-                      </p>
-                      <div className="actions">
-                        <Link to="/view" state={{ manuscript: m }}>
-                          <button>📄 View Abstract</button>
-                        </Link>
-                      </div>
-                    </li>
-                  ))}
+                <ul className="archive-list">
+                  {items.map((m) => {
+                    const names = [m.author, ...m.coAuthors.map((a) => a.name)];
+                    const authorsDisplay =
+                      names.length > 10
+                        ? `${m.author.trim().split(" ").slice(-1)[0]} et al.`
+                        : names.join(", ");
+                    return (
+                      <li key={m._id} className="archive-item">
+                        <div className="archive-item__meta">
+                          <span className="archive-item__type">
+                            {m.articleType || "Editorial"}
+                          </span>
+                        </div>
+                        <h3 className="archive-item__title">{m.title}</h3>
+                        <p className="archive-item__id">ID: {m.customId}</p>
+                        <p
+                          className="archive-item__authors"
+                          title={names.join(", ")}
+                        >
+                          <span>Author(s):</span> {authorsDisplay}
+                        </p>
+                        <div className="archive-item__actions">
+                          <Link to="/view" state={{ manuscript: m }}>
+                            <button className="btn-outline">
+                              View Abstract
+                            </button>
+                          </Link>
+                        </div>
+                      </li>
+                    );
+                  })}
                 </ul>
               )}
             </div>

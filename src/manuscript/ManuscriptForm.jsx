@@ -1,10 +1,29 @@
 import { useState, useEffect } from "react";
 import journals, { slug } from "../data/journals";
-import "../styles/form.css";
+import "../styles/manuscriptForm.css";
 import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaPlus } from "react-icons/fa";
 import { Helmet } from "react-helmet";
+
+const articleTypes = [
+  "Editorial",
+  "Research Article",
+  "Case Report",
+  "Review Article",
+  "Short Article",
+  "Short Communication",
+  "Letter to Editor",
+  "Commentary",
+  "Conference Proceeding",
+  "Rapid Communication",
+  "Special Issue Article",
+  "Annual Meeting Abstract",
+  "Meeting Report",
+  "Proceedings",
+  "Expert Review",
+];
+
 const ManuscriptForm = () => {
   const [author, setAuthor] = useState("");
   const [coAuthors, setCoAuthors] = useState([{ name: "", email: "" }]);
@@ -17,29 +36,18 @@ const ManuscriptForm = () => {
   const [countries, setCountries] = useState([]);
   const [country, setCountry] = useState("");
   const [errMsg, setErrMsg] = useState(null);
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const deleteCoAuthor = (index) => {
-    setCoAuthors((prev) => prev.filter((_, i) => i !== index));
-  };
-  const addNewCoAuthor = () =>
-    setCoAuthors((prev) => [...prev, { name: "", email: "" }]);
-
-  const handleCoAuthorChange = (index, field, value) => {
-    const updated = [...coAuthors];
-    updated[index] = { ...updated[index], [field]: value };
-    setCoAuthors(updated);
-  };
   useEffect(() => {
     setErrMsg(null);
   }, [author, email, title, abstract, country]);
+
   useEffect(() => {
     fetch("https://restcountries.com/v3.1/all?fields=name")
       .then((res) => res.json())
       .then((data) => {
-        const names = data.map((c) => c.name.common).sort();
-        setCountries(names);
+        setCountries(data.map((c) => c.name.common).sort());
       })
       .catch(() => {
         setCountries([
@@ -57,80 +65,81 @@ const ManuscriptForm = () => {
       });
   }, []);
 
+  const addCoAuthor = () =>
+    setCoAuthors((prev) => [...prev, { name: "", email: "" }]);
+
+  const deleteCoAuthor = (index) =>
+    setCoAuthors((prev) => prev.filter((_, i) => i !== index));
+
+  const handleCoAuthorChange = (index, field, value) => {
+    const updated = [...coAuthors];
+    updated[index] = { ...updated[index], [field]: value };
+    setCoAuthors(updated);
+  };
+
   const handleSubmit = async (e) => {
+    e.preventDefault();
     setLoading(true);
     setErrMsg(null);
-    let fileUrl = "";
-    e.preventDefault();
+
     const allCoAuthorsValid = coAuthors.every(
-      (c) => c.name.trim() && c.email.trim()
+      (c) => c.name.trim() && c.email.trim(),
     );
     if (!allCoAuthorsValid) {
       setErrMsg("Please fill in all co-author name and email fields.");
       setLoading(false);
       return;
     }
-    if (!file) return setErrMsg("Please select a file");
-    const formData = new FormData();
+    if (!file) {
+      setErrMsg("Please select a file.");
+      setLoading(false);
+      return;
+    }
+
     const allowedTypes = [
       "application/pdf",
       "application/msword",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     ];
-
     if (!allowedTypes.includes(file.type)) {
-      setErrMsg("Only .doc, .docx, or  files are allowed.");
+      setErrMsg("Only .pdf, .doc, or .docx files are allowed.");
       setLoading(false);
       return;
     }
 
-    formData.append("file", file);
-    const ext = file.name.split(".").pop();
-    formData.append("extension", ext);
-    for (let pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
-    }
+    let fileUrl = "";
     try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("extension", file.name.split(".").pop());
       const res = await axios.post("/file", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        headers: { "Content-Type": "multipart/form-data" },
       });
-      console.log(res.data.url);
       fileUrl = res.data.url;
     } catch (err) {
-      setErrMsg("File upload failed, please try again");
+      setErrMsg("File upload failed, please try again.");
       setLoading(false);
-      console.error("upload failed", err);
       return;
     }
-    const manuscript = {
-      author,
-      email,
-      journal: journalSlug,
-      title,
-      abstract,
-      file: fileUrl,
-      country,
-      coAuthors,
-      articleType,
-    };
 
-    const submit = async () => {
-      try {
-        const res = await axios.post("/manuscript", manuscript);
-        console.log(res.data);
-        navigate("/success");
-        return;
-      } catch (error) {
-        setLoading(false);
-        if (!error?.response) return setErrMsg("No server response");
-        setErrMsg(error?.data?.response?.error || "submitting failed");
-        console.error("Attempt failed", error);
-      }
-    };
-
-    submit();
+    try {
+      await axios.post("/manuscript", {
+        author,
+        email,
+        journal: journalSlug,
+        title,
+        abstract,
+        file: fileUrl,
+        country,
+        coAuthors,
+        articleType,
+      });
+      navigate("/success");
+    } catch (error) {
+      setLoading(false);
+      if (!error?.response) return setErrMsg("No server response");
+      setErrMsg(error?.response?.data?.error || "Submission failed");
+    }
   };
 
   return (
@@ -139,183 +148,203 @@ const ManuscriptForm = () => {
         <title>Submit Manuscript - Domain Journals</title>
         <meta
           name="description"
-          content="Submit your manuscript or research article for peer-reviewed publication on Domain Journals. Fast, easy and trusted publishing."
+          content="Submit your manuscript or research article for peer-reviewed publication on Domain Journals."
         />
         <link rel="canonical" href="https://domainjournals.com/submit" />
       </Helmet>
-      <div className="form-wrapper" style={{ paddingTop: "70px" }}>
-        <h1>Submit a Manuscript</h1>
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="name">Name:</label>
-          <input
-            required
-            id="name"
-            type="text"
-            placeholder="Enter your name"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-          />
 
-          <label htmlFor="email">Email:</label>
-          <input
-            required
-            id="email"
-            type="email"
-            placeholder="Enter email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <p>We'll never share your email with anyone else</p>
+      <div className="manuscript-page">
+        <div className="manuscript-header">
+          <h1>Submit a Manuscript</h1>
+          <p>
+            Fill in the details below to submit your research for peer review.
+          </p>
+        </div>
 
-          <h2>Co-authors</h2>
-          {coAuthors.map((c, i) => (
-            <div
-              key={i}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginBottom: "1rem",
-              }}
-            >
-              <div style={{ flexGrow: 1 }}>
-                <h3>Co-author {i + 1}</h3>
-                <input
-                  required
-                  style={{ margin: "10px" }}
-                  type="text"
-                  value={coAuthors[i].name}
-                  placeholder="Name"
-                  onChange={(e) =>
-                    handleCoAuthorChange(i, "name", e.target.value)
-                  }
-                  id={`co-author-${i}-name`}
-                />
-                <input
-                  required
-                  style={{ margin: "10px" }}
-                  type="text"
-                  value={coAuthors[i].email}
-                  placeholder="Email"
-                  onChange={(e) =>
-                    handleCoAuthorChange(i, "email", e.target.value)
-                  }
-                  id={`co-author-${i}-email`}
-                />
-              </div>
+        <form onSubmit={handleSubmit} className="manuscript-form">
+          <section className="form-section">
+            <h2 className="form-section__title">Author information</h2>
+
+            <div className="form-field">
+              <label htmlFor="name">Full name</label>
+              <input
+                required
+                id="name"
+                type="text"
+                placeholder="Your full name"
+                value={author}
+                onChange={(e) => setAuthor(e.target.value)}
+              />
+            </div>
+
+            <div className="form-field">
+              <label htmlFor="email">Email</label>
+              <input
+                required
+                id="email"
+                type="email"
+                placeholder="your@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <span className="form-field__hint">
+                We'll never share your email with anyone else.
+              </span>
+            </div>
+
+            <div className="form-field">
+              <label htmlFor="country">Country</label>
+              <select
+                required
+                id="country"
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
+              >
+                <option value="">Select your country</option>
+                {countries.map((c, i) => (
+                  <option key={i} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </section>
+
+          <section className="form-section">
+            <div className="form-section__header">
+              <h2 className="form-section__title">Co-authors</h2>
               <button
                 type="button"
-                onClick={() => deleteCoAuthor(i)}
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: "red",
-                  cursor: "pointer",
-                  marginLeft: "10px",
-                  alignSelf: "flex-start",
-                }}
-                aria-label={`Delete co-author ${i + 1}`}
+                className="btn-add-coauthor"
+                onClick={addCoAuthor}
               >
-                <FaTrash />
+                <FaPlus /> Add co-author
               </button>
             </div>
-          ))}
 
-          <button
-            type="button"
-            style={{
-              backgroundColor: "green",
-              fontSize: "20px",
-              borderRadius: "30px",
-            }}
-            onClick={addNewCoAuthor}
-          >
-            Add co-author
-          </button>
-          <label htmlFor="journal">Journal:</label>
-          <select
-            required
-            id="journal"
-            value={journalSlug}
-            onChange={(e) => setJournalSlug(e.target.value)}
-          >
-            {journals.map((j, index) => (
-              <option key={index} value={slug(j)}>
-                {j}
-              </option>
+            {coAuthors.map((c, i) => (
+              <div key={i} className="coauthor-row">
+                <div className="coauthor-row__fields">
+                  <div className="form-field">
+                    <label htmlFor={`coauthor-name-${i}`}>
+                      Co-author {i + 1} — name
+                    </label>
+                    <input
+                      required
+                      id={`coauthor-name-${i}`}
+                      type="text"
+                      placeholder="Full name"
+                      value={c.name}
+                      onChange={(e) =>
+                        handleCoAuthorChange(i, "name", e.target.value)
+                      }
+                    />
+                  </div>
+                  <div className="form-field">
+                    <label htmlFor={`coauthor-email-${i}`}>Email</label>
+                    <input
+                      required
+                      id={`coauthor-email-${i}`}
+                      type="email"
+                      placeholder="Email address"
+                      value={c.email}
+                      onChange={(e) =>
+                        handleCoAuthorChange(i, "email", e.target.value)
+                      }
+                    />
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  className="btn-delete-coauthor"
+                  onClick={() => deleteCoAuthor(i)}
+                  aria-label={`Remove co-author ${i + 1}`}
+                >
+                  <FaTrash />
+                </button>
+              </div>
             ))}
-          </select>
-          <label htmlFor="articletype">Article Type:</label>
-          <select
-            required
-            className="form-select"
-            id="articletype"
-            value={articleType}
-            onChange={(e) => setArticleType(e.target.value)}
-          >
-            <option value="Editorial">Editorial</option>
-            <option value="Research Article">Research Article</option>
-            <option value="Case Report">Case Report</option>
-            <option value="Review Article">Review Article</option>
-            <option value="Short Article">Short Article</option>
-            <option value="Short Communication">Short Communication</option>
-            <option value="Letter to Editor">Letter to Editor</option>
-            <option value="Commentry">Commentry</option>
-            <option value="Conference Proceeding">Conference Proceeding</option>
-            <option value="Rapid Communication">Rapid Communication</option>
-            <option value="Special Issue Article">Special Issue Article</option>
-            <option value="Annual Meeting Abstract">
-              Annual Meeting Abstract
-            </option>
-            <option value="Meeting Report">Meeting Report</option>
-            <option value="Proceedings">Proceedings</option>
-            <option value="Expert Review">Expert Review</option>
-          </select>
+          </section>
 
-          <label htmlFor="title">Manuscript Title:</label>
-          <textarea
-            required
-            id="title"
-            rows={5}
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          ></textarea>
+          <section className="form-section">
+            <h2 className="form-section__title">Manuscript details</h2>
 
-          <label htmlFor="abstract">Abstract:</label>
-          <textarea
-            required
-            id="abstract"
-            rows={5}
-            value={abstract}
-            onChange={(e) => setAbstract(e.target.value)}
-          ></textarea>
+            <div className="form-field">
+              <label htmlFor="journal">Journal</label>
+              <select
+                required
+                id="journal"
+                value={journalSlug}
+                onChange={(e) => setJournalSlug(e.target.value)}
+              >
+                {journals.map((j, i) => (
+                  <option key={i} value={slug(j)}>
+                    {j}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <label htmlFor="file">Please attach your file as pdf/doc:</label>
-          <input
-            required
-            id="file"
-            type="file"
-            accept=".pdf, .doc"
-            onChange={(e) => setFile(e.target.files[0])}
-          />
+            <div className="form-field">
+              <label htmlFor="articletype">Article type</label>
+              <select
+                required
+                id="articletype"
+                value={articleType}
+                onChange={(e) => setArticleType(e.target.value)}
+              >
+                {articleTypes.map((t) => (
+                  <option key={t} value={t}>
+                    {t}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <label htmlFor="country">Country:</label>
-          <select
-            required
-            id="country"
-            value={country}
-            onChange={(e) => setCountry(e.target.value)}
-          >
-            <option value="">--Choose a country--</option>
-            {countries.map((c, i) => (
-              <option key={i} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
-          {errMsg && <p style={{ color: "red" }}>{errMsg}</p>}
-          <button type="submit" disabled={loading}>
-            {loading ? "Sending manuscript..." : "Send Manuscript"}
+            <div className="form-field">
+              <label htmlFor="title">Manuscript title</label>
+              <textarea
+                required
+                id="title"
+                rows={4}
+                placeholder="Enter the full title of your manuscript"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </div>
+
+            <div className="form-field">
+              <label htmlFor="abstract">Abstract</label>
+              <textarea
+                required
+                id="abstract"
+                rows={8}
+                placeholder="Enter your abstract"
+                value={abstract}
+                onChange={(e) => setAbstract(e.target.value)}
+              />
+            </div>
+
+            <div className="form-field">
+              <label htmlFor="file">Manuscript file</label>
+              <span className="form-field__hint">
+                Accepted formats: .pdf, .doc, .docx
+              </span>
+              <input
+                required
+                id="file"
+                type="file"
+                accept=".pdf,.doc,.docx"
+                onChange={(e) => setFile(e.target.files[0])}
+                className="file-input"
+              />
+            </div>
+          </section>
+
+          {errMsg && <p className="form-error">{errMsg}</p>}
+
+          <button type="submit" className="form-submit-btn" disabled={loading}>
+            {loading ? "Submitting manuscript..." : "Submit manuscript"}
           </button>
         </form>
       </div>

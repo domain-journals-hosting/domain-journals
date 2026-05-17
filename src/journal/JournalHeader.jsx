@@ -9,7 +9,7 @@ const JournalHeader = ({ slug }) => {
   const isMobile = useScreenSize();
   const [isOpened, setIsOpened] = useState(false);
   const location = useLocation();
-  const toggleMenu = () => setIsOpened((prev) => !prev);
+
   const links = [
     { label: "Journal Home", to: `/journals/${slug}` },
     { label: "Editorial board", to: `/journals/${slug}/editorial-board` },
@@ -20,49 +20,47 @@ const JournalHeader = ({ slug }) => {
 
   return (
     <nav className="journal-header">
-      {!isMobile && (
-        <ul>
+      {!isMobile ? (
+        <ul className="journal-header__links">
           {links.map(({ label, to }) => (
             <li key={to}>
               <Link
                 to={to}
-                className={location.pathname === to ? "active" : ""}
+                className={`journal-header__link${location.pathname === to ? " active" : ""}`}
               >
                 {label}
               </Link>
             </li>
           ))}
         </ul>
+      ) : (
+        <button
+          className="journal-toggle-btn"
+          onClick={() => setIsOpened((p) => !p)}
+          aria-label="Toggle menu"
+        >
+          {isOpened ? <FaTimes /> : <FaBars />}
+        </button>
       )}
 
-      {isMobile && (
+      {isMobile && isOpened && (
         <>
-          {isOpened ? (
-            <FaTimes onClick={toggleMenu} className="journal-toggle-icon" />
-          ) : (
-            <FaBars onClick={toggleMenu} className="journal-toggle-icon" />
-          )}
-
-          {isOpened && (
-            <>
-              <div className="journal-overlay" onClick={toggleMenu} />
-              <div className="journal-drawer">
-                <ul>
-                  {links.map(({ label, to }) => (
-                    <li key={to}>
-                      <Link
-                        to={to}
-                        className={location.pathname === to ? "active" : ""}
-                        onClick={toggleMenu}
-                      >
-                        {label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </>
-          )}
+          <div className="journal-overlay" onClick={() => setIsOpened(false)} />
+          <div className="journal-drawer">
+            <ul>
+              {links.map(({ label, to }) => (
+                <li key={to}>
+                  <Link
+                    to={to}
+                    className={`journal-drawer__link${location.pathname === to ? " active" : ""}`}
+                    onClick={() => setIsOpened(false)}
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </>
       )}
 
