@@ -13,10 +13,8 @@ const RecentArticles = ({ journal = null }) => {
       const URL = journal
         ? `/accepted/recent/?journal=${journal}`
         : `/accepted/recent/`;
-      console.log(URL);
       try {
         const res = await axios.get(URL);
-        console.log("Received:", res.data);
         setArticles(res.data);
       } catch (err) {
         console.error("Failed to load recent articles:", err);
@@ -24,72 +22,59 @@ const RecentArticles = ({ journal = null }) => {
         setLoading(false);
       }
     };
-
     fetchArticles();
-  }, []);
-
-  const handleShowMore = () => {
-    setVisibleCount((prev) => prev + 6);
-  };
+  }, [journal]);
 
   const visibleArticles = articles.slice(0, visibleCount);
 
   return (
-    <div
-      className="recent-articles"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "flex-start",
-      }}
-    >
-      <h2 className="section-title">Recent Articles</h2>
+    <section className="recent-articles">
+      <h2 className="recent-articles__title">Recent Articles</h2>
 
       {loading ? (
-        <p className="status-msg">Loading...</p>
+        <p className="recent-articles__status">Loading...</p>
       ) : articles.length === 0 ? (
-        <p className="status-msg">No recent articles available</p>
+        <p className="recent-articles__status">No recent articles available</p>
       ) : (
         <>
           <ul className="articles-list">
-            {visibleArticles.map((m) => (
-              <li key={m._id} className="article-card">
-                <h3 style={{ padding: 0, margin: 0 }} className="article-title">
-                  {m.title}
-                </h3>
-                <p
-                  title={[m.author, ...m.coAuthors.map((a) => a.name)].join(
-                    ", "
-                  )}
-                >
-                  <strong>Author(s): </strong>
-                  {(() => {
-                    const names = [m.author, ...m.coAuthors.map((a) => a.name)];
-                    return names.length > 10
-                      ? `${m.author.trim().split(" ").slice(-1)[0]} et al.`
-                      : names.join(", ");
-                  })()}
-                </p>
-                <p> ID: {m.customId}</p>
-                <div className="article-actions">
-                  <Link to="/view" state={{ manuscript: m }}>
-                    <button>📄 View Abstract</button>
-                  </Link>
-                </div>
-              </li>
-            ))}
+            {visibleArticles.map((m) => {
+              const names = [m.author, ...m.coAuthors.map((a) => a.name)];
+              const authorsDisplay =
+                names.length > 10
+                  ? `${m.author.trim().split(" ").slice(-1)[0]} et al.`
+                  : names.join(", ");
+              return (
+                <li key={m._id} className="article-card">
+                  <h3 className="article-card__title">{m.title}</h3>
+                  <p className="article-card__authors">
+                    <span>Author(s):</span>{" "}
+                    <span title={names.join(", ")}>{authorsDisplay}</span>
+                  </p>
+                  <p className="article-card__id">ID: {m.customId}</p>
+                  <div className="article-card__actions">
+                    <Link to="/view" state={{ manuscript: m }}>
+                      <button className="btn-outline">View Abstract</button>
+                    </Link>
+                  </div>
+                </li>
+              );
+            })}
           </ul>
 
           {visibleCount < articles.length && (
-            <div style={{ textAlign: "center", marginTop: "1rem" }}>
-              <button className="btn" onClick={handleShowMore}>
+            <div className="recent-articles__more">
+              <button
+                className="btn-primary"
+                onClick={() => setVisibleCount((p) => p + 6)}
+              >
                 Show more
               </button>
             </div>
           )}
         </>
       )}
-    </div>
+    </section>
   );
 };
 

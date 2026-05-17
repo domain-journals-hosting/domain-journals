@@ -1,103 +1,58 @@
 import { useState } from "react";
 import axios from "../api/axios";
+import "../styles/newsletter.css";
 
 const NewsletterSubscription = () => {
   const [email, setEmail] = useState("");
   const [msg, setMsg] = useState("");
+  const [isError, setIsError] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMsg("Subscribing...");
-
+    setIsError(false);
     try {
-      const res = await axios.post("/newsletter/subscribe", { email });
+      await axios.post("/newsletter/subscribe", { email });
       setMsg("Subscribed successfully!");
       setEmail("");
     } catch (err) {
+      setIsError(true);
       setMsg(
         err.response?.status === 409
           ? "You're already subscribed."
-          : err?.response?.data?.error || "Subscription failed."
+          : err?.response?.data?.error || "Subscription failed.",
       );
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} style={styles.section}>
-      <h2 style={styles.heading}>Join our newsletter</h2>
-
-      <div style={styles.box}>
+    <section className="newsletter">
+      <h2 className="newsletter__title">Join our newsletter</h2>
+      <p className="newsletter__sub">
+        Stay updated with the latest research and publications.
+      </p>
+      <form onSubmit={handleSubmit} className="newsletter__form">
         <input
           type="email"
-          placeholder="Email"
+          placeholder="Your email address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          style={styles.input}
+          className="newsletter__input"
         />
-        <button type="submit" style={styles.button}>
-          Join us
+        <button type="submit" className="newsletter__btn">
+          Subscribe
         </button>
-      </div>
-
+      </form>
       {msg && (
         <p
-          style={{
-            ...styles.message,
-            color:
-              msg === "Subscription failed." ||
-              msg === "A valid email is required."
-                ? "crimson"
-                : "#1b5e20",
-          }}
+          className={`newsletter__msg${isError ? " newsletter__msg--error" : ""}`}
         >
           {msg}
         </p>
       )}
-    </form>
+    </section>
   );
 };
 
 export default NewsletterSubscription;
-const styles = {
-  heading: {
-    fontSize: "1.5rem",
-    color: "#093238",
-    margin: "0 0 1rem",
-    fontWeight: 700,
-  },
-  box: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "stretch",
-    flexWrap: "wrap",
-    maxWidth: "500px",
-    borderRadius: "6px",
-    overflow: "hidden",
-  },
-  input: {
-    flex: "1 1 70%",
-    padding: "0.75rem 1rem",
-    fontSize: "1rem",
-    border: "none",
-    outline: "none",
-    backgroundColor: "#f9f9f9",
-    fontWeight: 500,
-    color: "#333",
-  },
-  button: {
-    flex: "1 1 30%",
-    backgroundColor: "#659377",
-    color: "#f1f8e9",
-    fontSize: "1rem",
-    fontWeight: 600,
-    border: "none",
-    cursor: "pointer",
-    transition: "background 0.3s ease",
-  },
-  message: {
-    fontSize: "0.95rem",
-    fontWeight: 500,
-    marginTop: "0.8rem",
-  },
-};

@@ -5,7 +5,6 @@ import welcome from "../assets/welcome.jpg";
 import "../styles/home.css";
 import Contact from "./Contact";
 import JournalCarousel from "../journal/JournalCarousel";
-import useScreenSize from "../hooks/useScreenSize";
 import RecentArticles from "./RecentArticles";
 import ReviewCarousel from "./ReviewCarousel";
 import { FaArrowRight } from "react-icons/fa";
@@ -19,10 +18,8 @@ const Home = ({ setIsHeroVisible }) => {
     const handleScroll = () => {
       if (!heroRef.current) return;
       const heroBottom = heroRef.current.getBoundingClientRect().bottom;
-      const offset = 100;
-      setIsHeroVisible(heroBottom - offset > 0);
+      setIsHeroVisible(heroBottom - 100 > 0);
     };
-
     handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -44,14 +41,13 @@ const Home = ({ setIsHeroVisible }) => {
           <img src={welcome} alt="Welcome" className="hero-image" />
           <div className="hero-text">
             <h1 className="typing">Discover. Inspire. Innovate.</h1>
-            <h2 style={{ color: "white" }}> Welcome to Domain Journals, </h2>
+            <h2>Welcome to Domain Journals</h2>
             <p>
-              your open-source gateway to groundbreaking research. From
+              Your open-source gateway to groundbreaking research. From
               cutting-edge Health Studies and Life-changing Biology
               breakthroughs to the latest in Science & Technology and
-              thought-provoking Multidisciplinary insights, every article is a
-              window into tomorrow’s innovations. Dive in, explore freely, and
-              join a global community shaping the next era of knowledge.
+              thought-provoking Multidisciplinary insights — every article is a
+              window into tomorrow's innovations.
             </p>
             <Link to="/journals" className="hero-button">
               Start Exploring ↓
@@ -61,88 +57,61 @@ const Home = ({ setIsHeroVisible }) => {
 
         <JournalCarousel journals={journals} />
 
-        <article>
-          <h3>
-            <Link to={"/signup"}>Become an author?</Link>
-          </h3>
+        <section className="cta-section">
+          <p className="cta-eyebrow">Open access publishing</p>
+          <h2>Contribute to the advancement of knowledge</h2>
+          <p className="cta-body">
+            Submit your research to Domain Journals and join a global community
+            of authors shaping the next era of discovery.
+          </p>
+          <div className="cta-actions">
+            <button
+              className="cta-btn-primary"
+              onClick={() => navigate("/submit")}
+            >
+              Submit a manuscript
+            </button>
+            <Link to="/signup" className="cta-btn-secondary">
+              Become an author
+            </Link>
+          </div>
+        </section>
 
-          <h3
-            style={{ textAlign: "center", fontWeight: "900", lineHeight: "2" }}
-          >
-            Contribute to the advancement of knowledge. Submit your article to
-            domain journals today
-          </h3>
-          <button
-            style={{ margin: "20px", padding: "20px", borderRadius: "25px" }}
-            onClick={() => navigate("/submit")}
-          >
-            Submit a manuscript
-          </button>
-          <div
-            style={{
-              padding: "10px",
-              backgroundColor: "#093238",
-              width: "100%",
-            }}
-          ></div>
-        </article>
-
-        <article
-          style={{
-            padding: "1.2rem 1.5rem",
-            margin: "0 15px 20px",
-            borderRadius: "1rem",
-            boxShadow: " 0 4px 10px rgba(0, 128, 0, 0.12)",
-            transition: "box-shadow 0.3s ease",
-          }}
-        >
-          <h2 style={{ whiteSpace: "nowrap", margin: "20px" }}>
-            Authors reviews
-          </h2>
+        <section className="reviews-section">
+          <h2>Author reviews</h2>
           <ReviewCarousel />
-        </article>
+        </section>
 
-        <section>
-          <div className="card">
+        <section className="cards-section">
+          <div className="card" onClick={() => navigate("publication-ethics")}>
             <h2>Publication ethics</h2>
             <p>
-              Prior to the submission of the manuscript for consideration,
-              please visit the journal catalog and the instructions for the
-              author sections.
+              Prior to submission, please visit the journal catalog and the
+              instructions for authors sections.
             </p>
-            <p
-              onClick={() => navigate("publication-ethics")}
-              style={{ cursor: "pointer" }}
-            >
+            <span className="card-link">
               View more <FaArrowRight />
-            </p>
+            </span>
           </div>
-          <div className="card">
+          <div className="card" onClick={() => navigate("review-process")}>
             <h2>Review process</h2>
             <p>
               Peer review is a fundamental step towards ensuring the standards
-              and quality of the scientific publication.
+              and quality of scientific publication.
             </p>
-            <p
-              onClick={() => navigate("review-process")}
-              style={{ cursor: "pointer" }}
-            >
+            <span className="card-link">
               View more <FaArrowRight />
-            </p>
+            </span>
           </div>
-          <div className="card">
+          <div className="card" onClick={() => navigate("support")}>
             <h2>Support Domain Journals</h2>
             <p>
-              Domain journals Publishers follows the Open Access Policy of
-              publication, which allows free online availability and access of
-              articles, immediately upon publication.
+              We follow the Open Access Policy, allowing free online
+              availability of articles immediately upon publication.
             </p>
-            <p
-              onClick={() => navigate("support")}
-              style={{ cursor: "pointer" }}
-            >
+            <span className="card-link">
               View more <FaArrowRight />
-            </p>
+            </span>
           </div>
         </section>
 
