@@ -14,7 +14,7 @@ const Guidelines = () => {
         <strong>{key}: </strong>
         <span>{value}</span> <br />
         <br />
-      </div>
+      </div>,
     );
   }
   console.log(tableHTML);
@@ -27,12 +27,23 @@ const Guidelines = () => {
         <strong>Referencing {key}: </strong>
         <span>{value}</span> <br />
         <br />
-      </div>
+      </div>,
     );
   }
   console.log(tableHTML);
   return (
     <>
+      <Helmet>
+        <title>{journal.title} - Author Guidelines | Domain Journals</title>
+        <meta
+          name="description"
+          content={`Author submission guidelines for ${journal.title}. Learn about formatting, ethical considerations, references, and the review process.`}
+        />
+        <link
+          rel="canonical"
+          href={`https://www.domainjournals.com/journals/${slug}/guidelines`}
+        />
+      </Helmet>
       <JournalHeader slug={slug} />
       <div
         style={{

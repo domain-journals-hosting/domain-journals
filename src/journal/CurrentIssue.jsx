@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import axios from "../api/axios";
 import "../styles/currentIssue.css";
 import JournalHeader from "./JournalHeader";
-import RecentArticles from "../components/RecentArticles";
+import journals from "../data/journals.json";
+import { Helmet } from "react-helmet";
 export const CurrentIssue = () => {
   const { slug } = useParams();
   const [manuscripts, setManuscripts] = useState([]);
@@ -30,9 +31,21 @@ export const CurrentIssue = () => {
 
     fetchAccepted();
   }, [slug]);
-
+  const journal = journals.find((j) => j.slug === slug);
+  const journalTitle = journal?.title || "Journal";
   return (
     <div style={{ width: "100%" }}>
+      <Helmet>
+        <title>{journalTitle} - Current Issue | Domain Journals</title>
+        <meta
+          name="description"
+          content={`Read the latest published articles and research from the current issue of ${journalTitle}.`}
+        />
+        <link
+          rel="canonical"
+          href={`https://www.domainjournals.com/journals/${slug}/current-issue`}
+        />
+      </Helmet>
       <JournalHeader slug={slug} />
       <div className="current-issue">
         <h1>Current Issue</h1>

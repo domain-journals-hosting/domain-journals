@@ -1,7 +1,19 @@
+import { Helmet } from "react-helmet";
 import "../styles/publicationEthics.css";
 const PublicationEthics = () => {
   return (
     <div style={{ padding: "20px" }}>
+      <Helmet>
+        <title>Publication Ethics | Domain Journals</title>
+        <meta
+          name="description"
+          content="Read about Domain Journals' publication ethics policy and standards for authors, reviewers, and editors."
+        />
+        <link
+          rel="canonical"
+          href="https://www.domainjournals.com/publication-ethics"
+        />
+      </Helmet>
       <h1>Publication Ethics</h1>
 
       <h2>Author Responsibilities</h2>

@@ -24,7 +24,7 @@ export const ResetAuthor = () => {
     } catch (err) {
       console.log(err);
       setErr(
-        err?.response?.data?.error || err?.message || "Something went wrong"
+        err?.response?.data?.error || err?.message || "Something went wrong",
       );
     } finally {
       setLoading(false);
@@ -34,6 +34,7 @@ export const ResetAuthor = () => {
     "https://domainjournals.com/complete/" + encodeURIComponent(token);
 
   const handleCopy = () => {
+    if (typeof window === "undefined") return;
     navigator.clipboard.writeText(link);
     window.alert("URL copied");
   };

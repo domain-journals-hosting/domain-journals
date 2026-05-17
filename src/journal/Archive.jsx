@@ -4,6 +4,7 @@ import axios from "../api/axios";
 import "../styles/archive.css";
 import JournalHeader from "./JournalHeader";
 import ArchiveDetails from "../components/ArchiveDetails";
+import journals from "../data/journals";
 
 const Archive = () => {
   const { slug } = useParams();
@@ -99,8 +100,21 @@ const Archive = () => {
     fetchData();
   }, [slug]);
 
+  const journal = journals.find((j) => j.slug === slug);
+  const journalTitle = journal?.title || "Journal";
   return (
     <>
+      <Helmet>
+        <title>{journalTitle} Archive - Domain Journals</title>
+        <meta
+          name="description"
+          content={`Browse the archive of published issues and articles from ${journalTitle}.`}
+        />
+        <link
+          rel="canonical"
+          href={`https://www.domainjournals.com/journals/${slug}/archive`}
+        />
+      </Helmet>
       <JournalHeader slug={slug} />
       <div className="archive">
         <h1>Journal Archive</h1>

@@ -1,6 +1,17 @@
 const ReviewProcess = () => {
   return (
     <div style={{ padding: "20px" }}>
+      <Helmet>
+        <title>Review Process | Domain Journals</title>
+        <meta
+          name="description"
+          content="Learn about the peer review process at Domain Journals and how submitted manuscripts are evaluated."
+        />
+        <link
+          rel="canonical"
+          href="https://www.domainjournals.com/review-process"
+        />
+      </Helmet>
       <h1>Review Process</h1>
       <p>The review process typically involves several stages:</p>
 
