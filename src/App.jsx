@@ -83,24 +83,6 @@ function App() {
       <ScrollToTop />
 
       <Nav isHeroVisible={isHeroVisible} />
-      {/* Maintenance Banner */}
-      <div
-        style={{
-          background: "#35b40f",
-          color: "#000",
-          textAlign: "center",
-          padding: "10px",
-          fontWeight: "500",
-          fontSize: "14px",
-          zIndex: 1000000,
-          position: "fixed",
-          width: "100vw",
-        }}
-      >
-        We're currently performing scheduled maintenance. The site, email
-        services, and some features may be temporarily unavailable. We'll be
-        back shortly — thank you for your patience.
-      </div>
       <main style={{ paddingTop: !showNav ? 0 : "70px" }}>
         <Routes>
           <Route

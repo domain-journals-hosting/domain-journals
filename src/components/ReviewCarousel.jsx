@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import axios from "../api/axios";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import useScreenSize from "../hooks/useScreenSize";
 import defaultAvatar from "../assets/defaultAvatar.jpg";
 import "../styles/reviewCarousel.css";
@@ -9,12 +8,8 @@ const ReviewCarousel = () => {
   const isMobile = useScreenSize();
   const [reviews, setReviews] = useState([]);
   const [current, setCurrent] = useState(0);
-  const [direction, setDirection] = useState(null);
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  const carouselInterval = useRef(null);
-  const touchStartX = useRef(null);
-  const touchEndX = useRef(null);
+  const [fading, setFading] = useState(false);
+  const isPaused = useRef(false);
 
   useEffect(() => {
     const fetch = async () => {
@@ -28,204 +23,94 @@ const ReviewCarousel = () => {
     fetch();
   }, []);
 
-  const handleSlide = useCallback(
-    (dir) => {
-      if (isAnimating || reviews.length <= 1) return;
-      setDirection(dir);
-      setIsAnimating(true);
-      setTimeout(() => {
-        setCurrent((prev) =>
-          dir === "right"
-            ? (prev + 1) % reviews.length
-            : (prev - 1 + reviews.length) % reviews.length
-        );
-        setDirection(null);
-        setIsAnimating(false);
-      }, 600);
-    },
-    [isAnimating, reviews.length]
+  const goTo = useCallback((index) => {
+    setFading(true);
+    setTimeout(() => {
+      setCurrent(index);
+      setFading(false);
+    }, 250);
+  }, []);
+
+  const prev = () => goTo(current === 0 ? reviews.length - 1 : current - 1);
+
+  const next = useCallback(
+    () => goTo((current + 1) % reviews.length),
+    [current, reviews.length, goTo],
   );
 
   useEffect(() => {
-    carouselInterval.current = setInterval(() => {
-      handleSlide("right");
+    if (reviews.length <= 1) return;
+    const interval = setInterval(() => {
+      if (!isPaused.current) next();
     }, 10000);
-    return () => clearInterval(carouselInterval.current);
-  }, [handleSlide]);
+    return () => clearInterval(interval);
+  }, [next, reviews.length]);
 
-  const handleTouchStart = (e) => {
-    touchStartX.current = e.changedTouches[0].clientX;
+  const handleTouchStart = useRef(null);
+
+  const onTouchStart = (e) => {
+    handleTouchStart.current = e.changedTouches[0].clientX;
   };
 
-  const handleTouchEnd = (e) => {
-    touchEndX.current = e.changedTouches[0].clientX;
-    const distance = touchStartX.current - touchEndX.current;
-    if (Math.abs(distance) > 50) {
-      handleSlide(distance > 0 ? "right" : "left");
-    }
+  const onTouchEnd = (e) => {
+    const distance = handleTouchStart.current - e.changedTouches[0].clientX;
+    if (Math.abs(distance) > 50) distance > 0 ? next() : prev();
   };
 
-  const nextIndex = (current + 1) % reviews.length;
-  const prevIndex = (current - 1 + reviews.length) % reviews.length;
+  if (!reviews.length) return null;
 
-  const activeReviews = direction
-    ? direction === "right"
-      ? [reviews[current], reviews[nextIndex]]
-      : [reviews[prevIndex], reviews[current]]
-    : [reviews[current]];
-  const translateValue = direction
-    ? direction === "right"
-      ? "-100%"
-      : "100%"
-    : "0%";
-
-  if (!reviews.length) return <p>No reviews to show</p>;
+  const review = reviews[current];
 
   return (
     <div
-      style={{
-        position: "relative",
-        width: `${isMobile ? "100%" : "600px"}`,
-        height: "400px",
-        maxHeight: "400px",
-        overflow: "visible",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
+      className="review-carousel"
+      onMouseEnter={() => (isPaused.current = true)}
+      onMouseLeave={() => (isPaused.current = false)}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
     >
       {!isMobile && (
         <button
-          onClick={() => handleSlide("left")}
-          style={{
-            position: "absolute",
-            left: "-100px",
-            top: "50%",
-            transform: "translateY(-50%)",
-            border: "none",
-            fontSize: 24,
-            zIndex: 1,
-            cursor: "pointer",
-          }}
+          className="review-arrow left"
+          onClick={prev}
+          aria-label="Previous review"
         >
-          <FaChevronLeft />
+          <i className="ti ti-chevron-left" aria-hidden="true" />
         </button>
       )}
 
-      <div
-        className="reviews-carousel"
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-        style={{
-          position: "relative",
-          maxWidth: 600,
-          overflow: "visible",
-          margin: "50px auto",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <div
-          className={`track ${direction ? "animate-slide" : ""}`}
-          style={{
-            display: "flex",
-            width: `${activeReviews.length * 100}%`,
-            maxWidth: "100%",
-            transform: `translateX(${translateValue})`,
-          }}
-        >
-          {activeReviews.map((review, idx) => (
-            <div
-              key={idx}
-              className="review-wrapper"
-              style={{
-                justifySelf: "center",
-                width: "100%",
-                flex: "100%",
-                position: "relative",
-                overflow: "visible",
-              }}
-            >
-              <img
-                src={review?.profilePicture || defaultAvatar}
-                alt="Author avatar"
-                className="floating-avatar"
-                width={80}
-                height={80}
-                style={{
-                  borderRadius: "50%",
-                  position: "absolute",
-                  top: "-40px",
-                  left: "50%",
-                  transform: "translateX(-50%)",
-                  zIndex: 2,
-                  boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
-                }}
-              />
-
-              <div
-                className="review-card"
-                style={{
-                  background: "#f9f9f9",
-                  borderRadius: 10,
-                  boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-                  padding: "50px 20px 20px",
-                  clipPath: "polygon(0 0, 100% 0, 100% 100%, 25% 100%, 0% 75%)",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  height: "100%",
-                  backgroundColor: "#659377",
-                  width: "100%",
-                  position: "relative",
-                }}
-              >
-                <p
-                  style={{
-                    color: " #F1F8E9",
-                    margin: "20px 0",
-                    fontStyle: "italic",
-                    fontSize: 20,
-                    textAlign: "center",
-                  }}
-                >
-                  {review?.text}
-                </p>
-                <p
-                  style={{
-                    color: "#093238",
-                    position: "absolute",
-                    right: "20px",
-                    bottom: "15px",
-                    fontWeight: "800",
-                  }}
-                >
-                  - {review?.name}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
+      <div className={`review-card${fading ? " fading" : ""}`}>
+        <img
+          src={review?.profilePicture || defaultAvatar}
+          alt={review?.name || "Author"}
+          className="review-avatar"
+        />
+        <p className="review-text">"{review?.text}"</p>
+        <span className="review-name">— {review?.name}</span>
       </div>
 
       {!isMobile && (
         <button
-          onClick={() => handleSlide("right")}
-          style={{
-            position: "absolute",
-            right: "-80px",
-            top: "50%",
-            transform: "translateY(-50%)",
-            border: "none",
-            fontSize: 24,
-            zIndex: 1,
-            cursor: "pointer",
-          }}
+          className="review-arrow right"
+          onClick={next}
+          aria-label="Next review"
         >
-          <FaChevronRight />
+          <i className="ti ti-chevron-right" aria-hidden="true" />
         </button>
       )}
+
+      <div className="review-dots">
+        {reviews.map((_, idx) => (
+          <span
+            key={idx}
+            className={`dot${idx === current ? " active" : ""}`}
+            onClick={() => goTo(idx)}
+            role="button"
+            tabIndex={0}
+            aria-label={`Review ${idx + 1}`}
+          />
+        ))}
+      </div>
     </div>
   );
 };

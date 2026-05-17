@@ -6,6 +6,19 @@ import useScreenSize from "../hooks/useScreenSize";
 import { useAuth } from "../hooks/useAuthor";
 import { useUser } from "../hooks/useUser";
 import logo from "../assets/logo.png";
+
+const navIcons = {
+  "/": "ti-home",
+  "/journals": "ti-books",
+  "/submit": "ti-file-upload",
+  "/contact": "ti-mail",
+  "/admin/dashboard": "ti-layout-dashboard",
+  "/signup": "ti-user-plus",
+  "/login": "ti-login",
+  "/author": "ti-user",
+  "/courses": "ti-school",
+};
+
 const Nav = ({ isHeroVisible }) => {
   const isMobile = useScreenSize(800);
   const iconRef = useRef(null);
@@ -16,6 +29,7 @@ const Nav = ({ isHeroVisible }) => {
 
   const [isOpened, setIsOpened] = useState(false);
   const [visibleLinks, setVisibleLinks] = useState([]);
+
   const links = [
     { to: "/", label: "Home" },
     { to: "/journals", label: "Journals" },
@@ -33,6 +47,7 @@ const Nav = ({ isHeroVisible }) => {
     links.push({ to: "/author", label: "View profile" });
     links.push({ to: "/courses", label: "Courses" });
   }
+
   const toggleMenu = () => {
     const opening = !isOpened;
     setIsOpened(opening);
@@ -59,40 +74,33 @@ const Nav = ({ isHeroVisible }) => {
   };
 
   if (location.pathname.startsWith("/journals/")) return null;
+
+  const isActive = (to) =>
+    to === "/" ? location.pathname === "/" : location.pathname.startsWith(to);
+
   return (
     <>
       <div
-        className="nav-wrapper no-print"
-        style={{
-          position: "fixed",
-          top: isMobile ? 70 : 30,
-          left: 0,
-          right: 0,
-          zIndex: 999,
-          backgroundColor: isHeroVisible && "transparent",
-          borderBottom: isHeroVisible && "transparent",
-        }}
+        className={`nav-wrapper no-print${isHeroVisible ? " nav-hero" : ""}`}
       >
         <img
           src={logo}
-          alt=""
-          width={40}
-          height={40}
+          alt="Domain Journals"
+          width={36}
+          height={36}
           onClick={() => navigate("/")}
-          style={{
-            cursor: "pointer",
-          }}
+          className="nav-logo"
         />
-        {!isMobile && (
-          <h2 style={{ marginLeft: "30px", whiteSpace: "nowrap" }}>
-            Domain Journals
-          </h2>
-        )}
+        {!isMobile && <span className="nav-brand">Domain Journals</span>}
         {!isMobile ? (
           <nav className="big-screen">
             {links.map((item) => (
-              <Link to={item.to} key={item.to}>
-                <li>{item.label}</li>
+              <Link
+                to={item.to}
+                key={item.to}
+                className={`nav-link${item.to === "/submit" ? " nav-link--cta" : ""}${isActive(item.to) ? " nav-link--active" : ""}`}
+              >
+                {item.label}
               </Link>
             ))}
           </nav>
@@ -104,28 +112,22 @@ const Nav = ({ isHeroVisible }) => {
       </div>
 
       {isMobile && isOpened && (
-        <nav
-          className="mobile show"
-          style={{
-            backgroundColor: isHeroVisible && "black",
-            marginTop: "4.2rem",
-          }}
-        >
+        <nav className={`mobile show${isHeroVisible ? " mobile-hero" : ""}`}>
           {visibleLinks.map((item) => (
             <Link
               to={item.to}
               key={item.to}
-              style={{
-                transition: "all 0.3s ease",
-                opacity: 1,
-                transform: "translateY(0)",
-              }}
+              className={`mobile-link${isActive(item.to) ? " mobile-link--active" : ""}`}
               onClick={() => {
                 setIsOpened(false);
                 setVisibleLinks([]);
               }}
             >
-              <li>{item.label}</li>
+              <i
+                className={`ti ${navIcons[item.to] || "ti-circle"}`}
+                aria-hidden="true"
+              />
+              {item.label}
             </Link>
           ))}
         </nav>
