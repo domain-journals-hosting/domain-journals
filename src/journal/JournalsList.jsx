@@ -8,27 +8,25 @@ import multidisciplinary from "../assets/multidisciplinary.jpg";
 import scienceImage from "../assets/science.jpg";
 import { Helmet } from "react-helmet";
 
-const source = (string) =>
-  string === "health"
-    ? health
-    : string === "biological"
-    ? biological
-    : string === "multidisciplinary"
-    ? multidisciplinary
-    : scienceImage;
+const imageMap = {
+  health,
+  biological,
+  multidisciplinary,
+  science: scienceImage,
+};
 
 const JournalsList = () => {
   const [expanded, setExpanded] = useState(null);
   const navigate = useNavigate();
   const delayRef = useRef(null);
+
   useEffect(() => {
     return () => clearTimeout(delayRef.current);
   }, []);
+
   const handleMouseEnter = (slug) => {
     clearTimeout(delayRef.current);
-    delayRef.current = setTimeout(() => {
-      setExpanded(slug);
-    }, 500);
+    delayRef.current = setTimeout(() => setExpanded(slug), 500);
   };
 
   const handleMouseLeave = () => {
@@ -47,53 +45,79 @@ const JournalsList = () => {
         <title>Journals - Domain Journals</title>
         <meta
           name="description"
-          content="Explore all journals under Domain Journals, including Domain Health Journal, Journal of Science and Technlology, Biological sciences and Multidisciplinary."
+          content="Explore all journals under Domain Journals, including Domain Health Journal, Journal of Science and Technology, Biological Sciences and Multidisciplinary."
         />
         <link rel="canonical" href="https://domainjournals.com/journals" />
       </Helmet>
-      <h1 style={{ textAlign: "center", marginTop: "20px" }}>
-        All Domain Journals
-      </h1>
 
-      <div className="journal-container" style={{ paddingTop: "70px" }}>
-        {journals.map((journalObject) => {
-          const isActive = expanded === journalObject.slug;
-          return (
-            <div className="journal" key={journalObject.slug}>
-              <div className="image-wrapper">
-                <img src={source(journalObject.image)} alt="" />
-                <button
-                  className="expand-btn"
-                  onClick={() => toggleExpand(journalObject.slug)}
-                  onMouseEnter={() => handleMouseEnter(journalObject.slug)}
+      <div className="journals-page">
+        <div className="journals-page__header">
+          <h1>All Domain Journals</h1>
+          <p>
+            Explore our peer-reviewed open access journals across multiple
+            disciplines.
+          </p>
+        </div>
+
+        <div className="journal-container">
+          {journals.map((journalObject) => {
+            const isActive = expanded === journalObject.slug;
+            return (
+              <div className="journal-card" key={journalObject.slug}>
+                <div
+                  className="journal-card__image-wrapper"
+                  onMouseLeave={handleMouseLeave}
                 >
-                  {isActive ? "✖" : "➕"}
-                </button>
-
-                {isActive && (
-                  <div
-                    className="overlay-actions"
-                    onMouseLeave={handleMouseLeave}
+                  <img
+                    src={imageMap[journalObject.image]}
+                    alt={journalObject.title}
+                  />
+                  <button
+                    className={`journal-card__expand-btn${isActive ? " active" : ""}`}
+                    onClick={() => toggleExpand(journalObject.slug)}
+                    onMouseEnter={() => handleMouseEnter(journalObject.slug)}
+                    aria-label={isActive ? "Close menu" : "Open menu"}
                   >
-                    <Link to={journalObject.slug}>Home</Link>
-                    <Link to={`${journalObject.slug}/editorial-board`}>
-                      Editorial board
-                    </Link>
-                    <Link to={`${journalObject.slug}/current-issue`}>
-                      Current issue
-                    </Link>
-                  </div>
-                )}
+                    <i
+                      className={`ti ${isActive ? "ti-x" : "ti-plus"}`}
+                      aria-hidden="true"
+                    />
+                  </button>
+
+                  {isActive && (
+                    <div className="journal-card__overlay">
+                      <Link to={journalObject.slug}>
+                        <i className="ti ti-home" aria-hidden="true" /> Home
+                      </Link>
+                      <Link to={`${journalObject.slug}/editorial-board`}>
+                        <i className="ti ti-users" aria-hidden="true" />{" "}
+                        Editorial board
+                      </Link>
+                      <Link to={`${journalObject.slug}/current-issue`}>
+                        <i className="ti ti-book" aria-hidden="true" /> Current
+                        issue
+                      </Link>
+                    </div>
+                  )}
+                </div>
+
+                <div
+                  className="journal-card__body"
+                  onClick={() => navigate(journalObject.slug)}
+                >
+                  <h2 className="journal-card__title">{journalObject.title}</h2>
+                  <p className="journal-card__desc">
+                    {journalObject.description.substring(0, 200)}...
+                  </p>
+                  <span className="journal-card__link">
+                    <i className="ti ti-arrow-right" aria-hidden="true" /> Visit
+                    journal
+                  </span>
+                </div>
               </div>
-              <h2 onClick={() => navigate(`${journalObject.slug}`)}>
-                {journalObject.title}
-              </h2>
-              <p onClick={() => navigate(`${journalObject.slug}`)}>
-                {journalObject.description.substring(0, 300)}...
-              </p>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </>
   );

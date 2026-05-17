@@ -1,29 +1,14 @@
 import { useParams } from "react-router-dom";
 import journals from "../data/journals.json";
 import JournalHeader from "./JournalHeader";
+import { Helmet } from "react-helmet";
+import "../styles/editorialBoard.css";
 
 const EditorialBoard = () => {
   const { slug } = useParams();
-  const journal = journals.find((journal) => journal.slug === slug);
+  const journal = journals.find((j) => j.slug === slug);
   const journalTitle = journal?.title || "Journal";
 
-  const editorialSection = (
-    <div style={{ padding: "20px" }}>
-      <h1>{journal.title}</h1>
-      <h2>Editorial board</h2>
-      {journal.editorialBoard.map((member, index) => (
-        <div key={index} className="editor-card">
-          <h3>{member.role}</h3>
-          <p>
-            <strong>{member.name}</strong>
-          </p>
-          {member.address.map((line, i) => (
-            <p key={i}>{line}</p>
-          ))}
-        </div>
-      ))}
-    </div>
-  );
   return (
     <>
       <Helmet>
@@ -37,8 +22,32 @@ const EditorialBoard = () => {
           href={`https://www.domainjournals.com/journals/${slug}/editorial-board`}
         />
       </Helmet>
+
       <JournalHeader slug={slug} />
-      <div>{editorialSection}</div>
+
+      <div className="editorial-page">
+        <div className="editorial-page__header">
+          <h1>{journal.title}</h1>
+          <h2>Editorial Board</h2>
+        </div>
+
+        <div className="editorial-grid">
+          {journal.editorialBoard.map((member, index) => (
+            <div key={index} className="editor-card">
+              <div className="editor-card__avatar">{member.name.charAt(0)}</div>
+              <div className="editor-card__body">
+                <span className="editor-card__role">{member.role}</span>
+                <h3 className="editor-card__name">{member.name}</h3>
+                <div className="editor-card__address">
+                  {member.address.map((line, i) => (
+                    <p key={i}>{line}</p>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </>
   );
 };

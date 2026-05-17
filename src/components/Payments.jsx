@@ -152,7 +152,9 @@ const Payments = () => {
     >
       <option value="all">All</option>
       {allCourses.map((c) => (
-        <option value={c.toLowerCase()}>{c}</option>
+        <option key={c} value={c.toLowerCase()}>
+          {c}
+        </option>
       ))}
     </select>
   );
@@ -165,7 +167,9 @@ const Payments = () => {
     >
       <option value="all">All</option>
       {[true, false].map((c) => (
-        <option value={c}>{c ? "Confirmed" : "Unconfirmed"}</option>
+        <option key={c} value={c}>
+          {c ? "Confirmed" : "Unconfirmed"}
+        </option>
       ))}
     </select>
   );

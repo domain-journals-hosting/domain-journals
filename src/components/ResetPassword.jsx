@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuthor";
 import axios from "../api/axios";
+import "../styles/auth.css";
 
 const ResetPassword = () => {
   const { user, logout } = useAuth();
@@ -23,13 +24,12 @@ const ResetPassword = () => {
   const handleVerify = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
     try {
-      setLoading(true);
       const res = await axios.post("/author/verify", { id, resetKey });
       setMessage(res.data.message);
       setStep("reset");
     } catch (err) {
-      setMessage("");
       setError(err.response?.data?.error || "Verification failed");
     } finally {
       setLoading(false);
@@ -43,18 +43,16 @@ const ResetPassword = () => {
       setError("Passwords do not match");
       return;
     }
+    setLoading(true);
     try {
-      setLoading(true);
-      const res = await axios.post(
+      await axios.post(
         "/author/resetPw",
         { userId: id, resetKey, newPassword },
-        { withCredentials: true }
+        { withCredentials: true },
       );
-      setMessage(res.data.message);
       logout();
       navigate("/login");
     } catch (err) {
-      setMessage("");
       setError(err.response?.data?.error || "Reset failed");
     } finally {
       setLoading(false);
@@ -62,96 +60,77 @@ const ResetPassword = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.heading}>Reset Password</h2>
-      <p>A 6 digit code has been sent to your email</p>
-      {message && <p style={styles.message}>{message}</p>}
-      {error && <p style={styles.error}>{error}</p>}
+    <div className="auth-page">
+      <div className="auth-card">
+        <h1 className="auth-title">Reset password</h1>
+        <p className="auth-subtitle">
+          {step === "verify"
+            ? "Enter the 6-digit code sent to your email."
+            : "Choose a new password for your account."}
+        </p>
 
-      {step === "verify" ? (
-        <form onSubmit={handleVerify} style={styles.form}>
-          <input
-            type="text"
-            placeholder="Enter 6-digit reset code"
-            value={resetKey}
-            onChange={(e) => setResetKey(e.target.value)}
-            required
-            style={styles.input}
-          />
-          <button type="submit" disabled={loading} style={styles.button}>
-            {loading ? "Verifying..." : "Verify Code"}
+        {message && <p className="auth-success">{message}</p>}
+        {error && <p className="auth-error">{error}</p>}
+
+        {step === "verify" ? (
+          <form onSubmit={handleVerify} className="auth-form">
+            <div className="auth-field">
+              <label htmlFor="resetKey">Reset code</label>
+              <input
+                id="resetKey"
+                type="text"
+                placeholder="6-digit code"
+                value={resetKey}
+                onChange={(e) => setResetKey(e.target.value)}
+                required
+              />
+            </div>
+            <button type="submit" className="auth-btn" disabled={loading}>
+              {loading ? "Verifying..." : "Verify code"}
+            </button>
+          </form>
+        ) : (
+          <form onSubmit={handleResetPassword} className="auth-form">
+            <div className="auth-field">
+              <label htmlFor="newPassword">New password</label>
+              <input
+                id="newPassword"
+                type="password"
+                placeholder="Enter new password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                required
+              />
+            </div>
+            <div className="auth-field">
+              <label htmlFor="confirmPassword">Confirm password</label>
+              <input
+                id="confirmPassword"
+                type="password"
+                placeholder="Confirm new password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+            </div>
+            <button type="submit" className="auth-btn" disabled={loading}>
+              {loading ? "Resetting..." : "Reset password"}
+            </button>
+          </form>
+        )}
+
+        <div className="auth-links">
+          <button
+            type="button"
+            className="auth-link-btn"
+            onClick={() => navigate("/login")}
+          >
+            Back to sign in
           </button>
-        </form>
-      ) : (
-        <form onSubmit={handleResetPassword} style={styles.form}>
-          <input
-            type="password"
-            placeholder="Enter new password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            required
-            style={styles.input}
-          />
-          <input
-            type="password"
-            placeholder="Confirm new password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-            style={styles.input}
-          />
-          <button type="submit" disabled={loading} style={styles.button}>
-            {loading ? "Resetting..." : "Reset Password"}
-          </button>
-        </form>
-      )}
+        </div>
+      </div>
     </div>
   );
 };
 
 export default ResetPassword;
-
-const styles = {
-  container: {
-    maxWidth: 400,
-    margin: "60px auto",
-    padding: 20,
-    borderRadius: 8,
-    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-    textAlign: "center",
-  },
-  heading: {
-    marginBottom: 20,
-    fontSize: "1.8rem",
-  },
-  message: {
-    marginBottom: 20,
-    color: "green",
-  },
-  error: {
-    marginBottom: 20,
-    color: "crimson",
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 15,
-  },
-  input: {
-    padding: 10,
-    fontSize: "1rem",
-    borderRadius: 6,
-    border: "1px solid #ccc",
-    outline: "none",
-  },
-  button: {
-    backgroundColor: "#007bff",
-    color: "white",
-    padding: "10px",
-    fontSize: "1rem",
-    border: "none",
-    borderRadius: 6,
-    cursor: "pointer",
-  },
-};

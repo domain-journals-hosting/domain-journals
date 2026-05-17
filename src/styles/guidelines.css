@@ -1,0 +1,114 @@
+.guidelines-page {
+  background-color: #f1f8f4;
+  min-height: 100vh;
+  padding: 48px 24px 80px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.guidelines-content {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.guidelines-content h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #093238;
+  margin-bottom: 1.2rem;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #e8f5e9;
+}
+
+.guidelines-intro {
+  font-size: 1rem;
+  color: #1b5e20;
+  line-height: 1.8;
+  margin-bottom: 2.5rem;
+  padding: 1.2rem 1.5rem;
+  background-color: #e8f5e9;
+  border-left: 4px solid #659377;
+  border-radius: 0 8px 8px 0;
+}
+
+.guidelines-section {
+  margin-bottom: 2.5rem;
+}
+
+.guidelines-section h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #093238;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #c8e6c9;
+}
+
+.guidelines-section p {
+  font-size: 0.95rem;
+  color: #1b5e20;
+  line-height: 1.8;
+}
+
+.guidelines-subsection {
+  margin: 1.5rem 0 1.5rem 1rem;
+  padding-left: 1rem;
+  border-left: 2px solid #c8e6c9;
+}
+
+.guidelines-subsection h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #093238;
+  margin-bottom: 8px;
+}
+
+.guidelines-subsection p {
+  font-size: 0.92rem;
+  color: #1b5e20;
+  line-height: 1.7;
+}
+
+.guidelines-list {
+  margin: 12px 0 0 20px;
+  padding: 0;
+}
+
+.guidelines-list li {
+  font-size: 0.92rem;
+  color: #1b5e20;
+  line-height: 1.7;
+  margin-bottom: 6px;
+}
+
+.guidelines-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 0;
+  border-bottom: 0.5px solid #c8e6c9;
+  font-size: 0.92rem;
+}
+
+.guidelines-entry:last-child {
+  border-bottom: none;
+}
+
+.guidelines-entry strong {
+  color: #093238;
+  font-weight: 600;
+}
+
+.guidelines-entry span {
+  color: #1b5e20;
+  line-height: 1.7;
+}
+
+@media (max-width: 600px) {
+  .guidelines-page {
+    padding: 32px 16px 60px;
+  }
+
+  .guidelines-subsection {
+    margin-left: 0;
+  }
+}

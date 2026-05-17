@@ -5,6 +5,7 @@ import "../styles/currentIssue.css";
 import JournalHeader from "./JournalHeader";
 import journals from "../data/journals.json";
 import { Helmet } from "react-helmet";
+
 export const CurrentIssue = () => {
   const { slug } = useParams();
   const [manuscripts, setManuscripts] = useState([]);
@@ -16,9 +17,6 @@ export const CurrentIssue = () => {
       try {
         const journalRes = await axios.get(`/journal/${slug}`);
         const issue = journalRes.data?.issue;
-
-        console.log(journalRes);
-
         const acceptedRes = await axios.get(`/accepted/${slug}/${issue}`);
         setManuscripts(acceptedRes.data);
       } catch (err) {
@@ -28,13 +26,14 @@ export const CurrentIssue = () => {
         setLoading(false);
       }
     };
-
     fetchAccepted();
   }, [slug]);
+
   const journal = journals.find((j) => j.slug === slug);
   const journalTitle = journal?.title || "Journal";
+
   return (
-    <div style={{ width: "100%" }}>
+    <div className="current-issue-page">
       <Helmet>
         <title>{journalTitle} - Current Issue | Domain Journals</title>
         <meta
@@ -46,51 +45,49 @@ export const CurrentIssue = () => {
           href={`https://www.domainjournals.com/journals/${slug}/current-issue`}
         />
       </Helmet>
+
       <JournalHeader slug={slug} />
+
       <div className="current-issue">
         <h1>Current Issue</h1>
-        <br />
-        {loading && <p className="loading">Loading...</p>}
-        {err && <p className="errors">{err}</p>}
-        {!loading && !err && manuscripts.length === 0 ? (
-          <p>No manuscripts in this issue yet.</p>
-        ) : (
+
+        {loading && <p className="current-issue__status">Loading...</p>}
+        {err && <p className="current-issue__error">{err}</p>}
+        {!loading && !err && manuscripts.length === 0 && (
+          <p className="current-issue__status">
+            No manuscripts in this issue yet.
+          </p>
+        )}
+
+        {!loading && !err && manuscripts.length > 0 && (
           <ul className="manuscript-list">
-            {manuscripts.map((m) => (
-              <li key={m._id} className="manuscript-item">
-                <h5
-                  style={{
-                    backgroundColor: "blue",
-                    width: "fit-content",
-                    padding: "5px",
-                    borderRadius: "5px",
-                    color: "#fff",
-                  }}
-                >
-                  {m.articleType || "Editorial"}
-                </h5>
-                <h3>{m.title}</h3>
-                ID: {m.customId}
-                <p
-                  title={[m.author, ...m.coAuthors.map((a) => a.name)].join(
-                    ", ",
-                  )}
-                >
-                  <strong>Author(s): </strong>
-                  {(() => {
-                    const names = [m.author, ...m.coAuthors.map((a) => a.name)];
-                    return names.length > 10
-                      ? `${m.author.trim().split(" ").slice(-1)[0]} et al.`
-                      : names.join(", ");
-                  })()}
-                </p>
-                <div className="actions">
-                  <Link to="/view" state={{ manuscript: m }}>
-                    <button>📄 View Abstract</button>
-                  </Link>
-                </div>
-              </li>
-            ))}
+            {manuscripts.map((m) => {
+              const names = [m.author, ...m.coAuthors.map((a) => a.name)];
+              const authorsDisplay =
+                names.length > 10
+                  ? `${m.author.trim().split(" ").slice(-1)[0]} et al.`
+                  : names.join(", ");
+              return (
+                <li key={m._id} className="manuscript-item">
+                  <span className="manuscript-item__type">
+                    {m.articleType || "Editorial"}
+                  </span>
+                  <h3 className="manuscript-item__title">{m.title}</h3>
+                  <p className="manuscript-item__id">ID: {m.customId}</p>
+                  <p
+                    className="manuscript-item__authors"
+                    title={names.join(", ")}
+                  >
+                    <span>Author(s):</span> {authorsDisplay}
+                  </p>
+                  <div className="manuscript-item__actions">
+                    <Link to="/view" state={{ manuscript: m }}>
+                      <button className="btn-outline">View Abstract</button>
+                    </Link>
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>
