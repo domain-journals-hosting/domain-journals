@@ -72,12 +72,12 @@ const PaymentModal = ({ course, open, onClose }) => {
             <div className="account">
               <h4>Naira Account</h4>
               <p>
-                Account Number: <b>5601542840</b>
+                Account Number: <b>8131617679</b>
               </p>
               <p>
-                Account Name: <b>Domain Publishers Limited</b>
+                Account Name: <b>Ese Anibor</b>
               </p>
-              <p>Bank: Fidelity Bank</p>
+              <p>Bank: Opay</p>
             </div>
 
             <div className="account">
