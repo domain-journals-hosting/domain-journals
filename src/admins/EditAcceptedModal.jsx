@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "../api/axios";
+import "./EditManuscriptModal.css";
 
 const JOURNAL_OPTIONS = [
   { label: "Domain Health Journal", value: "domain-health-journal" },
@@ -59,14 +60,14 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    if (error) setError(""); // Clear error on change
+    if (error) setError("");
   };
 
-  // Co-authors handling
   const handleCoAuthorChange = (index, field, value) => {
     const updatedCoAuthors = [...formData.coAuthors];
     updatedCoAuthors[index][field] = value;
     setFormData((prev) => ({ ...prev, coAuthors: updatedCoAuthors }));
+    if (error) setError("");
   };
 
   const addCoAuthor = () => {
@@ -83,13 +84,47 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
     }));
   };
 
+  // Extract only modified fields for PATCH payload
+  const getChangedFields = () => {
+    const changed = {};
+    Object.keys(formData).forEach((key) => {
+      const currentVal = formData[key];
+      const originalVal = manuscript[key];
+
+      if (key === "coAuthors") {
+        if (JSON.stringify(currentVal) !== JSON.stringify(originalVal || [])) {
+          changed[key] = currentVal;
+        }
+      } else if (key === "issue" || key === "year") {
+        if (Number(currentVal) !== Number(originalVal)) {
+          changed[key] = Number(currentVal);
+        }
+      } else if (currentVal !== originalVal) {
+        changed[key] = currentVal;
+      }
+    });
+    return changed;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const patchPayload = getChangedFields();
+
+    // If nothing was edited, close without sending an HTTP request
+    if (Object.keys(patchPayload).length === 0) {
+      onClose();
+      return;
+    }
+
     setLoading(true);
     setError("");
 
     try {
-      const res = await axios.patch(`/accepted/${manuscript._id}`, formData);
+      const res = await axios.patch(
+        `/accepted/${manuscript._id}`,
+        patchPayload,
+      );
       onSuccess(res.data.manuscript || res.data);
       onClose();
     } catch (err) {
@@ -104,43 +139,44 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
   if (!manuscript) return null;
 
   return (
-    <div style={styles.overlay}>
-      <div style={styles.modal}>
-        <div style={styles.header}>
-          <h2 style={styles.title}>Edit Accepted Manuscript</h2>
-          <button style={styles.closeBtn} onClick={onClose}>
+    <div className="modal-overlay">
+      <div className="modal-container">
+        <div className="modal-header">
+          <h2 className="modal-title">Edit Accepted Manuscript</h2>
+          <button type="button" className="modal-close-btn" onClick={onClose}>
             &times;
           </button>
         </div>
 
-        {error && <div style={styles.errorAlert}>{error}</div>}
+        {error && <div className="modal-error-alert">{error}</div>}
 
-        <form onSubmit={handleSubmit} style={styles.form}>
+        <form onSubmit={handleSubmit} className="modal-form">
           {/* Custom ID & Journal Row */}
-          <div style={styles.row}>
-            <div style={styles.fieldGroup}>
-              <label style={styles.label}>
-                Manuscript ID (Custom ID) <span style={styles.required}>*</span>
+          <div className="form-grid-2">
+            <div className="form-group">
+              <label className="form-label">
+                Manuscript ID (Custom ID){" "}
+                <span className="required-star">*</span>
               </label>
               <input
                 type="text"
                 name="customId"
+                className="form-input"
                 value={formData.customId}
                 onChange={handleChange}
                 required
-                style={styles.input}
                 placeholder="e.g. DHJ-2026-001"
               />
             </div>
 
-            <div style={styles.fieldGroup}>
-              <label style={styles.label}>Journal</label>
+            <div className="form-group">
+              <label className="form-label">Journal</label>
               <select
                 name="journal"
+                className="form-select"
                 value={formData.journal}
                 onChange={handleChange}
                 required
-                style={styles.select}
               >
                 {JOURNAL_OPTIONS.map((j) => (
                   <option key={j.value} value={j.value}>
@@ -152,152 +188,152 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
           </div>
 
           {/* Title */}
-          <div style={styles.fieldGroup}>
-            <label style={styles.label}>Article Title</label>
+          <div className="form-group">
+            <label className="form-label">Article Title</label>
             <input
               type="text"
               name="title"
+              className="form-input"
               value={formData.title}
               onChange={handleChange}
               required
-              style={styles.input}
             />
           </div>
 
-          {/* Main Author & Email */}
-          <div style={styles.row}>
-            <div style={styles.fieldGroup}>
-              <label style={styles.label}>Primary Author</label>
+          {/* Primary Author & Email */}
+          <div className="form-grid-2">
+            <div className="form-group">
+              <label className="form-label">Primary Author</label>
               <input
                 type="text"
                 name="author"
+                className="form-input"
                 value={formData.author}
                 onChange={handleChange}
                 required
-                style={styles.input}
               />
             </div>
 
-            <div style={styles.fieldGroup}>
-              <label style={styles.label}>Author Email</label>
+            <div className="form-group">
+              <label className="form-label">Author Email</label>
               <input
                 type="email"
                 name="email"
+                className="form-input"
                 value={formData.email}
                 onChange={handleChange}
                 required
-                style={styles.input}
               />
             </div>
           </div>
 
           {/* Article Type, Issue & Year */}
-          <div style={styles.rowThree}>
-            <div style={styles.fieldGroup}>
-              <label style={styles.label}>Article Type</label>
+          <div className="form-grid-3">
+            <div className="form-group">
+              <label className="form-label">Article Type</label>
               <input
                 type="text"
                 name="articleType"
+                className="form-input"
                 value={formData.articleType}
                 onChange={handleChange}
                 required
                 placeholder="e.g. Research Article"
-                style={styles.input}
               />
             </div>
 
-            <div style={styles.fieldGroup}>
-              <label style={styles.label}>Issue Number</label>
+            <div className="form-group">
+              <label className="form-label">Issue Number</label>
               <input
                 type="number"
                 name="issue"
+                className="form-input"
                 min="1"
                 value={formData.issue}
                 onChange={handleChange}
                 required
-                style={styles.input}
               />
             </div>
 
-            <div style={styles.fieldGroup}>
-              <label style={styles.label}>Year</label>
+            <div className="form-group">
+              <label className="form-label">Year</label>
               <input
                 type="number"
                 name="year"
+                className="form-input"
                 value={formData.year}
                 onChange={handleChange}
                 required
-                style={styles.input}
               />
             </div>
           </div>
 
-          {/* Country & File Path/URL */}
-          <div style={styles.row}>
-            <div style={styles.fieldGroup}>
-              <label style={styles.label}>Country</label>
+          {/* Country & File Reference */}
+          <div className="form-grid-2">
+            <div className="form-group">
+              <label className="form-label">Country</label>
               <input
                 type="text"
                 name="country"
+                className="form-input"
                 value={formData.country}
                 onChange={handleChange}
                 required
-                style={styles.input}
               />
             </div>
 
-            <div style={styles.fieldGroup}>
-              <label style={styles.label}>PDF File Reference / Path</label>
+            <div className="form-group">
+              <label className="form-label">PDF File Reference / Path</label>
               <input
                 type="text"
                 name="file"
+                className="form-input"
                 value={formData.file}
                 onChange={handleChange}
                 required
-                style={styles.input}
               />
             </div>
           </div>
 
           {/* Co-Authors Section */}
-          <div style={styles.section}>
-            <div style={styles.sectionHeader}>
-              <label style={styles.label}>Co-Authors</label>
+          <div className="co-authors-section">
+            <div className="co-authors-header">
+              <label className="form-label">Co-Authors</label>
               <button
                 type="button"
+                className="btn-add-coauthor"
                 onClick={addCoAuthor}
-                style={styles.addCoAuthorBtn}
               >
                 + Add Co-Author
               </button>
             </div>
 
             {formData.coAuthors.map((coAuthor, index) => (
-              <div key={index} style={styles.coAuthorRow}>
+              <div key={index} className="co-author-row">
                 <input
                   type="text"
                   placeholder="Co-Author Name"
+                  className="form-input"
                   value={coAuthor.name}
                   onChange={(e) =>
                     handleCoAuthorChange(index, "name", e.target.value)
                   }
                   required
-                  style={{ ...styles.input, flex: 1 }}
                 />
                 <input
                   type="email"
                   placeholder="Co-Author Email"
+                  className="form-input"
                   value={coAuthor.email}
                   onChange={(e) =>
                     handleCoAuthorChange(index, "email", e.target.value)
                   }
                   required
-                  style={{ ...styles.input, flex: 1 }}
                 />
                 <button
                   type="button"
+                  className="btn-remove-coauthor"
                   onClick={() => removeCoAuthor(index)}
-                  style={styles.removeBtn}
                 >
                   &times;
                 </button>
@@ -306,30 +342,30 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
           </div>
 
           {/* Abstract */}
-          <div style={styles.fieldGroup}>
-            <label style={styles.label}>Abstract</label>
+          <div className="form-group">
+            <label className="form-label">Abstract</label>
             <textarea
               name="abstract"
+              className="form-textarea"
               rows="4"
               value={formData.abstract}
               onChange={handleChange}
               required
-              style={styles.textarea}
             />
           </div>
 
-          {/* Actions */}
-          <div style={styles.actions}>
+          {/* Form Actions */}
+          <div className="modal-actions">
             <button
               type="button"
+              className="btn-cancel"
               onClick={onClose}
-              style={styles.cancelBtn}
               disabled={loading}
             >
               Cancel
             </button>
-            <button type="submit" style={styles.submitBtn} disabled={loading}>
-              {loading ? "Saving Changes..." : "Save Changes"}
+            <button type="submit" className="btn-submit" disabled={loading}>
+              {loading ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </form>
@@ -339,179 +375,3 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
 };
 
 export default EditManuscriptModal;
-
-const styles = {
-  overlay: {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "rgba(9, 50, 56, 0.6)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    zIndex: 1000,
-    padding: "20px",
-  },
-  modal: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: "14px",
-    width: "100%",
-    maxWidth: "750px",
-    maxHeight: "90vh",
-    overflowY: "auto",
-    padding: "28px",
-    boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
-    fontFamily:
-      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-  },
-  header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    borderBottom: "1px solid #E0E7FF",
-    paddingBottom: "16px",
-    marginBottom: "20px",
-  },
-  title: {
-    margin: 0,
-    fontSize: "1.4rem",
-    color: "#093238",
-    fontWeight: "700",
-  },
-  closeBtn: {
-    background: "none",
-    border: "none",
-    fontSize: "1.8rem",
-    cursor: "pointer",
-    color: "#546E7A",
-  },
-  errorAlert: {
-    backgroundColor: "#FFEBEE",
-    color: "#C62828",
-    padding: "12px 16px",
-    borderRadius: "8px",
-    marginBottom: "20px",
-    fontSize: "0.9rem",
-    fontWeight: "600",
-    border: "1px solid #FFCDD2",
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "18px",
-  },
-  row: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "16px",
-  },
-  rowThree: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr 1fr",
-    gap: "16px",
-  },
-  fieldGroup: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "6px",
-  },
-  label: {
-    fontSize: "0.85rem",
-    fontWeight: "600",
-    color: "#093238",
-  },
-  required: {
-    color: "#C62828",
-  },
-  input: {
-    padding: "10px 12px",
-    borderRadius: "8px",
-    border: "1px solid #CFD8DC",
-    fontSize: "0.95rem",
-    outline: "none",
-    color: "#093238",
-  },
-  select: {
-    padding: "10px 12px",
-    borderRadius: "8px",
-    border: "1px solid #CFD8DC",
-    fontSize: "0.95rem",
-    outline: "none",
-    backgroundColor: "#FFF",
-    color: "#093238",
-  },
-  textarea: {
-    padding: "10px 12px",
-    borderRadius: "8px",
-    border: "1px solid #CFD8DC",
-    fontSize: "0.95rem",
-    outline: "none",
-    resize: "vertical",
-    fontFamily: "inherit",
-    color: "#093238",
-  },
-  section: {
-    backgroundColor: "#F8FAF8",
-    padding: "14px",
-    borderRadius: "10px",
-    border: "1px solid #E0E7FF",
-  },
-  sectionHeader: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: "10px",
-  },
-  addCoAuthorBtn: {
-    background: "none",
-    border: "none",
-    color: "#659377",
-    fontWeight: "600",
-    fontSize: "0.85rem",
-    cursor: "pointer",
-  },
-  coAuthorRow: {
-    display: "flex",
-    gap: "10px",
-    alignItems: "center",
-    marginBottom: "8px",
-  },
-  removeBtn: {
-    background: "#FFEBEE",
-    border: "none",
-    color: "#C62828",
-    fontSize: "1.2rem",
-    borderRadius: "6px",
-    width: "32px",
-    height: "32px",
-    cursor: "pointer",
-  },
-  actions: {
-    display: "flex",
-    justifyContent: "flex-end",
-    gap: "12px",
-    marginTop: "10px",
-    borderTop: "1px solid #E0E7FF",
-    paddingTop: "16px",
-  },
-  cancelBtn: {
-    padding: "10px 18px",
-    borderRadius: "8px",
-    border: "1px solid #CFD8DC",
-    background: "#FFF",
-    color: "#546E7A",
-    fontWeight: "600",
-    cursor: "pointer",
-  },
-  submitBtn: {
-    padding: "10px 22px",
-    borderRadius: "8px",
-    border: "none",
-    background: "#659377",
-    color: "#FFF",
-    fontWeight: "600",
-    cursor: "pointer",
-  },
-};
