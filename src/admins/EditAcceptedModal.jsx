@@ -89,8 +89,7 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
     setError("");
 
     try {
-      // Endpoint handles customId uniqueness check & returns 409 if taken
-      const res = await axios.put(`/accepted/${manuscript._id}`, formData);
+      const res = await axios.patch(`/accepted/${manuscript._id}`, formData);
       onSuccess(res.data.manuscript || res.data);
       onClose();
     } catch (err) {
