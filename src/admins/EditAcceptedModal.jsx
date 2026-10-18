@@ -1,63 +1,72 @@
 import { useState, useEffect } from "react";
 import axios from "../api/axios";
-import journals, { slug } from "../data/journals";
-import { FaTrash, FaPlus, FaEye, FaFileUpload, FaTimes } from "react-icons/fa";
-import "../styles/editAcceptedModal.css";
 
-const EditAcceptedModal = ({ manuscript, isOpen, onClose, onSaveSuccess }) => {
+const JOURNAL_OPTIONS = [
+  { label: "Domain Health Journal", value: "domain-health-journal" },
+  {
+    label: "Domain Journal of Science and Technology",
+    value: "domain-journal-of-science-and-technology",
+  },
+  {
+    label: "Domain Multidisciplinary Journal",
+    value: "domain-multidisciplinary-journal",
+  },
+  {
+    label: "Domain Journal of Biological Sciences",
+    value: "domain-journal-of-biological-sciences",
+  },
+];
+
+const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
+    customId: "",
     title: "",
     author: "",
     email: "",
-    coAuthors: [],
     journal: "",
     issue: 1,
     year: new Date().getFullYear(),
-    articleType: "Research Article",
-    abstract: "",
+    articleType: "",
     country: "",
+    abstract: "",
     file: "",
+    coAuthors: [],
   });
 
-  const [newFile, setNewFile] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [showPreview, setShowPreview] = useState(false);
   const [error, setError] = useState("");
 
+  // Populate form with existing manuscript data
   useEffect(() => {
     if (manuscript) {
       setFormData({
+        customId: manuscript.customId || "",
         title: manuscript.title || "",
         author: manuscript.author || "",
         email: manuscript.email || "",
-        coAuthors: Array.isArray(manuscript.coAuthors)
-          ? manuscript.coAuthors
-          : [],
-        journal: manuscript.journal || slug(journals[0]),
+        journal: manuscript.journal || JOURNAL_OPTIONS[0].value,
         issue: manuscript.issue || 1,
         year: manuscript.year || new Date().getFullYear(),
-        articleType: manuscript.articleType || "Research Article",
-        abstract: manuscript.abstract || "",
+        articleType: manuscript.articleType || "",
         country: manuscript.country || "",
+        abstract: manuscript.abstract || "",
         file: manuscript.file || "",
+        coAuthors: manuscript.coAuthors ? [...manuscript.coAuthors] : [],
       });
-      setShowPreview(false);
-      setNewFile(null);
-      setError("");
     }
   }, [manuscript]);
-
-  if (!isOpen) return null;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (error) setError(""); // Clear error on change
   };
 
+  // Co-authors handling
   const handleCoAuthorChange = (index, field, value) => {
-    const updated = [...formData.coAuthors];
-    updated[index] = { ...updated[index], [field]: value };
-    setFormData((prev) => ({ ...prev, coAuthors: updated }));
+    const updatedCoAuthors = [...formData.coAuthors];
+    updatedCoAuthors[index][field] = value;
+    setFormData((prev) => ({ ...prev, coAuthors: updatedCoAuthors }));
   };
 
   const addCoAuthor = () => {
@@ -79,322 +88,249 @@ const EditAcceptedModal = ({ manuscript, isOpen, onClose, onSaveSuccess }) => {
     setLoading(true);
     setError("");
 
-    let uploadedFileUrl = formData.file;
-
-    // Handle File Upload if a new file was selected
-    if (newFile) {
-      const uploadData = new FormData();
-      uploadData.append("file", newFile);
-      try {
-        const res = await axios.post("/file", uploadData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-        uploadedFileUrl = res.data.url;
-      } catch (err) {
-        console.error("File upload error:", err);
-        setError("File upload failed. Please try again.");
-        setLoading(false);
-        return;
-      }
-    }
-
     try {
-      const payload = {
-        ...formData,
-        file: uploadedFileUrl,
-      };
-
-      await axios.patch(`/accepted/${manuscript._id}`, payload, {
-        withCredentials: true,
-      });
-
-      onSaveSuccess();
+      // Endpoint handles customId uniqueness check & returns 409 if taken
+      const res = await axios.put(`/accepted/${manuscript._id}`, formData);
+      onSuccess(res.data.manuscript || res.data);
       onClose();
     } catch (err) {
-      console.error(err);
-      setError(err?.response?.data?.error || "Failed to update manuscript.");
+      const serverMessage =
+        err.response?.data?.error || "Failed to update manuscript";
+      setError(serverMessage);
     } finally {
       setLoading(false);
     }
   };
 
+  if (!manuscript) return null;
+
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <div>
-            <h3>Edit Published Manuscript</h3>
-            <span className="custom-id-tag">{manuscript?.customId}</span>
-          </div>
-          <button
-            className="close-btn"
-            onClick={onClose}
-            aria-label="Close modal"
-          >
-            <FaTimes />
+    <div style={styles.overlay}>
+      <div style={styles.modal}>
+        <div style={styles.header}>
+          <h2 style={styles.title}>Edit Accepted Manuscript</h2>
+          <button style={styles.closeBtn} onClick={onClose}>
+            &times;
           </button>
         </div>
 
-        {error && <div className="modal-error-banner">{error}</div>}
+        {error && <div style={styles.errorAlert}>{error}</div>}
 
-        <form onSubmit={handleSubmit} className="modal-form-body">
-          {/* SECTION 1: MANUSCRIPT IDENTIFICATION */}
-          <div className="form-section">
-            <h4 className="section-title">Title & Classification</h4>
-            <div className="form-group">
-              <label htmlFor="title">Title</label>
-              <textarea
-                id="title"
-                name="title"
-                rows={2}
-                value={formData.title}
+        <form onSubmit={handleSubmit} style={styles.form}>
+          {/* Custom ID & Journal Row */}
+          <div style={styles.row}>
+            <div style={styles.fieldGroup}>
+              <label style={styles.label}>
+                Manuscript ID (Custom ID) <span style={styles.required}>*</span>
+              </label>
+              <input
+                type="text"
+                name="customId"
+                value={formData.customId}
                 onChange={handleChange}
                 required
+                style={styles.input}
+                placeholder="e.g. DHJ-2026-001"
               />
             </div>
 
-            <div className="form-grid grid-3">
-              <div className="form-group">
-                <label htmlFor="journal">Journal</label>
-                <select
-                  id="journal"
-                  name="journal"
-                  value={formData.journal}
-                  onChange={handleChange}
-                >
-                  {journals.map((j) => (
-                    <option key={slug(j)} value={slug(j)}>
-                      {j}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="issue">Issue</label>
-                <input
-                  id="issue"
-                  type="number"
-                  name="issue"
-                  min="1"
-                  value={formData.issue}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="year">Year</label>
-                <input
-                  id="year"
-                  type="number"
-                  name="year"
-                  value={formData.year}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="form-grid grid-2">
-              <div className="form-group">
-                <label htmlFor="articleType">Article Type</label>
-                <select
-                  id="articleType"
-                  name="articleType"
-                  value={formData.articleType}
-                  onChange={handleChange}
-                >
-                  <option value="Editorial">Editorial</option>
-                  <option value="Research Article">Research Article</option>
-                  <option value="Case Report">Case Report</option>
-                  <option value="Review Article">Review Article</option>
-                  <option value="Short Article">Short Article</option>
-                  <option value="Short Communication">
-                    Short Communication
+            <div style={styles.fieldGroup}>
+              <label style={styles.label}>Journal</label>
+              <select
+                name="journal"
+                value={formData.journal}
+                onChange={handleChange}
+                required
+                style={styles.select}
+              >
+                {JOURNAL_OPTIONS.map((j) => (
+                  <option key={j.value} value={j.value}>
+                    {j.label}
                   </option>
-                  <option value="Letter to Editor">Letter to Editor</option>
-                  <option value="Commentry">Commentry</option>
-                  <option value="Conference Proceeding">
-                    Conference Proceeding
-                  </option>
-                  <option value="Rapid Communication">
-                    Rapid Communication
-                  </option>
-                  <option value="Special Issue Article">
-                    Special Issue Article
-                  </option>
-                  <option value="Annual Meeting Abstract">
-                    Annual Meeting Abstract
-                  </option>
-                  <option value="Meeting Report">Meeting Report</option>
-                  <option value="Proceedings">Proceedings</option>
-                  <option value="Expert Review">Expert Review</option>
-                </select>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="country">Country</label>
-                <input
-                  id="country"
-                  type="text"
-                  name="country"
-                  value={formData.country}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+                ))}
+              </select>
             </div>
           </div>
 
-          {/* SECTION 2: AUTHORS */}
-          <div className="form-section">
-            <h4 className="section-title">Author Information</h4>
-            <div className="form-grid grid-2">
-              <div className="form-group">
-                <label htmlFor="author">Primary Author Name</label>
-                <input
-                  id="author"
-                  type="text"
-                  name="author"
-                  value={formData.author}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="email">Primary Author Email</label>
-                <input
-                  id="email"
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+          {/* Title */}
+          <div style={styles.fieldGroup}>
+            <label style={styles.label}>Article Title</label>
+            <input
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              required
+              style={styles.input}
+            />
+          </div>
+
+          {/* Main Author & Email */}
+          <div style={styles.row}>
+            <div style={styles.fieldGroup}>
+              <label style={styles.label}>Primary Author</label>
+              <input
+                type="text"
+                name="author"
+                value={formData.author}
+                onChange={handleChange}
+                required
+                style={styles.input}
+              />
             </div>
 
-            <div className="coauthors-block">
-              <div className="coauthors-header">
-                <h5>Co-Authors ({formData.coAuthors.length})</h5>
+            <div style={styles.fieldGroup}>
+              <label style={styles.label}>Author Email</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                style={styles.input}
+              />
+            </div>
+          </div>
+
+          {/* Article Type, Issue & Year */}
+          <div style={styles.rowThree}>
+            <div style={styles.fieldGroup}>
+              <label style={styles.label}>Article Type</label>
+              <input
+                type="text"
+                name="articleType"
+                value={formData.articleType}
+                onChange={handleChange}
+                required
+                placeholder="e.g. Research Article"
+                style={styles.input}
+              />
+            </div>
+
+            <div style={styles.fieldGroup}>
+              <label style={styles.label}>Issue Number</label>
+              <input
+                type="number"
+                name="issue"
+                min="1"
+                value={formData.issue}
+                onChange={handleChange}
+                required
+                style={styles.input}
+              />
+            </div>
+
+            <div style={styles.fieldGroup}>
+              <label style={styles.label}>Year</label>
+              <input
+                type="number"
+                name="year"
+                value={formData.year}
+                onChange={handleChange}
+                required
+                style={styles.input}
+              />
+            </div>
+          </div>
+
+          {/* Country & File Path/URL */}
+          <div style={styles.row}>
+            <div style={styles.fieldGroup}>
+              <label style={styles.label}>Country</label>
+              <input
+                type="text"
+                name="country"
+                value={formData.country}
+                onChange={handleChange}
+                required
+                style={styles.input}
+              />
+            </div>
+
+            <div style={styles.fieldGroup}>
+              <label style={styles.label}>PDF File Reference / Path</label>
+              <input
+                type="text"
+                name="file"
+                value={formData.file}
+                onChange={handleChange}
+                required
+                style={styles.input}
+              />
+            </div>
+          </div>
+
+          {/* Co-Authors Section */}
+          <div style={styles.section}>
+            <div style={styles.sectionHeader}>
+              <label style={styles.label}>Co-Authors</label>
+              <button
+                type="button"
+                onClick={addCoAuthor}
+                style={styles.addCoAuthorBtn}
+              >
+                + Add Co-Author
+              </button>
+            </div>
+
+            {formData.coAuthors.map((coAuthor, index) => (
+              <div key={index} style={styles.coAuthorRow}>
+                <input
+                  type="text"
+                  placeholder="Co-Author Name"
+                  value={coAuthor.name}
+                  onChange={(e) =>
+                    handleCoAuthorChange(index, "name", e.target.value)
+                  }
+                  required
+                  style={{ ...styles.input, flex: 1 }}
+                />
+                <input
+                  type="email"
+                  placeholder="Co-Author Email"
+                  value={coAuthor.email}
+                  onChange={(e) =>
+                    handleCoAuthorChange(index, "email", e.target.value)
+                  }
+                  required
+                  style={{ ...styles.input, flex: 1 }}
+                />
                 <button
                   type="button"
-                  className="btn-add-sm"
-                  onClick={addCoAuthor}
+                  onClick={() => removeCoAuthor(index)}
+                  style={styles.removeBtn}
                 >
-                  <FaPlus /> Add Co-Author
+                  &times;
                 </button>
               </div>
-
-              {formData.coAuthors.map((c, i) => (
-                <div key={i} className="coauthor-row">
-                  <input
-                    type="text"
-                    placeholder="Name"
-                    value={c.name}
-                    onChange={(e) =>
-                      handleCoAuthorChange(i, "name", e.target.value)
-                    }
-                    required
-                  />
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    value={c.email}
-                    onChange={(e) =>
-                      handleCoAuthorChange(i, "email", e.target.value)
-                    }
-                    required
-                  />
-                  <button
-                    type="button"
-                    className="btn-remove-sm"
-                    onClick={() => removeCoAuthor(i)}
-                    title="Remove co-author"
-                  >
-                    <FaTrash />
-                  </button>
-                </div>
-              ))}
-            </div>
+            ))}
           </div>
 
-          {/* SECTION 3: ABSTRACT & DOCUMENT PREVIEW */}
-          <div className="form-section">
-            <h4 className="section-title">Abstract & Manuscript File</h4>
-            <div className="form-group">
-              <label htmlFor="abstract">Abstract</label>
-              <textarea
-                id="abstract"
-                name="abstract"
-                rows={5}
-                value={formData.abstract}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            {/* Document Handling & Embedded Iframe */}
-            <div className="file-management-box">
-              <div className="file-management-header">
-                <div>
-                  <strong>Document:</strong>
-                  {formData.file ? (
-                    <span className="file-url-text">{formData.file}</span>
-                  ) : (
-                    <span className="no-file">No file attached</span>
-                  )}
-                </div>
-
-                {formData.file && (
-                  <button
-                    type="button"
-                    className="btn-preview-toggle"
-                    onClick={() => setShowPreview(!showPreview)}
-                  >
-                    <FaEye />{" "}
-                    {showPreview ? "Hide Preview" : "Preview Document"}
-                  </button>
-                )}
-              </div>
-
-              {/* Embedded Document Preview Iframe */}
-              {showPreview && formData.file && (
-                <div className="iframe-preview-container">
-                  <iframe
-                    title="Manuscript Document Preview"
-                    src={`https://docs.google.com/viewer?url=${encodeURIComponent(
-                      formData.file,
-                    )}&embedded=true`}
-                    width="100%"
-                    height="380"
-                    frameBorder="0"
-                  />
-                </div>
-              )}
-
-              <div className="upload-new-file-group">
-                <label htmlFor="newFile">
-                  <FaFileUpload /> Upload Replacement File (optional):
-                </label>
-                <input
-                  id="newFile"
-                  type="file"
-                  accept=".docx,.doc,.pdf"
-                  onChange={(e) => setNewFile(e.target.files[0])}
-                />
-              </div>
-            </div>
+          {/* Abstract */}
+          <div style={styles.fieldGroup}>
+            <label style={styles.label}>Abstract</label>
+            <textarea
+              name="abstract"
+              rows="4"
+              value={formData.abstract}
+              onChange={handleChange}
+              required
+              style={styles.textarea}
+            />
           </div>
 
-          {/* FOOTER ACTIONS */}
-          <div className="modal-footer">
-            <button type="button" className="btn-cancel" onClick={onClose}>
+          {/* Actions */}
+          <div style={styles.actions}>
+            <button
+              type="button"
+              onClick={onClose}
+              style={styles.cancelBtn}
+              disabled={loading}
+            >
               Cancel
             </button>
-            <button type="submit" className="btn-submit" disabled={loading}>
-              {loading ? "Saving Changes..." : "Save Manuscript"}
+            <button type="submit" style={styles.submitBtn} disabled={loading}>
+              {loading ? "Saving Changes..." : "Save Changes"}
             </button>
           </div>
         </form>
@@ -403,4 +339,180 @@ const EditAcceptedModal = ({ manuscript, isOpen, onClose, onSaveSuccess }) => {
   );
 };
 
-export default EditAcceptedModal;
+export default EditManuscriptModal;
+
+const styles = {
+  overlay: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(9, 50, 56, 0.6)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 1000,
+    padding: "20px",
+  },
+  modal: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: "14px",
+    width: "100%",
+    maxWidth: "750px",
+    maxHeight: "90vh",
+    overflowY: "auto",
+    padding: "28px",
+    boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
+    fontFamily:
+      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+  },
+  header: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderBottom: "1px solid #E0E7FF",
+    paddingBottom: "16px",
+    marginBottom: "20px",
+  },
+  title: {
+    margin: 0,
+    fontSize: "1.4rem",
+    color: "#093238",
+    fontWeight: "700",
+  },
+  closeBtn: {
+    background: "none",
+    border: "none",
+    fontSize: "1.8rem",
+    cursor: "pointer",
+    color: "#546E7A",
+  },
+  errorAlert: {
+    backgroundColor: "#FFEBEE",
+    color: "#C62828",
+    padding: "12px 16px",
+    borderRadius: "8px",
+    marginBottom: "20px",
+    fontSize: "0.9rem",
+    fontWeight: "600",
+    border: "1px solid #FFCDD2",
+  },
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "18px",
+  },
+  row: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "16px",
+  },
+  rowThree: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr 1fr",
+    gap: "16px",
+  },
+  fieldGroup: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "6px",
+  },
+  label: {
+    fontSize: "0.85rem",
+    fontWeight: "600",
+    color: "#093238",
+  },
+  required: {
+    color: "#C62828",
+  },
+  input: {
+    padding: "10px 12px",
+    borderRadius: "8px",
+    border: "1px solid #CFD8DC",
+    fontSize: "0.95rem",
+    outline: "none",
+    color: "#093238",
+  },
+  select: {
+    padding: "10px 12px",
+    borderRadius: "8px",
+    border: "1px solid #CFD8DC",
+    fontSize: "0.95rem",
+    outline: "none",
+    backgroundColor: "#FFF",
+    color: "#093238",
+  },
+  textarea: {
+    padding: "10px 12px",
+    borderRadius: "8px",
+    border: "1px solid #CFD8DC",
+    fontSize: "0.95rem",
+    outline: "none",
+    resize: "vertical",
+    fontFamily: "inherit",
+    color: "#093238",
+  },
+  section: {
+    backgroundColor: "#F8FAF8",
+    padding: "14px",
+    borderRadius: "10px",
+    border: "1px solid #E0E7FF",
+  },
+  sectionHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "10px",
+  },
+  addCoAuthorBtn: {
+    background: "none",
+    border: "none",
+    color: "#659377",
+    fontWeight: "600",
+    fontSize: "0.85rem",
+    cursor: "pointer",
+  },
+  coAuthorRow: {
+    display: "flex",
+    gap: "10px",
+    alignItems: "center",
+    marginBottom: "8px",
+  },
+  removeBtn: {
+    background: "#FFEBEE",
+    border: "none",
+    color: "#C62828",
+    fontSize: "1.2rem",
+    borderRadius: "6px",
+    width: "32px",
+    height: "32px",
+    cursor: "pointer",
+  },
+  actions: {
+    display: "flex",
+    justifyContent: "flex-end",
+    gap: "12px",
+    marginTop: "10px",
+    borderTop: "1px solid #E0E7FF",
+    paddingTop: "16px",
+  },
+  cancelBtn: {
+    padding: "10px 18px",
+    borderRadius: "8px",
+    border: "1px solid #CFD8DC",
+    background: "#FFF",
+    color: "#546E7A",
+    fontWeight: "600",
+    cursor: "pointer",
+  },
+  submitBtn: {
+    padding: "10px 22px",
+    borderRadius: "8px",
+    border: "none",
+    background: "#659377",
+    color: "#FFF",
+    fontWeight: "600",
+    cursor: "pointer",
+  },
+};
