@@ -4,17 +4,27 @@ import "../styles/review.css";
 import Toast from "../components/Toast";
 import ConfirmDialog from "../components/ConfirmDialog";
 import RequireUserAuth from "./RequireUserAuth";
+import EditAcceptedModal from "./EditAcceptedModal";
 
-const ReviewActions = ({ id, status, issue, onUpdate, journal, edited }) => {
+const ReviewActions = ({
+  id,
+  manuscript,
+  status,
+  issue,
+  onUpdate,
+  journal,
+  edited,
+}) => {
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState("");
   const [onConfirmAction, setOnConfirmAction] = useState(() => () => {});
   const fileInputRef = useRef(null);
   const [file, setFile] = useState(null);
   const [showRejectInput, setShowRejectInput] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [toast, setToast] = useState(null);
   const [comment, setComment] = useState(
-    "Sorry, We couldn't accept this manuscript"
+    "Sorry, We couldn't accept this manuscript",
   );
   const [loadingAction, setLoadingAction] = useState("");
 
@@ -58,7 +68,6 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal, edited }) => {
     const actionMap = {
       approve: { method: "patch", url: `/manuscript/${id}/approve` },
       pay: { method: "patch", url: `/manuscript/${id}/paid` },
-
       screen: { method: "patch", url: `manuscript/screen/${id}` },
       reject: {
         method: "patch",
@@ -74,6 +83,7 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal, edited }) => {
         data: { id, issue, journal },
       },
       delete: { method: "delete", url: `/manuscript/admin/${id}` },
+      deletePublished: { method: "delete", url: `/accepted/${id}` },
     };
 
     const action = actionMap[type];
@@ -126,6 +136,45 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal, edited }) => {
           onClose={() => setToast(null)}
         />
       )}
+
+      {/* EDIT MODAL FOR PUBLISHED MANUSCRIPTS */}
+      {isEditModalOpen && (
+        <EditAcceptedModal
+          manuscript={manuscript}
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          onSaveSuccess={() => {
+            setToast({ message: "Manuscript updated successfully." });
+            onUpdate();
+          }}
+        />
+      )}
+
+      {status === "published" && (
+        <>
+          <button
+            className="btn edit"
+            style={{ backgroundColor: "#2196F3", color: "white" }}
+            onClick={() => setIsEditModalOpen(true)}
+          >
+            Edit Manuscript
+          </button>
+
+          <button
+            className="btn delete"
+            disabled={!!loadingAction}
+            onClick={() =>
+              confirm(
+                "Are you sure you want to delete this published manuscript? This action cannot be undone.",
+                () => handleAction("deletePublished"),
+              )
+            }
+          >
+            {loadingAction === "deletePublished" ? "Deleting..." : "Delete"}
+          </button>
+        </>
+      )}
+
       {status === "screening" && (
         <>
           <button
@@ -199,7 +248,7 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal, edited }) => {
               className="btn pay"
               onClick={() =>
                 confirm("Are you sure you've confirmed this payment?", () =>
-                  handleAction("pay")
+                  handleAction("pay"),
                 )
               }
             >
@@ -208,6 +257,7 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal, edited }) => {
           </RequireUserAuth>
         </>
       )}
+
       {status === "paid" && (
         <div className="paid-group">
           <div className="upload-section">
@@ -233,7 +283,7 @@ const ReviewActions = ({ id, status, issue, onUpdate, journal, edited }) => {
                 const id = await handleAction("test");
                 confirm(
                   `Are you sure you want to publish this articles?\nThe ID ${id} will be attached to it`,
-                  () => handleAction("publish")
+                  () => handleAction("publish"),
                 );
               }}
             >

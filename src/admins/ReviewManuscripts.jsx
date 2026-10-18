@@ -3,13 +3,37 @@ import axios from "../api/axios";
 import { slug } from "../data/journals";
 import ReviewActions from "./ReviewActions";
 import journals from "../data/journals";
+import { FaFileAlt, FaDownload, FaEye, FaUser, FaGlobe } from "react-icons/fa";
 import "../styles/reviewManuscripts.css";
 import { useUser } from "../hooks/useUser";
+
 const backendBase = import.meta.env.VITE_API_BASE_URL;
+
 const downloadLink = (file) => {
   return file.endsWith(".doc")
     ? file
     : `${backendBase}/file?url=${encodeURIComponent(file)}`;
+};
+
+// Expandable Abstract Component with smooth inline expansion
+const TruncatedAbstract = ({ text, maxLength = 220 }) => {
+  const [expanded, setExpanded] = useState(false);
+
+  if (!text) return null;
+  if (text.length <= maxLength) return <span>{text}</span>;
+
+  return (
+    <span className="abstract-text">
+      {expanded ? text : `${text.slice(0, maxLength)}... `}
+      <button
+        type="button"
+        onClick={() => setExpanded(!expanded)}
+        className="read-more-toggle"
+      >
+        {expanded ? "Show less" : "Read full abstract"}
+      </button>
+    </span>
+  );
 };
 
 const ReviewManuscripts = () => {
@@ -18,17 +42,17 @@ const ReviewManuscripts = () => {
 
   const getStatusTabs = () => {
     const tabs = [
-      { label: "Under Review", value: "under-review", color: "#FFA500" },
-      { label: "Approved", value: "approved", color: "#4CAF50" },
-      { label: "Paid", value: "paid", color: "#2196F3" },
-      { label: "Rejected", value: "rejected", color: "#F44336" },
+      { label: "Under Review", value: "under-review" },
+      { label: "Approved", value: "approved" },
+      { label: "Paid", value: "paid" },
+      { label: "Published", value: "published" },
+      { label: "Rejected", value: "rejected" },
     ];
 
     if (role === "admin") {
       tabs.unshift({
         label: "Screening",
         value: "screening",
-        color: "#9E9E9E",
       });
     }
 
@@ -48,10 +72,23 @@ const ReviewManuscripts = () => {
       const { data } = await axios.get("/manuscript", {
         withCredentials: true,
       });
+
+      const { data: acceptedData } = await axios.get("/accepted/all", {
+        withCredentials: true,
+      });
+
       const manuscriptsWithStatus = data.map((m) => ({
         ...m,
         status: m.status || "under-review",
       }));
+
+      acceptedData.forEach((m) => {
+        manuscriptsWithStatus.push({
+          ...m,
+          status: "published",
+        });
+      });
+
       setManuscripts(manuscriptsWithStatus);
 
       manuscriptsWithStatus.forEach((m) => {
@@ -83,142 +120,198 @@ const ReviewManuscripts = () => {
 
   if (loading)
     return (
-      <p style={{ textAlign: "center", margin: "40px auto" }}>
-        Loading manuscripts...
-      </p>
+      <div className="status-container">
+        <p>Loading manuscripts...</p>
+      </div>
     );
+
   if (error)
-    return <p style={{ textAlign: "center", margin: "40px auto" }}>{error}</p>;
+    return (
+      <div className="status-container error">
+        <p>{error}</p>
+      </div>
+    );
 
   return (
-    <div className="review-container">
-      <h2>Review Manuscripts</h2>
+    <div className="review-page-container">
+      <div className="review-page-header">
+        <h2>Manuscript Management</h2>
+        <span className="count-badge">{filtered.length} Items</span>
+      </div>
 
-      <div className="review-tabs">
+      {/* Tabs */}
+      <div className="review-tabs-bar">
         {STATUS_TABS.map((tab) => (
           <button
             key={tab.value}
             onClick={() => setActiveTab(tab.value)}
-            className="review-tab"
-            style={{
-              backgroundColor: activeTab === tab.value ? tab.color : "#f0f0f0",
-              color: activeTab === tab.value ? "white" : "#333",
-            }}
+            className={`tab-btn ${activeTab === tab.value ? "active" : ""}`}
+            data-status={tab.value}
           >
             {tab.label}
           </button>
         ))}
       </div>
 
+      {/* Manuscript List */}
       {filtered.length === 0 ? (
-        <p>No manuscripts in this category.</p>
+        <div className="empty-state">
+          <FaFileAlt className="empty-icon" />
+          <p>No manuscripts in this category.</p>
+        </div>
       ) : (
-        <ul className="review-list">
-          {filtered.map((m) => (
-            <li key={m._id} className="review-card">
-              <h3>{m.title}</h3>
-              <p
-                title={[m.author, ...m.coAuthors.map((a) => a.name)].join(", ")}
-              >
-                <strong>Author(s):</strong>{" "}
-                {(() => {
-                  const names = [
-                    m.author,
-                    ...m.coAuthors.map((a) => a.name),
-                  ].join(", ");
-                  return names.length > 100
-                    ? names.slice(0, 97) + "..."
-                    : names;
-                })()}
-              </p>
+        <div className="review-cards-list">
+          {filtered.map((m) => {
+            const coAuthorsList = Array.isArray(m.coAuthors)
+              ? m.coAuthors.map((a) => a.name).filter(Boolean)
+              : [];
+            const allAuthorNames = [m.author, ...coAuthorsList].join(", ");
 
-              {m.status === "paid" ? (
-                <>
-                  <label className="review-label">Journal</label>
-                  <select
-                    className="review-select"
-                    value={selectedValues[m._id]?.journal || m.journal}
-                    onChange={(e) =>
-                      setSelectedValues((prev) => ({
-                        ...prev,
-                        [m._id]: { ...prev[m._id], journal: e.target.value },
-                      }))
-                    }
-                  >
-                    {journals.map((j) => (
-                      <option key={slug(j)} value={slug(j)}>
-                        {j}
-                      </option>
-                    ))}
-                  </select>
-
-                  <label className="review-label">Issue</label>
-                  <select
-                    className="review-select"
-                    value={selectedValues[m._id]?.issue || m.issue}
-                    onChange={(e) =>
-                      setSelectedValues((prev) => ({
-                        ...prev,
-                        [m._id]: {
-                          ...prev[m._id],
-                          issue: Number(e.target.value),
-                        },
-                      }))
-                    }
-                  >
-                    {Array.from({ length: m.issue }, (_, i) => m.issue - i).map(
-                      (n) => (
-                        <option key={n} value={n}>
-                          {n}
-                        </option>
-                      ),
+            return (
+              <div key={m._id} className="manuscript-card">
+                {/* ZONE 1: HEADER & TITLE */}
+                <div className="card-zone-header">
+                  <div className="title-row">
+                    <h3 className="manuscript-title">{m.title}</h3>
+                    {m.customId && (
+                      <span className="custom-id-chip">{m.customId}</span>
                     )}
-                  </select>
-                </>
-              ) : (
-                <>
-                  <p>
-                    <strong>Journal:</strong> {m.journal}
-                  </p>
-                  <p>
-                    <strong>Issue:</strong> {m.issue}
-                  </p>
-                  <p>
-                    <strong>Article type:</strong> {m.articleType}
-                  </p>
-                </>
-              )}
+                  </div>
 
-              <p>
-                <strong>Abstract:</strong> {m.abstract}
-              </p>
+                  <div className="author-meta-row">
+                    <span className="author-item">
+                      <FaUser className="meta-icon" />
+                      <strong>Main Author:</strong> {m.author} ({m.email})
+                    </span>
+                    {coAuthorsList.length > 0 && (
+                      <span className="coauthors-tag">
+                        +{coAuthorsList.length} Co-Author
+                        {coAuthorsList.length > 1 ? "s" : ""}:{" "}
+                        {coAuthorsList.join(", ")}
+                      </span>
+                    )}
+                  </div>
+                </div>
 
-              <div className="review-actions">
-                <a
-                  href={`https://docs.google.com/viewer?url=${encodeURIComponent(m.file)}&embedded=true`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <button className="review-action-btn">View</button>
-                </a>
-                <a href={downloadLink(m.file)} download>
-                  <button className="review-action-btn">Download</button>
-                </a>
+                {/* ZONE 2: METADATA PILLS & CONFIG */}
+                <div className="card-zone-meta">
+                  {m.status === "paid" ? (
+                    <div className="paid-selectors-group">
+                      <div className="select-pill">
+                        <label>Target Journal:</label>
+                        <select
+                          value={selectedValues[m._id]?.journal || m.journal}
+                          onChange={(e) =>
+                            setSelectedValues((prev) => ({
+                              ...prev,
+                              [m._id]: {
+                                ...prev[m._id],
+                                journal: e.target.value,
+                              },
+                            }))
+                          }
+                        >
+                          {journals.map((j) => (
+                            <option key={slug(j)} value={slug(j)}>
+                              {j}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
 
-                <div style={{ width: "100%" }}>
-                  <ReviewActions
-                    id={m._id}
-                    edited={m.edited}
-                    status={m.status || "under-review"}
-                    onUpdate={fetchManuscripts}
-                    issue={selectedValues[m._id]?.issue || m.issue}
-                    journal={selectedValues[m._id]?.journal || m.journal}
-                  />
+                      <div className="select-pill">
+                        <label>Issue No:</label>
+                        <select
+                          value={selectedValues[m._id]?.issue || m.issue}
+                          onChange={(e) =>
+                            setSelectedValues((prev) => ({
+                              ...prev,
+                              [m._id]: {
+                                ...prev[m._id],
+                                issue: Number(e.target.value),
+                              },
+                            }))
+                          }
+                        >
+                          {Array.from(
+                            { length: m.issue || 1 },
+                            (_, i) => (m.issue || 1) - i,
+                          ).map((n) => (
+                            <option key={n} value={n}>
+                              Issue {n}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="meta-badges-row">
+                      <span className="meta-chip journal">
+                        <strong>Journal:</strong> {m.journal}
+                      </span>
+                      <span className="meta-chip issue">
+                        <strong>Issue:</strong> {m.issue}
+                      </span>
+                      {m.articleType && (
+                        <span className="meta-chip type">
+                          <strong>Type:</strong> {m.articleType}
+                        </span>
+                      )}
+                      {m.country && (
+                        <span className="meta-chip country">
+                          <FaGlobe className="chip-icon" /> {m.country}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* ZONE 3: ABSTRACT BODY */}
+                <div className="card-zone-body">
+                  <p className="abstract-paragraph">
+                    <strong>Abstract:</strong>{" "}
+                    <TruncatedAbstract text={m.abstract} maxLength={200} />
+                  </p>
+                </div>
+
+                {/* ZONE 4: FOOTER ACTIONS TOOLBAR */}
+                <div className="card-zone-footer">
+                  <div className="file-actions-group">
+                    <a
+                      href={`https://docs.google.com/viewer?url=${encodeURIComponent(
+                        m.file,
+                      )}&embedded=true`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-file-action view"
+                    >
+                      <FaEye /> View
+                    </a>
+                    <a
+                      href={downloadLink(m.file)}
+                      download
+                      className="btn-file-action download"
+                    >
+                      <FaDownload /> Download
+                    </a>
+                  </div>
+
+                  <div className="workflow-actions-group">
+                    <ReviewActions
+                      id={m._id}
+                      manuscript={m}
+                      edited={m.edited}
+                      status={m.status || "under-review"}
+                      onUpdate={fetchManuscripts}
+                      issue={selectedValues[m._id]?.issue || m.issue}
+                      journal={selectedValues[m._id]?.journal || m.journal}
+                    />
+                  </div>
                 </div>
               </div>
-            </li>
-          ))}
-        </ul>
+            );
+          })}
+        </div>
       )}
     </div>
   );

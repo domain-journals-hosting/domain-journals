@@ -1,80 +1,406 @@
-.review-container {
-  padding: 20px;
-  margin: 0 auto;
-  font-family: "Segoe UI", sans-serif;
+/* Container & Headers */
+.review-page-container {
+  max-width: 1100px;
+  margin: 24px auto;
+  padding: 0 16px;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #1e293b;
+  box-sizing: border-box;
 }
 
-.review-tabs {
+.review-page-header {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: space-between;
   gap: 12px;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
-.review-tab {
-  border: none;
-  border-radius: 20px;
-  padding: 10px 18px;
-  font-weight: bold;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.review-list {
-  max-width: 600px;
-  list-style: none;
-  padding: 0;
+.review-page-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
   margin: 0;
 }
 
-.review-card {
-  background: #fff;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-  margin-bottom: 20px;
+.count-badge {
+  background-color: #e2e8f0;
+  color: #475569;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
 }
 
-.review-actions {
+/* Fully Wrapping Tabs Bar */
+.review-tabs-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.tab-btn {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #64748b;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
+.tab-btn.active {
+  background: #046630;
+  color: #ffffff;
+  border-color: #046630;
+  box-shadow: 0 2px 4px rgba(4, 102, 48, 0.2);
+}
+
+/* Cards Layout */
+.review-cards-list {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-top: 16px;
 }
 
-.view-download {
+.manuscript-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 18px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
   display: flex;
-  gap: 12px;
+  flex-direction: column;
+  gap: 14px;
+  transition:
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.manuscript-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* Zone 1: Header */
+.card-zone-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.title-row {
+  display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px 12px;
 }
 
-.review-action-btn {
-  background-color: #007bff;
-  border: none;
-  padding: 8px 16px;
+.manuscript-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #0f172a;
+  flex: 1 1 240px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.custom-id-chip {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 8px;
   border-radius: 6px;
-  color: white;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+  white-space: nowrap;
 }
 
-.review-label {
-  display: block;
-  margin-top: 12px;
-  margin-bottom: 6px;
-  font-weight: 600;
-  font-size: 14px;
+.author-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+  font-size: 0.85rem;
+  color: #475569;
+  overflow-wrap: anywhere;
 }
 
-.review-select {
+.author-item {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.meta-icon {
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.coauthors-tag {
+  background-color: #f1f5f9;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: #64748b;
+  overflow-wrap: anywhere;
+}
+
+/* Zone 2: Meta Badges */
+.card-zone-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.meta-badges-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 8px;
   width: 100%;
-  max-width: 250px;
-  padding: 8px 12px;
-  font-size: 14px;
+}
+
+.meta-chip {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+  font-size: 0.78rem;
+  padding: 3px 8px;
   border-radius: 6px;
-  border: 1px solid #ccc;
-  margin-bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.meta-chip.journal {
+  background-color: #f0fdf4;
+  border-color: #bbf7d0;
+  color: #166534;
+}
+
+.meta-chip.issue {
+  background-color: #fefce8;
+  border-color: #fef08a;
+  color: #854d0e;
+}
+
+.meta-chip.type {
+  background-color: #f5f3ff;
+  border-color: #ddd6fe;
+  color: #5b21b6;
+}
+
+.paid-selectors-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  background-color: #f8fafc;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.select-pill {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+  flex: 1 1 200px;
+}
+
+.select-pill select {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #ffffff;
+  font-size: 0.85rem;
+}
+
+/* Zone 3: Abstract Body */
+.card-zone-body {
+  background-color: #fafafa;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #f1f5f9;
+}
+
+.abstract-paragraph {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: #334155;
+  overflow-wrap: anywhere;
+}
+
+.read-more-toggle {
+  background: none;
+  border: none;
+  color: #046630;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0 4px;
+  font-size: 0.85rem;
+  text-decoration: underline;
+}
+
+/* Zone 4: Footer Toolbar & Actions Wrap */
+.card-zone-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.file-actions-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-file-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  min-height: 36px;
+}
+
+.btn-file-action.view {
+  background-color: #f1f5f9;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+}
+
+.btn-file-action.download {
+  background-color: #ffffff;
+  color: #046630;
+  border: 1px solid #046630;
+}
+
+.workflow-actions-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 auto;
+  justify-content: flex-end;
+}
+
+/* Workflow Actions Wrapping */
+.review-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px !important;
+  width: 100%;
+}
+
+.review-actions .btn {
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Paid workflow upload section wrapper */
+.paid-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+}
+
+.upload-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+}
+
+.upload-section label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+  width: 100%;
+}
+
+.upload-section input[type="file"] {
+  max-width: 100%;
+}
+
+.reject-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  width: 100%;
+  align-items: center;
+}
+
+.reject-box input {
+  flex: 1 1 180px;
+  padding: 8px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+}
+
+/* Mobile full-width stacking */
+@media (max-width: 640px) {
+  .card-zone-footer,
+  .file-actions-group,
+  .workflow-actions-group {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .file-actions-group .btn-file-action {
+    flex: 1 1 auto;
+  }
+
+  .review-actions .btn {
+    flex: 1 1 100%;
+    width: 100%;
+  }
 }
