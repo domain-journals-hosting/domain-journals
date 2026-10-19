@@ -128,6 +128,7 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
       onSuccess(res.data.manuscript || res.data);
       onClose();
     } catch (err) {
+      console.log(err);
       const serverMessage =
         err.response?.data?.error || "Failed to update manuscript";
       setError(serverMessage);
