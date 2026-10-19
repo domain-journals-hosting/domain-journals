@@ -143,7 +143,7 @@ const ReviewActions = ({
           manuscript={manuscript}
           isOpen={isEditModalOpen}
           onClose={() => setIsEditModalOpen(false)}
-          onSaveSuccess={() => {
+          onSuccess={() => {
             setToast({ message: "Manuscript updated successfully." });
             onUpdate();
           }}
