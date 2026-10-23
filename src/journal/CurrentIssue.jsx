@@ -81,8 +81,8 @@ export const CurrentIssue = () => {
                     <span>Author(s):</span> {authorsDisplay}
                   </p>
                   <div className="manuscript-item__actions">
-                    <Link to="/view" state={{ manuscript: m }}>
-                      <button className="btn-outline">View Abstract</button>
+                    <Link to={`/articles/${m.slug}`} className="btn-outline">
+                      View Abstract
                     </Link>
                   </div>
                 </li>

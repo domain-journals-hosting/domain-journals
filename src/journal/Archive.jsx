@@ -156,10 +156,11 @@ const Archive = () => {
                           <span>Author(s):</span> {authorsDisplay}
                         </p>
                         <div className="archive-item__actions">
-                          <Link to="/view" state={{ manuscript: m }}>
-                            <button className="btn-outline">
-                              View Abstract
-                            </button>
+                          <Link
+                            to={`/articles/${m.slug}`}
+                            className="btn-outline"
+                          >
+                            View Abstract
                           </Link>
                         </div>
                       </li>

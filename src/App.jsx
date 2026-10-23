@@ -63,6 +63,8 @@ import CompleteReset from "./components/CompleteReset";
 import ReviewPayments from "./components/ReviewPayments";
 import Results from "./admins/Results";
 import ReviseExam from "./admins/ReviseExam";
+import ArticlesList from "./articles/ArticlesList";
+import ArticleDetails from "./articles/ArticleDetails";
 
 function App() {
   const location = useLocation();
@@ -82,6 +84,7 @@ function App() {
     <div className="App">
       <ScrollToTop />
 
+      {/* Basic Routes */}
       <Nav isHeroVisible={isHeroVisible} />
       <main style={{ paddingTop: !showNav ? 0 : "70px" }}>
         <Routes>
@@ -100,10 +103,33 @@ function App() {
             element={<CurrentIssue />}
           />
 
+          <Route path="/articles" element={<ArticlesList />} />
+          <Route path="/articles/:slug" element={<ArticleDetails />} />
+
           <Route
             path="/journals/:slug/editorial-board"
             element={<EditorialBoard />}
           />
+
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/forgot" element={<ForgotPw />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/reset" element={<ResetPassword />} />
+          <Route path="/journals/:slug/guidelines" element={<Guidelines />} />
+          <Route path="/journals/:slug/archive" element={<Archive />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/publication-ethics" element={<PublicationEthics />} />
+          <Route path="/review-process" element={<ReviewProcess />} />
+          <Route path="/support" element={<Support />} />
+          <Route path="/success" element={<Success />} />
+
+          <Route path="/edit/:token" element={<EditManuscript />} />
+          <Route path="/delete/:token" element={<DeleteManuscript />} />
+          <Route path="/status/:id" element={<TrackManuscript />} />
+          <Route path="/pay/:manuscriptId" element={<Pay />} />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+
+          {/* Admin and editor auth routes */}
           <Route element={<RequireUserAuth />}>
             <Route path="/admin/all" element={<UsersList />} />
             <Route path="/admin/dashboard" element={<Dashboard />} />
@@ -112,8 +138,15 @@ function App() {
             <Route path="/new-exam/:courseId" element={<ExamForm />} />
             <Route path="/edit-exam/:examId" element={<EditExamForm />} />
           </Route>
+
+          {/* Unauthenticated routes  */}
           <Route path="/admin/forgot" element={<AdminForgotPW />} />
           <Route path="/admin/reset" element={<ResetAdminPW />} />
+
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/invite/:token" element={<CompleteInvite />} />
+
+          {/* Admin auth routes */}
           <Route element={<RequireUserAuth allowedRoles={["admin"]} />}>
             <Route path="/admins/submit-archive" element={<SubmitArchive />} />
             <Route path="/admin/reset-author" element={<ResetAuthor />} />
@@ -127,8 +160,8 @@ function App() {
             <Route path="/admin/payments" element={<Payments />} />
             <Route path="/admin/payments/r" element={<ReviewPayments />} />
           </Route>
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/invite/:token" element={<CompleteInvite />} />
+
+          {/* Basic authentication */}
           <Route element={<RequireAuth />}>
             <Route path="/complete/:token" element={<CompleteReset />} />
             <Route path="/take-exam/:examId" element={<TakeExam />} />
@@ -143,22 +176,7 @@ function App() {
             <Route path="/review" element={<NewReview />} />
             <Route path="/results" element={<AllResults />} />
           </Route>
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/forgot" element={<ForgotPw />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/reset" element={<ResetPassword />} />
-          <Route path="/journals/:slug/guidelines" element={<Guidelines />} />
-          <Route path="/journals/:slug/archive" element={<Archive />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/publication-ethics" element={<PublicationEthics />} />
-          <Route path="/review-process" element={<ReviewProcess />} />
-          <Route path="/support" element={<Support />} />
-          <Route path="/success" element={<Success />} />
-          <Route path="/edit/:token" element={<EditManuscript />} />
-          <Route path="/delete/:token" element={<DeleteManuscript />} />
-          <Route path="/status/:id" element={<TrackManuscript />} />
-          <Route path="/pay/:manuscriptId" element={<Pay />} />
-          <Route path="/payment-success" element={<PaymentSuccess />} />
+
           <Route path="/*" element={<Missing />} />
         </Routes>
       </main>

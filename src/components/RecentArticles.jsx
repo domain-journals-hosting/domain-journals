@@ -53,8 +53,8 @@ const RecentArticles = ({ journal = null }) => {
                   </p>
                   <p className="article-card__id">ID: {m.customId}</p>
                   <div className="article-card__actions">
-                    <Link to="/view" state={{ manuscript: m }}>
-                      <button className="btn-outline">View Abstract</button>
+                    <Link to={`/articles/${m.slug}`} className="btn-outline">
+                      View Abstract
                     </Link>
                   </div>
                 </li>

@@ -10,6 +10,7 @@ import logo from "../assets/logo.png";
 const navIcons = {
   "/": "ti-home",
   "/journals": "ti-books",
+  "/articles": "ti-file-text",
   "/submit": "ti-file-upload",
   "/contact": "ti-mail",
   "/admin/dashboard": "ti-layout-dashboard",
@@ -33,6 +34,7 @@ const Nav = ({ isHeroVisible }) => {
   const links = [
     { to: "/", label: "Home" },
     { to: "/journals", label: "Journals" },
+    { to: "/articles", label: "Articles" },
     { to: "/submit", label: "Submit manuscript" },
     { to: "/contact", label: "Contact us" },
   ];
