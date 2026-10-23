@@ -4,6 +4,7 @@ import biological from "../assets/biological.jpg";
 import multidisciplinary from "../assets/multidisciplinary.jpg";
 import scienceImage from "../assets/science.jpg";
 import journals from "../data/journals.json";
+
 const ManuscriptView = () => {
   const backendBase = import.meta.env.VITE_API_BASE_URL;
   const downloadLink = (file) => {
@@ -22,10 +23,10 @@ const ManuscriptView = () => {
     return string === "health"
       ? health
       : string === "biological"
-      ? biological
-      : string === "multidisciplinary"
-      ? multidisciplinary
-      : scienceImage;
+        ? biological
+        : string === "multidisciplinary"
+          ? multidisciplinary
+          : scienceImage;
   };
 
   const {
@@ -82,7 +83,7 @@ const ManuscriptView = () => {
       <div className="actions" style={{ marginTop: "30px" }}>
         <a
           href={`https://docs.google.com/viewer?url=${encodeURIComponent(
-            file
+            file,
           )}&embedded=true`}
           target="_blank"
           rel="noopener noreferrer"

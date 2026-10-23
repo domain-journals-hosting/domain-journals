@@ -17,19 +17,16 @@ export default defineConfig([
   {
     files: ["**/*.{js,mjs,cjs,jsx}"],
     rules: {
-      // --- SUPPRESSING HARMLESS NOISE ---
       "react/prop-types": "off",
       "no-useless-escape": "off",
       "no-undef": "off",
       "react/no-unescaped-entities": "off",
       "react/jsx-no-target-blank": "off",
 
-      // Ignore unused variables unless they start with an underscore
       "no-unused-vars": "off",
 
-      // --- KEEPING CRITICAL ERRORS ALIVE ---
-      "react/jsx-key": "error", // Flags missing keys (causes massive UI render bugs)
-      "react/jsx-no-undef": "error", // Flags when you use components like 'Helmet' without importing them (crashes page)
+      "react/jsx-key": "error",
+      "react/jsx-no-undef": "error",
     },
   },
 ]);
