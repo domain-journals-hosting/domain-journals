@@ -15,11 +15,35 @@ import {
   FaGlobe,
   FaEnvelope,
   FaFileAlt,
+  FaCalendarAlt,
 } from "react-icons/fa";
 import axios from "../api/axios";
 import Toast from "../components/Toast";
+import ArticleContent from "./ArticleContent";
 import journals from "../data/journals.json";
 import "../styles/articles.css";
+
+const formatScholarDate = (dateString, fallbackYear) => {
+  if (!dateString) return fallbackYear ? `${fallbackYear}/01/01` : "";
+  const d = new Date(dateString);
+  if (isNaN(d.getTime())) return fallbackYear ? `${fallbackYear}/01/01` : "";
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}/${month}/${day}`;
+};
+
+const formatFullDate = (dateString, fallbackYear) => {
+  console.log(dateString, fallbackYear);
+  if (!dateString) return fallbackYear || "";
+  const d = new Date(dateString);
+  if (isNaN(d.getTime())) return fallbackYear || "";
+  return d.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
 
 const ArticleDetails = () => {
   const { slug } = useParams();
@@ -37,6 +61,7 @@ const ArticleDetails = () => {
     try {
       const res = await axios.get(`/accepted/slug/${slug}`);
       setArticle(res.data);
+      setShowIframe(!res.data.content);
     } catch (e) {
       setError("The requested article could not be found.");
     } finally {
@@ -61,7 +86,9 @@ const ArticleDetails = () => {
       article.coAuthors.length > 0
         ? `, & ${article.coAuthors.map((c) => c.name).join(", ")}`
         : "";
-    const citation = `${article.author}${coAuthorText} (${article.year}). ${article.title}. ${journalDisplayTitle}, Issue ${article.issue}. [ID: ${article.customId}]`;
+    const pubDate = formatFullDate(article.createdAt, article.year);
+
+    const citation = `${article.author}${coAuthorText} (${pubDate}). ${article.title}. ${journalDisplayTitle}, Issue ${article.issue}. [ID: ${article.customId}]`;
 
     navigator.clipboard.writeText(citation);
     setCopied(true);
@@ -88,10 +115,13 @@ const ArticleDetails = () => {
           ))}
           <meta
             name="citation_publication_date"
-            content={String(article.year)}
+            content={formatScholarDate(article.createdAt, article.year)}
           />
           <meta name="citation_journal_title" content={journalDisplayTitle} />
           <meta name="citation_pdf_url" content={article.file} />
+          {article.content && (
+            <meta name="citation_fulltext_html_url" content={shareUrl} />
+          )}
         </Helmet>
       )}
 
@@ -200,6 +230,13 @@ const ArticleDetails = () => {
 
                 <div className="section-title-tag">Abstract</div>
                 <div className="abstract-container">{article.abstract}</div>
+
+                {article.content && (
+                  <>
+                    <div className="section-title-tag">Full Text</div>
+                    <ArticleContent content={article.content} />
+                  </>
+                )}
 
                 {showIframe && article.file && (
                   <div className="document-viewer-wrapper">
@@ -330,8 +367,19 @@ const ArticleDetails = () => {
                     </div>
 
                     <div className="info-item">
-                      <div className="info-item-label">Year</div>
-                      <div className="info-item-val">{article.year}</div>
+                      <div className="info-item-label">Published Date</div>
+                      <div
+                        className="info-item-val"
+                        style={{ fontWeight: 600 }}
+                      >
+                        <FaCalendarAlt
+                          style={{
+                            marginRight: "6px",
+                            color: "var(--color-sage, #659377)",
+                          }}
+                        />
+                        {formatFullDate(article.createdAt, article.year)}
+                      </div>
                     </div>
 
                     <div className="info-item">

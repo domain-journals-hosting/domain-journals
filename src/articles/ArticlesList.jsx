@@ -1,11 +1,23 @@
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { FaSearch, FaArrowRight, FaFilter } from "react-icons/fa";
+import { FaSearch, FaArrowRight, FaCalendarAlt } from "react-icons/fa";
 import axios from "../api/axios";
 import Toast from "../components/Toast";
 import journals from "../data/journals.json";
 import "../styles/articles.css";
+
+const formatDateCard = (dateString, fallbackYear) => {
+  if (!dateString) return fallbackYear ? `Published: ${fallbackYear}` : "";
+  const d = new Date(dateString);
+  if (isNaN(d.getTime()))
+    return fallbackYear ? `Published: ${fallbackYear}` : "";
+  return `Published: ${d.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  })}`;
+};
 
 const ArticlesList = () => {
   const [articles, setArticles] = useState([]);
@@ -35,13 +47,21 @@ const ArticlesList = () => {
   }, []);
 
   const yearsList = useMemo(() => {
-    const yearsSet = new Set(articles.map((a) => a.year));
+    const yearsSet = new Set(
+      articles.map((a) =>
+        a.createdAt ? new Date(a.createdAt).getFullYear() : a.year,
+      ),
+    );
     return Array.from(yearsSet).sort((a, b) => b - a);
   }, [articles]);
 
   const filteredArticles = useMemo(() => {
     return articles.filter((article) => {
       const term = searchTerm.toLowerCase();
+      const articleYear = article.createdAt
+        ? new Date(article.createdAt).getFullYear()
+        : article.year;
+
       const matchesSearch =
         article.title.toLowerCase().includes(term) ||
         article.author.toLowerCase().includes(term) ||
@@ -51,7 +71,7 @@ const ArticlesList = () => {
         selectedJournal === "all" || article.journal === selectedJournal;
 
       const matchesYear =
-        selectedYear === "all" || article.year === Number(selectedYear);
+        selectedYear === "all" || articleYear === Number(selectedYear);
 
       return matchesSearch && matchesJournal && matchesYear;
     });
@@ -225,7 +245,14 @@ const ArticlesList = () => {
 
                     <div className="card-bottom-row">
                       <span>
-                        Year: {a.year} • Issue #{a.issue} • {a.country}
+                        <FaCalendarAlt
+                          style={{
+                            marginRight: "6px",
+                            color: "var(--color-sage, #659377)",
+                          }}
+                        />
+                        {formatDateCard(a.createdAt, a.year)} • Issue #{a.issue}{" "}
+                        • {a.country}
                       </span>
                       <span className="card-read-link">
                         Read Full Article <FaArrowRight />
