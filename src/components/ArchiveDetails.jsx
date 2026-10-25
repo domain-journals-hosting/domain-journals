@@ -1,35 +1,34 @@
 import { FaDownload, FaEye } from "react-icons/fa";
 import "../styles/archiveDetails.css";
-
-const backendBase = "https://api.domainjournals.com";
+import { getViewerUrl, getDownloadUrl } from "../utils/fileHelpers";
 
 const ArchiveDetails = ({ file, fileUrl }) => {
-  if (!file) return null;
+  const targetUrl = fileUrl || file;
+  if (!targetUrl) return null;
 
-  const isLink = file.startsWith("http://") || file.startsWith("https://");
-  const downloadUrl = `${backendBase}/file?url=${fileUrl}`;
+  const viewerLink = getViewerUrl(targetUrl);
+  const downloadLink = getDownloadUrl(targetUrl);
 
   return (
     <div className="archive-details">
       <div className="archive-details__actions">
         <a
           className="archive-details__btn archive-details__btn--view"
-          href={fileUrl}
+          href={viewerLink}
           target="_blank"
           rel="noopener noreferrer"
         >
           <FaEye /> View issue
         </a>
-        {!isLink && (
-          <a
-            className="archive-details__btn archive-details__btn--download"
-            href={downloadUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FaDownload /> Download
-          </a>
-        )}
+        <a
+          className="archive-details__btn archive-details__btn--download"
+          href={downloadLink}
+          download
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <FaDownload /> Download
+        </a>
       </div>
     </div>
   );

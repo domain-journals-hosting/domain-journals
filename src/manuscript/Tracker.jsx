@@ -1,75 +1,56 @@
+import "../styles/tracker.css";
+
 const statusLabels = {
+  screening: "Screening",
   "under-review": "Under Review",
-  approved: "Approved (Awaiting Payment)",
+  approved: "Approved",
   paid: "Paid",
+  published: "Published",
 };
 
-const statusOrder = ["under-review", "approved", "paid"];
+const statusOrder = [
+  "screening",
+  "under-review",
+  "approved",
+  "paid",
+  "published",
+];
 
-const ManuscriptStatusTracker = ({ currentStatus }) => {
+const ManuscriptStatusTracker = ({ currentStatus, comment }) => {
   const isRejected = currentStatus === "rejected";
+  const currentIndex = statusOrder.indexOf(currentStatus);
 
   return (
-    <div style={{ padding: "1rem 0" }}>
-      <p
-        style={{
-          marginBottom: "1rem",
-          fontStyle: "italic",
-          fontSize: "0.9rem",
-        }}
-      >
-        These statuses are only valid until your manuscript has been uploaded
+    <div className="tracker-container">
+      <p className="tracker-disclaimer">
+        These statuses reflect real-time editorial progress through to
+        publication.
       </p>
 
-      <div style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
+      <div className="tracker-stepper">
         {statusOrder.map((status, index) => {
           const isActive = currentStatus === status;
-          const isDone =
-            statusOrder.indexOf(currentStatus) > index && !isRejected;
+          const isDone = !isRejected && currentIndex > index;
+
+          let stepClass = "tracker-step-wrapper";
+          if (isActive) stepClass += " is-active";
+          if (isDone) stepClass += " is-done";
 
           return (
-            <div key={status} style={{ textAlign: "center" }}>
-              <div
-                style={{
-                  width: "32px",
-                  height: "32px",
-                  borderRadius: "50%",
-                  backgroundColor: isActive
-                    ? "green"
-                    : isDone
-                    ? "#ccc"
-                    : "#e0e0e0",
-                  color: isActive ? "#fff" : "#333",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontWeight: "bold",
-                  margin: "0 auto",
-                }}
-              >
-                {index + 1}
-              </div>
-              <small
-                style={{
-                  display: "block",
-                  marginTop: "0.5rem",
-                  fontSize: "0.75rem",
-                }}
-              >
-                {statusLabels[status]}
-              </small>
+            <div key={status} className={stepClass}>
+              <div className="tracker-circle">{isDone ? "✓" : index + 1}</div>
+              <span className="tracker-label">{statusLabels[status]}</span>
             </div>
           );
         })}
-
-        {isRejected && (
-          <div
-            style={{ marginLeft: "2rem", color: "crimson", fontWeight: "bold" }}
-          >
-            ❌ Rejected
-          </div>
-        )}
       </div>
+
+      {isRejected && (
+        <div className="tracker-rejected-box">
+          <div className="tracker-rejected-title">❌ Manuscript Rejected</div>
+          {comment && <p className="tracker-rejected-comment">{comment}</p>}
+        </div>
+      )}
     </div>
   );
 };

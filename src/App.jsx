@@ -84,7 +84,6 @@ function App() {
     <div className="App">
       <ScrollToTop />
 
-      {/* Basic Routes */}
       <Nav isHeroVisible={isHeroVisible} />
       <main style={{ paddingTop: !showNav ? 0 : "70px" }}>
         <Routes>
@@ -122,9 +121,6 @@ function App() {
           <Route path="/review-process" element={<ReviewProcess />} />
           <Route path="/support" element={<Support />} />
           <Route path="/success" element={<Success />} />
-
-          <Route path="/edit/:token" element={<EditManuscript />} />
-          <Route path="/delete/:token" element={<DeleteManuscript />} />
           <Route path="/status/:id" element={<TrackManuscript />} />
           <Route path="/pay/:manuscriptId" element={<Pay />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
@@ -174,6 +170,14 @@ function App() {
             <Route path="/submit" element={<ManuscriptForm />} />
             <Route path="/author" element={<AuthorProfile />} />
             <Route path="/review" element={<NewReview />} />
+            <Route path="/edit/:id" element={<EditManuscript />} />
+            <Route path="/delete/:id" element={<DeleteManuscript />} />
+
+            {/* Optional fallback for legacy token links */}
+            <Route path="/edit/token/:token" element={<EditManuscript />} />
+
+            <Route path="/delete/token/:token" element={<DeleteManuscript />} />
+
             <Route path="/results" element={<AllResults />} />
           </Route>
 

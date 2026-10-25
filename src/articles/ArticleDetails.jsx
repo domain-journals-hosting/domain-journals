@@ -81,7 +81,6 @@ const ArticleDetails = () => {
           />
           <link rel="canonical" href={shareUrl} />
 
-          {/* Academic Highwire Press Meta Tags for Google Scholar */}
           <meta name="citation_title" content={article.title} />
           <meta name="citation_author" content={article.author} />
           {article.coAuthors.map((co) => (
@@ -199,11 +198,9 @@ const ArticleDetails = () => {
                   </button>
                 </div>
 
-                {/* Abstract */}
                 <div className="section-title-tag">Abstract</div>
                 <div className="abstract-container">{article.abstract}</div>
 
-                {/* Embedded Document / PDF Viewer Iframe */}
                 {showIframe && article.file && (
                   <div className="document-viewer-wrapper">
                     <div className="viewer-header">
@@ -284,9 +281,7 @@ const ArticleDetails = () => {
                 </div>
               </main>
 
-              {/* SIDEBAR */}
               <aside className="article-sidebar">
-                {/* Author Info */}
                 <div className="sidebar-box">
                   <h3 className="sidebar-box-title">Author Information</h3>
 
@@ -325,7 +320,6 @@ const ArticleDetails = () => {
                   )}
                 </div>
 
-                {/* Metadata Info */}
                 <div className="sidebar-box">
                   <h3 className="sidebar-box-title">Publication Details</h3>
 

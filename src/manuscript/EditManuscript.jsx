@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import journals, { slug } from "../data/journals";
-import "../styles/form.css";
 import axios from "../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
 import Toast from "../components/Toast";
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaArrowLeft } from "react-icons/fa";
+import "../styles/editManuscript.css";
 
 const EditManuscript = () => {
-  const { token } = useParams();
+  const { id, token } = useParams();
   const navigate = useNavigate();
 
   const [author, setAuthor] = useState("");
@@ -20,42 +20,74 @@ const EditManuscript = () => {
   const [newFile, setNewFile] = useState(null);
   const [countries, setCountries] = useState([]);
   const [country, setCountry] = useState("");
-  const [errMsg, setErrMsg] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [toast, setToast] = useState(null);
   const [articleType, setArticleType] = useState("Editorial");
 
-  const deleteCoAuthor = (index) => {
-    setCoAuthors((prev) => prev.filter((_, i) => i !== index));
-  };
+  const [errMsg, setErrMsg] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(true);
+  const [toast, setToast] = useState(null);
 
+  // Determine fetch and save endpoints based on URL parameters
+  const fetchEndpoint = id
+    ? `/manuscript/${id}`
+    : `/manuscript/verify/${token}`;
+  const patchEndpoint = id ? `/manuscript/${id}` : `/manuscript/token/${token}`;
+
+  // Fetch Manuscript Data
   useEffect(() => {
-    (async () => {
-      try {
-        const res = await axios.get(`/manuscript/verify/${token}`);
-        const m = res.data;
-        setAuthor(m.author);
-        setArticleType(m.articleType || "Editorial");
-        setEmail(m.email);
-        setCoAuthors(Array.isArray(m.coAuthors) ? m.coAuthors : []);
-        setJournalSlug(m.journal);
-        setTitle(m.title);
-        setAbstract(m.abstract);
-        setExistingFileUrl(m.file);
-        setCountry(m.country);
-      } catch (err) {
-        setErrMsg(err.response?.data?.error);
-        setToast({
-          message: `There was an error: ${
-            err.response?.data?.error || "Something went wrong"
-          }`,
-          error: true,
-        });
-        navigate(-1);
-      }
-    })();
-  }, [token, navigate]);
+    let isMounted = true;
 
+    const fetchManuscript = async () => {
+      try {
+        const config = id ? { withCredentials: true } : {};
+        const res = await axios.get(fetchEndpoint, config);
+        const m = res.data;
+
+        if (!isMounted) return;
+
+        // Status restriction check
+        if (["paid", "published"].includes(m.status)) {
+          setToast({
+            message: `Manuscripts with status '${m.status}' cannot be edited.`,
+            error: true,
+          });
+          setTimeout(() => navigate("/author"), 2000);
+          return;
+        }
+
+        setAuthor(m.author || "");
+        setArticleType(m.articleType || "Editorial");
+        setEmail(m.email || "");
+        setCoAuthors(Array.isArray(m.coAuthors) ? m.coAuthors : []);
+        setJournalSlug(m.journal || slug(journals[0]));
+        setTitle(m.title || "");
+        setAbstract(m.abstract || "");
+        setExistingFileUrl(m.file || "");
+        setCountry(m.country || "");
+      } catch (err) {
+        if (!isMounted) return;
+        const message =
+          err.response?.data?.error || "Failed to load manuscript details.";
+        setErrMsg(message);
+        setToast({ message, error: true });
+      } finally {
+        if (isMounted) setFetching(false);
+      }
+    };
+
+    if (id || token) {
+      fetchManuscript();
+    } else {
+      setFetching(false);
+      setErrMsg("No valid manuscript identifier provided.");
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, [id, token, fetchEndpoint, navigate]);
+
+  // Fetch Country List
   useEffect(() => {
     fetch("https://restcountries.com/v3.1/all?fields=name")
       .then((res) => res.json())
@@ -83,6 +115,10 @@ const EditManuscript = () => {
     setCoAuthors((prev) => [...prev, { name: "", email: "" }]);
   };
 
+  const deleteCoAuthor = (index) => {
+    setCoAuthors((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const handleCoAuthorChange = (index, field, value) => {
     const updated = [...coAuthors];
     updated[index] = { ...updated[index], [field]: value };
@@ -95,12 +131,14 @@ const EditManuscript = () => {
     setErrMsg(null);
     let fileUrl = existingFileUrl;
 
+    // Optional replacement file upload
     if (newFile) {
       const formData = new FormData();
       formData.append("file", newFile);
       try {
         const res = await axios.post("/file", formData, {
           headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: true,
         });
         fileUrl = res.data.url;
       } catch (err) {
@@ -110,7 +148,7 @@ const EditManuscript = () => {
       }
     }
 
-    const manuscript = {
+    const payload = {
       author,
       coAuthors,
       email,
@@ -123,17 +161,34 @@ const EditManuscript = () => {
     };
 
     try {
-      await axios.patch(`/manuscript/${token}`, manuscript);
-      navigate("/success");
+      const config = id ? { withCredentials: true } : {};
+      await axios.patch(patchEndpoint, payload, config);
+
+      navigate("/author", {
+        state: { toastMessage: "Manuscript updated successfully!" },
+      });
     } catch (err) {
-      setErrMsg("Update failed. Please try again later.");
+      setErrMsg(
+        err.response?.data?.error || "Update failed. Please try again later.",
+      );
     } finally {
       setLoading(false);
     }
   };
 
+  if (fetching) {
+    return (
+      <div
+        className="edit-ms-wrapper"
+        style={{ textAlign: "center", padding: "60px 20px" }}
+      >
+        <p>Loading manuscript details...</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="form-wrapper">
+    <div className="edit-ms-wrapper">
       {toast && (
         <Toast
           message={toast.message}
@@ -142,60 +197,78 @@ const EditManuscript = () => {
         />
       )}
 
+      <button
+        type="button"
+        onClick={() => navigate("/author")}
+        style={{
+          background: "none",
+          border: "none",
+          color: "var(--color-sage, #659377)",
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "6px",
+          fontWeight: 600,
+          cursor: "pointer",
+          marginBottom: "16px",
+        }}
+      >
+        <FaArrowLeft /> Back to Dashboard
+      </button>
+
       <h1>Edit Manuscript</h1>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="author">Name:</label>
+
+      <form onSubmit={handleSubmit} className="edit-ms-form">
+        <label htmlFor="author" className="edit-ms-label">
+          Main Author Name:
+        </label>
         <input
           required
           id="author"
           type="text"
+          className="edit-ms-input"
           value={author}
           onChange={(e) => setAuthor(e.target.value)}
         />
 
-        <label htmlFor="email">Email:</label>
+        <label htmlFor="email" className="edit-ms-label">
+          Email Address:
+        </label>
         <input
           required
           id="email"
           type="email"
+          className="edit-ms-input"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
         <h2>Co-authors</h2>
         {coAuthors.map((c, i) => (
-          <div
-            key={i}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: "1rem",
-            }}
-          >
+          <div key={i} className="edit-ms-coauthor-card">
             <div style={{ flexGrow: 1 }}>
-              <h3>Co-author {i + 1}</h3>
+              <h3 style={{ margin: "0 0 8px 0", fontSize: "0.92rem" }}>
+                Co-author {i + 1}
+              </h3>
               <input
                 required
-                style={{ margin: "10px" }}
+                className="edit-ms-input"
+                style={{ marginBottom: "8px" }}
                 type="text"
-                value={coAuthors[i].name}
-                placeholder="Name"
+                value={c.name}
+                placeholder="Full Name"
                 onChange={(e) =>
                   handleCoAuthorChange(i, "name", e.target.value)
                 }
-                id={`co-author-${i}-name`}
               />
               <input
                 required
-                style={{ margin: "10px" }}
-                type="text"
-                value={coAuthors[i].email}
-                placeholder="Email"
+                className="edit-ms-input"
+                type="email"
+                value={c.email}
+                placeholder="Email Address"
                 onChange={(e) =>
                   handleCoAuthorChange(i, "email", e.target.value)
                 }
-                id={`co-author-${i}-email`}
               />
             </div>
             <button
@@ -203,8 +276,10 @@ const EditManuscript = () => {
               onClick={() => deleteCoAuthor(i)}
               style={{
                 border: "none",
-                color: "red",
+                background: "none",
+                color: "var(--status-rejected, #c62828)",
                 cursor: "pointer",
+                padding: "8px",
                 marginLeft: "10px",
                 alignSelf: "flex-start",
               }}
@@ -215,14 +290,31 @@ const EditManuscript = () => {
           </div>
         ))}
 
-        <button type="button" onClick={addNewCoAuthor}>
-          Add co-author
+        <button
+          type="button"
+          onClick={addNewCoAuthor}
+          style={{
+            marginBottom: "20px",
+            background: "#e8f5e9",
+            color: "var(--color-teal-dark, #093238)",
+            border: "1px solid var(--color-sage, #659377)",
+            borderRadius: "6px",
+            padding: "8px 14px",
+            cursor: "pointer",
+            fontWeight: 600,
+            alignSelf: "flex-start",
+          }}
+        >
+          + Add Co-author
         </button>
 
-        <label htmlFor="journal">Journal:</label>
+        <label htmlFor="journal" className="edit-ms-label">
+          Target Journal:
+        </label>
         <select
           required
           id="journal"
+          className="edit-ms-select"
           value={journalSlug}
           onChange={(e) => setJournalSlug(e.target.value)}
         >
@@ -232,10 +324,14 @@ const EditManuscript = () => {
             </option>
           ))}
         </select>
-        <label htmlFor="articletype">Article Type:</label>
+
+        <label htmlFor="articletype" className="edit-ms-label">
+          Article Type:
+        </label>
         <select
           required
           id="articletype"
+          className="edit-ms-select"
           value={articleType}
           onChange={(e) => setArticleType(e.target.value)}
         >
@@ -258,36 +354,51 @@ const EditManuscript = () => {
           <option value="Expert Review">Expert Review</option>
         </select>
 
-        <label htmlFor="title">Manuscript Title:</label>
+        <label htmlFor="title" className="edit-ms-label">
+          Manuscript Title:
+        </label>
         <textarea
           required
           id="title"
-          rows={5}
+          className="edit-ms-textarea"
+          rows={4}
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-        ></textarea>
+        />
 
-        <label htmlFor="abstract">Abstract:</label>
+        <label htmlFor="abstract" className="edit-ms-label">
+          Abstract:
+        </label>
         <textarea
           required
           id="abstract"
-          rows={5}
+          className="edit-ms-textarea"
+          rows={6}
           value={abstract}
           onChange={(e) => setAbstract(e.target.value)}
-        ></textarea>
+        />
 
         {existingFileUrl && (
-          <>
-            <label>Current File:</label>
-            <div style={{ marginBottom: "10px" }}>
+          <div style={{ margin: "12px 0 18px 0" }}>
+            <label
+              className="edit-ms-label"
+              style={{ display: "block", marginBottom: "4px" }}
+            >
+              Current Manuscript File:
+            </label>
+            <div style={{ fontSize: "0.9rem" }}>
               <a
                 href={`https://docs.google.com/viewer?url=${encodeURIComponent(
-                  existingFileUrl
+                  existingFileUrl,
                 )}&embedded=true`}
                 target="_blank"
                 rel="noopener noreferrer"
+                style={{
+                  color: "var(--status-paid, #0288d1)",
+                  fontWeight: 600,
+                }}
               >
-                View File
+                Preview File
               </a>{" "}
               |{" "}
               <a
@@ -295,29 +406,36 @@ const EditManuscript = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 download
+                style={{ color: "var(--color-sage, #659377)", fontWeight: 600 }}
               >
-                Download
+                Download File
               </a>
             </div>
-          </>
+          </div>
         )}
 
-        <label htmlFor="file">Upload new file (optional):</label>
+        <label htmlFor="file" className="edit-ms-label">
+          Upload New File (Optional replacement):
+        </label>
         <input
           id="file"
           type="file"
+          className="edit-ms-file-input"
           accept=".docx,.doc,.pdf"
           onChange={(e) => setNewFile(e.target.files[0])}
         />
 
-        <label htmlFor="country">Country:</label>
+        <label htmlFor="country" className="edit-ms-label">
+          Country of Origin:
+        </label>
         <select
           required
           id="country"
+          className="edit-ms-select"
           value={country}
           onChange={(e) => setCountry(e.target.value)}
         >
-          <option value="">--Choose a country--</option>
+          <option value="">-- Choose a country --</option>
           {countries.map((c, i) => (
             <option key={i} value={c}>
               {c}
@@ -325,10 +443,20 @@ const EditManuscript = () => {
           ))}
         </select>
 
-        {errMsg && <p style={{ color: "red" }}>{errMsg}</p>}
+        {errMsg && (
+          <p
+            style={{
+              color: "var(--status-rejected, #c62828)",
+              fontWeight: 600,
+              marginTop: "12px",
+            }}
+          >
+            {errMsg}
+          </p>
+        )}
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Updating..." : "Update Manuscript"}
+        <button type="submit" disabled={loading} className="edit-ms-btn-submit">
+          {loading ? "Updating Manuscript..." : "Save Manuscript Updates"}
         </button>
       </form>
     </div>
