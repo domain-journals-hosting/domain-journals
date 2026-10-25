@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "../api/axios";
 import slugify from "../utils/slug";
+import ContentEditorModal from "../components/ContentEditorModal";
 import "./EditManuscriptModal.css";
 
 const JOURNAL_OPTIONS = [
@@ -33,11 +34,19 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
     country: "",
     abstract: "",
     file: "",
+    content: "",
     coAuthors: [],
   });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [isContentModalOpen, setIsContentModalOpen] = useState(false);
+
+  // File upload state
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [uploadingFile, setUploadingFile] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
+  const fileInputRef = useRef(null);
 
   // Populate form with existing manuscript data
   useEffect(() => {
@@ -55,6 +64,7 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
         country: manuscript.country || "",
         abstract: manuscript.abstract || "",
         file: manuscript.file || "",
+        content: manuscript.content || "",
         coAuthors: manuscript.coAuthors ? [...manuscript.coAuthors] : [],
       });
     }
@@ -95,6 +105,42 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
     }));
   };
 
+  // Upload manuscript PDF file directly to Cloudinary via POST /file
+  const handleFileUpload = async () => {
+    if (!selectedFile) {
+      setError("Please pick a file to upload first");
+      return;
+    }
+
+    const uploadPayload = new FormData();
+    uploadPayload.append("file", selectedFile);
+
+    setUploadingFile(true);
+    setError("");
+    setUploadSuccess(false);
+
+    try {
+      const res = await axios.post("/file", uploadPayload, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      const uploadedUrl = res.data.url;
+
+      // Update form data state with the newly returned file URL
+      setFormData((prev) => ({ ...prev, file: uploadedUrl }));
+      setUploadSuccess(true);
+      setSelectedFile(null);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    } catch (err) {
+      console.error(err);
+      setError(
+        err.response?.data?.error || "Failed to upload new manuscript file",
+      );
+    } finally {
+      setUploadingFile(false);
+    }
+  };
+
   // Extract modified fields for PATCH payload
   const getChangedFields = () => {
     const changed = {};
@@ -104,6 +150,10 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
 
       if (key === "coAuthors") {
         if (JSON.stringify(currentVal) !== JSON.stringify(originalVal || [])) {
+          changed[key] = currentVal;
+        }
+      } else if (key === "content") {
+        if ((currentVal || "") !== (originalVal || "")) {
           changed[key] = currentVal;
         }
       } else if (key === "issue" || key === "year") {
@@ -215,7 +265,7 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
             />
           </div>
 
-          {/* Article Slug with Action Button & Suggestion Pill */}
+          {/* Article Slug */}
           <div className="form-group">
             <div
               style={{
@@ -256,7 +306,6 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
               placeholder="e.g. research-article-title-slug"
             />
 
-            {/* Interactive suggestion button if slug is missing or outdated */}
             {suggestedSlug && formData.slug !== suggestedSlug && (
               <div style={{ marginTop: "8px" }}>
                 <button
@@ -350,7 +399,7 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
             </div>
           </div>
 
-          {/* Country & File Reference */}
+          {/* Country & File Upload Section */}
           <div className="form-grid-2">
             <div className="form-group">
               <label className="form-label">Country</label>
@@ -364,8 +413,9 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
               />
             </div>
 
+            {/* Interactive PDF File Upload */}
             <div className="form-group">
-              <label className="form-label">PDF File Reference / Path</label>
+              <label className="form-label">PDF File Reference / Upload</label>
               <input
                 type="text"
                 name="file"
@@ -373,7 +423,47 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
                 value={formData.file}
                 onChange={handleChange}
                 required
+                placeholder="Cloudinary File URL"
               />
+              <div
+                style={{
+                  marginTop: "8px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  flexWrap: "wrap",
+                }}
+              >
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  accept=".pdf,.doc,.docx"
+                  onChange={(e) => setSelectedFile(e.target.files[0] || null)}
+                  style={{ fontSize: "0.82rem" }}
+                />
+                <button
+                  type="button"
+                  className="btn-sage-outline"
+                  onClick={handleFileUpload}
+                  disabled={!selectedFile || uploadingFile}
+                  style={{ padding: "4px 10px", fontSize: "0.8rem" }}
+                >
+                  {uploadingFile ? "Uploading..." : "Upload New File"}
+                </button>
+              </div>
+              {uploadSuccess && (
+                <span
+                  style={{
+                    color: "var(--color-sage, #659377)",
+                    fontSize: "0.8rem",
+                    fontWeight: 600,
+                    marginTop: "4px",
+                    display: "block",
+                  }}
+                >
+                  ✓ File uploaded and path updated!
+                </span>
+              )}
             </div>
           </div>
 
@@ -423,6 +513,43 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
             ))}
           </div>
 
+          {/* Article Content */}
+          <div className="form-group">
+            <label className="form-label">Article Content</label>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
+                flexWrap: "wrap",
+              }}
+            >
+              <button
+                type="button"
+                className="btn-sage-outline"
+                onClick={() => setIsContentModalOpen(true)}
+              >
+                Edit Article Content
+              </button>
+              <span style={{ fontSize: "0.85rem" }}>
+                {formData.content
+                  ? "Structured content added"
+                  : "No article content yet"}
+              </span>
+            </div>
+            {isContentModalOpen && (
+              <ContentEditorModal
+                isOpen={isContentModalOpen}
+                onClose={() => setIsContentModalOpen(false)}
+                fileUrl={formData.file}
+                initialContent={formData.content}
+                onSave={(content) =>
+                  setFormData((prev) => ({ ...prev, content }))
+                }
+              />
+            )}
+          </div>
+
           {/* Abstract */}
           <div className="form-group">
             <label className="form-label">Abstract</label>
@@ -442,11 +569,15 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
               type="button"
               className="btn-cancel"
               onClick={onClose}
-              disabled={loading}
+              disabled={loading || uploadingFile}
             >
               Cancel
             </button>
-            <button type="submit" className="btn-submit" disabled={loading}>
+            <button
+              type="submit"
+              className="btn-submit"
+              disabled={loading || uploadingFile}
+            >
               {loading ? "Saving..." : "Save Changes"}
             </button>
           </div>

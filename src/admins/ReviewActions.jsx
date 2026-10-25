@@ -5,6 +5,7 @@ import Toast from "../components/Toast";
 import ConfirmDialog from "../components/ConfirmDialog";
 import RequireUserAuth from "./RequireUserAuth";
 import EditAcceptedModal from "./EditAcceptedModal";
+import ContentEditorModal from "../components/ContentEditorModal";
 import slugify from "../utils/slug";
 
 const ReviewActions = ({
@@ -31,6 +32,8 @@ const ReviewActions = ({
   );
   const [loadingAction, setLoadingAction] = useState("");
   const [slug, setSlug] = useState("");
+  const [isContentModalOpen, setIsContentModalOpen] = useState(false);
+  const [content, setContent] = useState("");
 
   // Keep slug updated with manuscript title by default
   useEffect(() => {
@@ -97,6 +100,7 @@ const ReviewActions = ({
           issue,
           journal,
           slug: customSlug,
+          ...(content ? { content } : {}),
         },
       },
       delete: { method: "delete", url: `/manuscript/admin/${id}` },
@@ -113,6 +117,7 @@ const ReviewActions = ({
       setToast({ message: `Action '${type}' successful.` });
       onUpdate?.();
       setFile(null);
+      if (type === "publish") setContent("");
       return res.data;
     } catch (err) {
       console.error(err);
@@ -216,6 +221,16 @@ const ReviewActions = ({
             setToast({ message: "Manuscript updated successfully." });
             onUpdate();
           }}
+        />
+      )}
+
+      {isContentModalOpen && (
+        <ContentEditorModal
+          isOpen={isContentModalOpen}
+          onClose={() => setIsContentModalOpen(false)}
+          fileUrl={manuscript?.file}
+          initialContent={content}
+          onSave={setContent}
         />
       )}
 
@@ -346,6 +361,17 @@ const ReviewActions = ({
           </div>
 
           <div className="publish-wrapper">
+            <button
+              type="button"
+              className="btn-sage-outline"
+              onClick={() => setIsContentModalOpen(true)}
+              disabled={!!loadingAction}
+            >
+              {content ? "Edit Article Content" : "Manage Article Content"}
+            </button>
+            {content && (
+              <span style={{ fontSize: "0.8rem" }}>&#10003; Content added</span>
+            )}
             <button
               className="btn publish"
               onClick={handlePublishClick}
