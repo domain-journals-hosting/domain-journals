@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "../api/axios";
+import slugify from "../utils/slug";
 import "./EditManuscriptModal.css";
 
 const JOURNAL_OPTIONS = [
@@ -21,6 +22,7 @@ const JOURNAL_OPTIONS = [
 const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
     customId: "",
+    slug: "",
     title: "",
     author: "",
     email: "",
@@ -42,6 +44,7 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
     if (manuscript) {
       setFormData({
         customId: manuscript.customId || "",
+        slug: manuscript.slug || "",
         title: manuscript.title || "",
         author: manuscript.author || "",
         email: manuscript.email || "",
@@ -84,7 +87,15 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
     }));
   };
 
-  // Extract only modified fields for PATCH payload
+  const applySuggestedSlug = () => {
+    if (!formData.title) return;
+    setFormData((prev) => ({
+      ...prev,
+      slug: slugify(prev.title),
+    }));
+  };
+
+  // Extract modified fields for PATCH payload
   const getChangedFields = () => {
     const changed = {};
     Object.keys(formData).forEach((key) => {
@@ -111,7 +122,6 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
 
     const patchPayload = getChangedFields();
 
-    // If nothing was edited, close without sending an HTTP request
     if (Object.keys(patchPayload).length === 0) {
       onClose();
       return;
@@ -128,7 +138,7 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
       onSuccess(res.data.manuscript || res.data);
       onClose();
     } catch (err) {
-      console.log(err);
+      console.error(err);
       const serverMessage =
         err.response?.data?.error || "Failed to update manuscript";
       setError(serverMessage);
@@ -138,6 +148,8 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
   };
 
   if (!manuscript) return null;
+
+  const suggestedSlug = formData.title ? slugify(formData.title) : "";
 
   return (
     <div className="modal-overlay">
@@ -188,9 +200,11 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
             </div>
           </div>
 
-          {/* Title */}
+          {/* Article Title */}
           <div className="form-group">
-            <label className="form-label">Article Title</label>
+            <label className="form-label">
+              Article Title <span className="required-star">*</span>
+            </label>
             <input
               type="text"
               name="title"
@@ -199,6 +213,73 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
               onChange={handleChange}
               required
             />
+          </div>
+
+          {/* Article Slug with Action Button & Suggestion Pill */}
+          <div className="form-group">
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <label className="form-label" style={{ margin: 0 }}>
+                Article Slug (SEO URL) <span className="required-star">*</span>
+              </label>
+              {formData.title && (
+                <button
+                  type="button"
+                  onClick={applySuggestedSlug}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: "var(--color-sage, #659377)",
+                    cursor: "pointer",
+                    fontSize: "0.82rem",
+                    fontWeight: 700,
+                    textDecoration: "underline",
+                  }}
+                >
+                  ⚡ Generate from title
+                </button>
+              )}
+            </div>
+            <input
+              type="text"
+              name="slug"
+              className="form-input"
+              style={{ marginTop: "6px" }}
+              value={formData.slug}
+              onChange={handleChange}
+              required
+              placeholder="e.g. research-article-title-slug"
+            />
+
+            {/* Interactive suggestion button if slug is missing or outdated */}
+            {suggestedSlug && formData.slug !== suggestedSlug && (
+              <div style={{ marginTop: "8px" }}>
+                <button
+                  type="button"
+                  onClick={applySuggestedSlug}
+                  style={{
+                    background: "#e8f5e9",
+                    border: "1px solid var(--color-sage, #659377)",
+                    borderRadius: "6px",
+                    padding: "6px 12px",
+                    fontSize: "0.8rem",
+                    color: "var(--color-teal-dark, #093238)",
+                    cursor: "pointer",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    fontWeight: 600,
+                  }}
+                >
+                  💡 Click to apply suggested slug: <u>{suggestedSlug}</u>
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Primary Author & Email */}

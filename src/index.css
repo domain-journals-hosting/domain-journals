@@ -1,3 +1,32 @@
+:root {
+  /* Brand Palette */
+  --color-teal-dark: #093238;
+  --color-sage: #659377;
+  --color-sage-dark: #4e745b;
+  --color-sage-light: #a8d5b5;
+  --color-bg: #f1f8f4;
+  --color-card-bg: #ffffff;
+  --color-text-dark: #1b5e20;
+  --color-text-muted: #3a5c43;
+  --color-border: rgba(9, 50, 56, 0.12);
+  --color-badge-bg: #e8f5e9;
+
+  /* Workflow Status Colors */
+  --status-screening: #546e7a;
+  --status-review: #f57c00;
+  --status-approved: #2e7d32;
+  --status-paid: #0288d1;
+  --status-published: #1565c0;
+  --status-rejected: #c62828;
+
+  /* Elevation & Radius */
+  --shadow-sm: 0 2px 8px rgba(9, 50, 56, 0.06);
+  --shadow-md: 0 8px 24px rgba(9, 50, 56, 0.12);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+}
+
 * {
   margin: 0;
   padding: 0;

@@ -1,10 +1,11 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import axios from "../api/axios";
 import "../styles/review.css";
 import Toast from "../components/Toast";
 import ConfirmDialog from "../components/ConfirmDialog";
 import RequireUserAuth from "./RequireUserAuth";
 import EditAcceptedModal from "./EditAcceptedModal";
+import slugify from "../utils/slug";
 
 const ReviewActions = ({
   id,
@@ -17,7 +18,9 @@ const ReviewActions = ({
 }) => {
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState("");
+  const [confirmChildren, setConfirmChildren] = useState(null);
   const [onConfirmAction, setOnConfirmAction] = useState(() => () => {});
+
   const fileInputRef = useRef(null);
   const [file, setFile] = useState(null);
   const [showRejectInput, setShowRejectInput] = useState(false);
@@ -27,9 +30,18 @@ const ReviewActions = ({
     "Sorry, We couldn't accept this manuscript",
   );
   const [loadingAction, setLoadingAction] = useState("");
+  const [slug, setSlug] = useState("");
 
-  const confirm = (message, action) => {
+  // Keep slug updated with manuscript title by default
+  useEffect(() => {
+    if (manuscript?.title) {
+      setSlug(slugify(manuscript.title));
+    }
+  }, [manuscript]);
+
+  const confirm = (message, action, children = null) => {
     setConfirmMessage(message);
+    setConfirmChildren(children);
     setOnConfirmAction(() => () => action());
     setConfirmVisible(true);
   };
@@ -53,7 +65,7 @@ const ReviewActions = ({
       await axios.patch(`manuscript/admin/${id}`, { file: url });
 
       setToast({ message: "Successfully updated manuscript file" });
-      fileInputRef.current.value = "";
+      if (fileInputRef.current) fileInputRef.current.value = "";
       onUpdate();
     } catch (err) {
       console.log(err);
@@ -62,7 +74,7 @@ const ReviewActions = ({
     }
   };
 
-  const handleAction = async (type, payload = {}) => {
+  const handleAction = async (type, customSlug = slug) => {
     setLoadingAction(type);
 
     const actionMap = {
@@ -80,7 +92,12 @@ const ReviewActions = ({
       publish: {
         method: "post",
         url: `/accepted`,
-        data: { id, issue, journal },
+        data: {
+          id,
+          issue,
+          journal,
+          slug: customSlug,
+        },
       },
       delete: { method: "delete", url: `/manuscript/admin/${id}` },
       deletePublished: { method: "delete", url: `/accepted/${id}` },
@@ -117,17 +134,69 @@ const ReviewActions = ({
     setComment("");
   };
 
+  // Open Publish confirmation with slug input field
+  const handlePublishClick = async () => {
+    try {
+      const generatedCustomId = await handleAction("test");
+      let currentSlug = slug || slugify(manuscript.title);
+
+      confirm(
+        `Publishing manuscript. The ID "${generatedCustomId}" will be assigned. You can customize the URL slug below:`,
+        () => handleAction("publish", currentSlug),
+        <div style={{ marginTop: "12px", textAlign: "left" }}>
+          <label
+            style={{
+              fontSize: "0.85rem",
+              fontWeight: 600,
+              display: "block",
+              marginBottom: "4px",
+            }}
+          >
+            URL Slug:
+          </label>
+          <input
+            type="text"
+            defaultValue={currentSlug}
+            onChange={(e) => {
+              currentSlug = e.target.value;
+              setSlug(e.target.value);
+            }}
+            style={{
+              width: "100%",
+              padding: "8px 12px",
+              borderRadius: "6px",
+              border: "1px solid #ccc",
+              fontSize: "0.9rem",
+              boxSizing: "border-box",
+            }}
+          />
+        </div>,
+      );
+    } catch (err) {
+      setToast({
+        message: "Failed to generate ID for publication.",
+        error: true,
+      });
+    }
+  };
+
   return (
     <div className="review-actions">
       <ConfirmDialog
         open={confirmVisible}
-        onClose={() => setConfirmVisible(false)}
+        onClose={() => {
+          setConfirmVisible(false);
+          setConfirmChildren(null);
+        }}
         onConfirm={() => {
           onConfirmAction();
           setConfirmVisible(false);
+          setConfirmChildren(null);
         }}
         message={confirmMessage}
-      />
+      >
+        {confirmChildren}
+      </ConfirmDialog>
 
       {toast && (
         <Toast
@@ -279,13 +348,8 @@ const ReviewActions = ({
           <div className="publish-wrapper">
             <button
               className="btn publish"
-              onClick={async () => {
-                const id = await handleAction("test");
-                confirm(
-                  `Are you sure you want to publish this articles?\nThe ID ${id} will be attached to it`,
-                  () => handleAction("publish"),
-                );
-              }}
+              onClick={handlePublishClick}
+              disabled={!!loadingAction}
             >
               {loadingAction === "publish" ? "Publishing..." : "Publish"}
             </button>

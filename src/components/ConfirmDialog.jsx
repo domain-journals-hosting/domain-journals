@@ -2,17 +2,22 @@ import "../styles/confirmDialog.css";
 
 const ConfirmDialog = ({
   open,
-  onClose = () => (open = false),
+  onClose,
   onConfirm,
+  title = "Are you sure?",
   message,
+  children,
 }) => {
   if (!open) return null;
 
   return (
     <div className="confirm-backdrop">
       <div className="confirm-dialog">
-        <h2>Are you sure?</h2>
-        <p>{message}</p>
+        <h2>{title}</h2>
+        {message && <p className="confirm-message">{message}</p>}
+
+        {children && <div className="confirm-body">{children}</div>}
+
         <div className="confirm-actions">
           <button className="btn cancel" onClick={onClose}>
             Cancel
