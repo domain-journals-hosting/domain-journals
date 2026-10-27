@@ -147,3 +147,9 @@ html {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
+
+/* Multi-line captions / legends keep their line breaks */
+.article-content .article-figure figcaption,
+.article-content .article-table caption {
+  white-space: pre-line;
+}
