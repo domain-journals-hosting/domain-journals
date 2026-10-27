@@ -1,5 +1,3 @@
-/* Content editor modal. All classes are prefixed "cem-" to avoid clashing with other modals. */
-
 .cem-overlay {
   position: fixed;
   inset: 0;
@@ -408,4 +406,77 @@
     flex-basis: 100%;
     order: 3;
   }
+}
+
+/* Link styled as a button */
+a.cem-btn {
+  text-decoration: none;
+}
+.cem-block-content {
+  min-width: 0;
+}
+
+.cem-notice {
+  margin: 12px 20px 0;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm, 8px);
+  background: var(--color-badge-bg, #e8f5e9);
+  color: var(--color-text-muted, #3a5c43);
+  font-size: 0.85rem;
+}
+
+/* Table editor */
+.cem-table-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cem-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--color-border, rgba(9, 50, 56, 0.15));
+  border-radius: var(--radius-sm, 8px);
+}
+.cem-table {
+  border-collapse: collapse;
+  width: max-content;
+  min-width: 100%;
+}
+.cem-table th,
+.cem-table td {
+  padding: 3px;
+  border-bottom: 1px solid var(--color-border, rgba(9, 50, 56, 0.1));
+}
+.cem-table thead th {
+  padding: 4px 3px 0;
+  text-align: center;
+  border: 0;
+}
+.cem-head-row .cem-cell {
+  font-weight: 700;
+  background: var(--color-badge-bg, #e8f5e9);
+}
+.cem-cell {
+  width: 100%;
+  min-width: 110px;
+  padding: 6px 8px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.88rem;
+}
+.cem-cell:focus {
+  outline: none;
+  border-color: #659377;
+  background: #fff;
+}
+.cem-table-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.cem-table-actions .cem-hint {
+  margin: 0;
 }

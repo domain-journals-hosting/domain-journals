@@ -1,0 +1,67 @@
+/* FileUploadField */
+.ufield {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ufield-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.ufield-row .form-input {
+  flex: 1 1 220px;
+  min-width: 0;
+}
+.ufield-open {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--color-sage-dark, #4e745b);
+  text-decoration: none;
+}
+.ufield-open:hover {
+  text-decoration: underline;
+}
+.ufield-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  font-size: 0.82rem;
+}
+.ufield-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.ufield-hint {
+  font-size: 0.78rem;
+  color: var(--color-text-muted, #3a5c43);
+}
+.ufield-bar {
+  height: 6px;
+  border-radius: 3px;
+  overflow: hidden;
+  background: var(--color-badge-bg, #e8f5e9);
+}
+.ufield-bar > div {
+  height: 100%;
+  background: #659377;
+  transition: width 0.15s;
+}
+.ufield-ok {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-sage-dark, #4e745b);
+}
+.ufield-err {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #ef4444;
+}
