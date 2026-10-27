@@ -14,6 +14,8 @@ import {
   FaParagraph,
   FaCode,
   FaList,
+  FaTable,
+  FaExternalLinkAlt,
 } from "react-icons/fa";
 import axios from "../api/axios";
 import {
@@ -21,7 +23,9 @@ import {
   parseAiJson,
   parseStoredContent,
   stripRefMarker,
+  blockHasContent,
 } from "../utils/articleContent";
+import { getViewerUrl } from "../utils/fileHelpers";
 import "../styles/contentEditorModal.css";
 
 /* ------------------------------ helpers ------------------------------ */
@@ -163,15 +167,17 @@ const ContentEditorModal = ({
 
   /* ---------------------------- serialization ---------------------------- */
   const serialize = (prune) => {
+    const clean = (b) =>
+      prune && b.type === "table"
+        ? { ...b, rows: b.rows.filter((r) => r.some((c) => c.trim())) }
+        : b;
+
     let secs = sections.map(({ heading, level, blocks }) => ({
       heading,
       level,
       blocks: blocks
-        .map(({ id, ...b }) => b)
-        .filter(
-          (b) =>
-            !prune || (b.type === "figure" ? b.url?.trim() : b.text?.trim()),
-        ),
+        .map(({ id, ...b }) => clean(b))
+        .filter((b) => !prune || blockHasContent(b)),
     }));
     if (prune) secs = secs.filter((s) => s.heading.trim() || s.blocks.length);
 
@@ -184,9 +190,8 @@ const ContentEditorModal = ({
   };
 
   const hasContent = () =>
-    sections.some((s) =>
-      s.blocks.some((b) => (b.text || b.url || "").trim()),
-    ) || references.some((r) => r.text.trim());
+    sections.some((s) => s.blocks.some(blockHasContent)) ||
+    references.some((r) => r.text.trim());
 
   /* ------------------------------ extraction ------------------------------ */
   const handleAutoExtract = async () => {
@@ -279,7 +284,18 @@ const ContentEditorModal = ({
     const block =
       type === "figure"
         ? { id: uid(), type, url: "", caption: "" }
-        : { id: uid(), type, text: "" };
+        : type === "table"
+          ? {
+              id: uid(),
+              type,
+              caption: "",
+              headers: ["", "", ""],
+              rows: [
+                ["", "", ""],
+                ["", "", ""],
+              ],
+            }
+          : { id: uid(), type, text: "" };
     setSections((p) =>
       p.map((s) => (s.id === sid ? { ...s, blocks: [...s.blocks, block] } : s)),
     );
@@ -315,6 +331,71 @@ const ContentEditorModal = ({
       ),
     );
 
+  // Table editing. The grid is [headers, ...rows]; fn receives a deep copy and returns the new grid.
+  const updateTable = (sid, bid, fn) =>
+    setSections((p) =>
+      p.map((s) =>
+        s.id !== sid
+          ? s
+          : {
+              ...s,
+              blocks: s.blocks.map((b) => {
+                if (b.id !== bid) return b;
+                const grid = fn([b.headers, ...b.rows].map((r) => [...r]));
+                return { ...b, headers: grid[0], rows: grid.slice(1) };
+              }),
+            },
+      ),
+    );
+
+  const setCell = (sid, bid, r, c, v) =>
+    updateTable(sid, bid, (g) => {
+      g[r][c] = v;
+      return g;
+    });
+  const addRow = (sid, bid) =>
+    updateTable(sid, bid, (g) => [...g, Array(g[0].length).fill("")]);
+  const removeRow = (sid, bid, r) =>
+    updateTable(sid, bid, (g) =>
+      g.length > 2 && r > 0 ? g.filter((_, i) => i !== r) : g,
+    );
+  const addCol = (sid, bid) =>
+    updateTable(sid, bid, (g) => g.map((row) => [...row, ""]));
+  const removeCol = (sid, bid, c) =>
+    updateTable(sid, bid, (g) =>
+      g[0].length > 1 ? g.map((row) => row.filter((_, i) => i !== c)) : g,
+    );
+
+  // Paste cells copied from Excel / Sheets / Word (tab- and newline-separated) into the grid
+  const handleCellPaste = (e, sid, bid, r, c) => {
+    const text = e.clipboardData.getData("text");
+    if (!/[\t\n]/.test(text)) return; // single value: let the browser paste normally
+    e.preventDefault();
+    updateTable(sid, bid, (g) => {
+      const data = text
+        .replace(/\r/g, "")
+        .replace(/\n+$/, "")
+        .split("\n")
+        .map((line) => line.split("\t"));
+      const needRows = r + data.length;
+      const needCols = Math.max(
+        g[0].length,
+        c + data.reduce((m, d) => Math.max(m, d.length), 0),
+      );
+      const grid = g.map((row) => [
+        ...row,
+        ...Array(needCols - row.length).fill(""),
+      ]);
+      while (grid.length < needRows) grid.push(Array(needCols).fill(""));
+      data.forEach((line, i) =>
+        line.forEach((cell, j) => {
+          grid[r + i][c + j] = cell.trim();
+        }),
+      );
+      return grid;
+    });
+  };
+
   const handleImageUpload = async (e, sid, bid) => {
     const file = e.target.files?.[0];
     e.target.value = "";
@@ -326,7 +407,9 @@ const ContentEditorModal = ({
     setUploadingId(bid);
     setError("");
     try {
-      const { data } = await axios.post("/file/figure", formData);
+      const { data } = await axios.post("/file/figure", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       patchBlock(sid, bid, { url: data.url }); // functional update: safe even if the user kept typing
     } catch {
       setError("Failed to upload image. Please try again.");
@@ -351,6 +434,9 @@ const ContentEditorModal = ({
   };
 
   /* --------------------------------- view --------------------------------- */
+  // Cloudinary raw PDFs have no extension in their URL; Word files keep .doc/.docx
+  const isWordFile = !!fileUrl && /\.docx?(\?|#|$)/i.test(fileUrl);
+
   return createPortal(
     <div className="cem-overlay">
       <div
@@ -374,6 +460,13 @@ const ContentEditorModal = ({
         {error && (
           <div className="cem-error" role="alert">
             {error}
+          </div>
+        )}
+
+        {isWordFile && (
+          <div className="cem-notice">
+            This looks like a Word file. Auto-extract only works with PDFs, so
+            use the AI prompt instead.
           </div>
         )}
 
@@ -413,6 +506,17 @@ const ContentEditorModal = ({
           </div>
 
           <div className="cem-toolbar-actions">
+            {fileUrl && (
+              <a
+                href={getViewerUrl(fileUrl)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cem-btn cem-btn--outline cem-btn--sm"
+                title="Open the manuscript in a new tab to compare while editing"
+              >
+                <FaExternalLinkAlt /> Open file
+              </a>
+            )}
             <button
               type="button"
               className="cem-btn cem-btn--outline cem-btn--sm"
@@ -526,6 +630,7 @@ const ContentEditorModal = ({
                         <div className="cem-block-type">
                           {blk.type === "paragraph" && <FaParagraph />}
                           {blk.type === "quote" && <FaQuoteLeft />}
+                          {blk.type === "table" && <FaTable />}
                           {blk.type === "figure" && <FaImage />}
                           <span>{blk.type}</span>
                         </div>
@@ -551,6 +656,127 @@ const ContentEditorModal = ({
                                   : "Paragraph text…"
                               }
                             />
+                          )}
+
+                          {blk.type === "table" && (
+                            <div className="cem-table-editor">
+                              <input
+                                type="text"
+                                className="cem-input"
+                                value={blk.caption || ""}
+                                onChange={(e) =>
+                                  patchBlock(sec.id, blk.id, {
+                                    caption: e.target.value,
+                                  })
+                                }
+                                placeholder="Caption (e.g., Table 1: Baseline characteristics)"
+                              />
+                              <div className="cem-table-wrap">
+                                <table className="cem-table">
+                                  <thead>
+                                    <tr>
+                                      {blk.headers.map((_, c) => (
+                                        <th key={c}>
+                                          <IconBtn
+                                            title={`Delete column ${c + 1}`}
+                                            danger
+                                            onClick={() =>
+                                              removeCol(sec.id, blk.id, c)
+                                            }
+                                            disabled={blk.headers.length <= 1}
+                                          >
+                                            <FaTimes />
+                                          </IconBtn>
+                                        </th>
+                                      ))}
+                                      <th />
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {[blk.headers, ...blk.rows].map(
+                                      (row, r) => (
+                                        <tr
+                                          key={r}
+                                          className={
+                                            r === 0 ? "cem-head-row" : undefined
+                                          }
+                                        >
+                                          {row.map((cell, c) => (
+                                            <td key={c}>
+                                              <input
+                                                type="text"
+                                                className="cem-cell"
+                                                value={cell}
+                                                onChange={(e) =>
+                                                  setCell(
+                                                    sec.id,
+                                                    blk.id,
+                                                    r,
+                                                    c,
+                                                    e.target.value,
+                                                  )
+                                                }
+                                                onPaste={(e) =>
+                                                  handleCellPaste(
+                                                    e,
+                                                    sec.id,
+                                                    blk.id,
+                                                    r,
+                                                    c,
+                                                  )
+                                                }
+                                                placeholder={
+                                                  r === 0 ? "Header" : ""
+                                                }
+                                                aria-label={
+                                                  r === 0
+                                                    ? `Header ${c + 1}`
+                                                    : `Row ${r}, column ${c + 1}`
+                                                }
+                                              />
+                                            </td>
+                                          ))}
+                                          <td>
+                                            {r > 0 && (
+                                              <IconBtn
+                                                title={`Delete row ${r}`}
+                                                danger
+                                                onClick={() =>
+                                                  removeRow(sec.id, blk.id, r)
+                                                }
+                                                disabled={blk.rows.length <= 1}
+                                              >
+                                                <FaTrash />
+                                              </IconBtn>
+                                            )}
+                                          </td>
+                                        </tr>
+                                      ),
+                                    )}
+                                  </tbody>
+                                </table>
+                              </div>
+                              <div className="cem-table-actions">
+                                <button
+                                  type="button"
+                                  className="cem-btn cem-btn--outline cem-btn--xs"
+                                  onClick={() => addRow(sec.id, blk.id)}
+                                >
+                                  <FaPlus /> Row
+                                </button>
+                                <button
+                                  type="button"
+                                  className="cem-btn cem-btn--outline cem-btn--xs"
+                                  onClick={() => addCol(sec.id, blk.id)}
+                                >
+                                  <FaPlus /> Column
+                                </button>
+                                <span className="cem-hint">
+                                  Tip: paste cells copied from Excel or Word
+                                  into any cell.
+                                </span>
+                              </div>
+                            </div>
                           )}
 
                           {blk.type === "figure" && (
@@ -646,7 +872,7 @@ const ContentEditorModal = ({
 
                   <div className="cem-add-row">
                     <span>Add to section:</span>
-                    {["paragraph", "quote", "figure"].map((type) => (
+                    {["paragraph", "quote", "figure", "table"].map((type) => (
                       <button
                         key={type}
                         type="button"

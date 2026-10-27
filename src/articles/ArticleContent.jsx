@@ -5,6 +5,9 @@ import "../styles/articleContent.css";
 // Matches [1], [1,2], [1, 3], [1–3]
 const CITE_RE = /\[(\d{1,3}(?:\s*[,–-]\s*\d{1,3})*)\]/g;
 
+// Numeric-looking cells (and columns made only of them) are right-aligned
+const NUMERIC_RE = /^[-+\u2212]?\d[\d,]*(\.\d+)?%?$/;
+
 /** Turns "[1, 2]" in text into links to #ref-1 / #ref-2 (only for references that exist). */
 const withCitations = (text, refCount) => {
   if (!refCount) return text;
@@ -80,6 +83,53 @@ const ArticleContent = ({ content, legacyHtml = false }) => {
                   <blockquote key={j} className="journal-quote">
                     {withCitations(b.text, references.length)}
                   </blockquote>
+                );
+              }
+              if (b.type === "table") {
+                const hasHead = b.headers.some(Boolean);
+                const numeric = b.headers.map((_, c) => {
+                  const vals = b.rows.map((r) => r[c]).filter(Boolean);
+                  return (
+                    vals.length > 0 && vals.every((v) => NUMERIC_RE.test(v))
+                  );
+                });
+                return (
+                  <div key={j} className="article-table">
+                    <div className="article-table-scroll">
+                      <table>
+                        {b.caption && <caption>{b.caption}</caption>}
+                        {hasHead && (
+                          <thead>
+                            <tr>
+                              {b.headers.map((h, c) => (
+                                <th
+                                  key={c}
+                                  scope="col"
+                                  className={numeric[c] ? "num" : undefined}
+                                >
+                                  {h}
+                                </th>
+                              ))}
+                            </tr>
+                          </thead>
+                        )}
+                        <tbody>
+                          {b.rows.map((row, r) => (
+                            <tr key={r}>
+                              {row.map((cell, c) => (
+                                <td
+                                  key={c}
+                                  className={numeric[c] ? "num" : undefined}
+                                >
+                                  {cell}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 );
               }
               if (b.type === "figure") {
