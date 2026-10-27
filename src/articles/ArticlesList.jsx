@@ -95,7 +95,7 @@ const ArticlesList = () => {
 
         <div className="articles-container">
           <header className="articles-header">
-            <h1>Accepted Articles & Publications</h1>
+            <h1> Published Articles </h1>
             <p>
               Explore peer-reviewed open access articles across our
               discipline-specific journals.

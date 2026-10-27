@@ -181,6 +181,7 @@ export const generateAiPrompt =
       "level": 1,
       "blocks": [
         { "type": "paragraph", "text": "Table 1 summarises the groups..." },
+        { "type": "figure", "url": "", "caption": "Figure 1: Study design" },
         {
           "type": "table",
           "caption": "Table 1: Baseline characteristics of participants",
@@ -203,7 +204,7 @@ Rules:
 1. Divide text logically into article headings (Abstract, Introduction, Methodology, Results, Discussion, Conclusion).
 2. "level" is 1 for main headings and 2 for sub-headings.
 3. Maintain sequential order. Join lines broken by the PDF layout into whole paragraphs, and repair words split by hyphenation.
-4. Allowed block types inside 'blocks': "paragraph", "quote" and "table". Do not include images, charts, page numbers, headers or footers.
+4. Allowed block types inside 'blocks': "paragraph", "quote", "table" and "figure". Do not include page numbers, headers or footers.
 5. Tables:
    - Output every data table as a "table" block, placed in the section and position where it appears in the paper. Never write a table as a paragraph, as markdown, or as a picture.
    - "caption" is the full caption including its label (for example "Table 2: Results by group"). Put any table notes or sources at the end of the caption.
@@ -212,5 +213,9 @@ Rules:
    - Copy every cell exactly: keep numbers, units, symbols and markers such as * or superscript letters. Use "" for an empty cell. For merged cells, repeat the value in each column it spans. Never invent or round data.
    - A table that continues across pages is ONE table block.
    - Do not turn charts or figures into tables.
-6. Put every citation inside the root "references" array, one string per reference, without the leading number.
-7. Do NOT include markdown code fences (\`\`\`json). Output pure JSON only.`;
+6. Figures:
+   - For every figure, output a "figure" block at the position where the figure appears, with "url" set to "" (images are added later by hand).
+   - "caption" holds only the figure's own label, title and legend (for example "Figure 1: Study design. Boxes show..."), plus any source note.
+   - Body text that merely sits above or below a figure is NOT part of the caption: keep it as normal paragraphs before and after the figure block.
+7. Put every citation inside the root "references" array, one string per reference, without the leading number.
+8. Do NOT include markdown code fences (\`\`\`json). Output pure JSON only.`;

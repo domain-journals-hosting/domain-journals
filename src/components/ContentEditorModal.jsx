@@ -828,16 +828,16 @@ const ContentEditorModal = ({
                                   )}
                                 </label>
                               )}
-                              <input
-                                type="text"
-                                className="cem-input"
+                              <textarea
+                                rows={2}
+                                className="cem-textarea"
                                 value={blk.caption || ""}
                                 onChange={(e) =>
                                   patchBlock(sec.id, blk.id, {
                                     caption: e.target.value,
                                   })
                                 }
-                                placeholder="Caption (e.g., Figure 1: Experimental setup)"
+                                placeholder="Caption / legend (e.g., Figure 1: Experimental setup). Add any notes or source here."
                               />
                             </div>
                           )}
