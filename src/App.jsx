@@ -65,6 +65,7 @@ import Results from "./admins/Results";
 import ReviseExam from "./admins/ReviseExam";
 import ArticlesList from "./articles/ArticlesList";
 import ArticleDetails from "./articles/ArticleDetails";
+import ArticlePdfViewer from "./articles/ArticlePdfViewer";
 
 function App() {
   const location = useLocation();
@@ -104,6 +105,7 @@ function App() {
 
           <Route path="/articles" element={<ArticlesList />} />
           <Route path="/articles/:slug" element={<ArticleDetails />} />
+          <Route path="/articles/:slug/pdf" element={<ArticlePdfViewer />} />
 
           <Route
             path="/journals/:slug/editorial-board"
