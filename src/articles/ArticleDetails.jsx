@@ -14,13 +14,13 @@ import {
   FaWhatsapp,
   FaGlobe,
   FaEnvelope,
-  FaFileAlt,
   FaCalendarAlt,
 } from "react-icons/fa";
 import axios from "../api/axios";
 import Toast from "../components/Toast";
 import ArticleContent from "./ArticleContent";
 import journals from "../data/journals.json";
+import { getDownloadUrl } from "../utils/fileHelpers";
 import "../styles/articles.css";
 
 const formatScholarDate = (dateString, fallbackYear) => {
@@ -34,7 +34,6 @@ const formatScholarDate = (dateString, fallbackYear) => {
 };
 
 const formatFullDate = (dateString, fallbackYear) => {
-  console.log(dateString, fallbackYear);
   if (!dateString) return fallbackYear || "";
   const d = new Date(dateString);
   if (isNaN(d.getTime())) return fallbackYear || "";
@@ -53,7 +52,6 @@ const ArticleDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);
-  const [showIframe, setShowIframe] = useState(true);
 
   const getArticle = async () => {
     setLoading(true);
@@ -61,7 +59,6 @@ const ArticleDetails = () => {
     try {
       const res = await axios.get(`/accepted/slug/${slug}`);
       setArticle(res.data);
-      setShowIframe(!res.data.content);
     } catch (e) {
       setError("The requested article could not be found.");
     } finally {
@@ -119,7 +116,7 @@ const ArticleDetails = () => {
             content: formatScholarDate(article.createdAt, article.year),
           },
           { name: "citation_journal_title", content: journalDisplayTitle },
-          { name: "citation_pdf_url", content: article.file },
+          { name: "citation_pdf_url", content: getDownloadUrl(article.file) },
           ...(article.content
             ? [{ name: "citation_fulltext_html_url", content: shareUrl }]
             : []),
@@ -206,7 +203,7 @@ const ArticleDetails = () => {
               {/* Primary Action Buttons */}
               <div className="article-actions-bar">
                 <a
-                  href={article.file}
+                  href={getDownloadUrl(article.file)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-sage-primary"
@@ -222,13 +219,14 @@ const ArticleDetails = () => {
                   {copied ? "Citation Copied!" : "Cite Article"}
                 </button>
 
-                <button
-                  className="btn-sage-outline"
-                  onClick={() => setShowIframe(!showIframe)}
-                >
-                  <FaEye />{" "}
-                  {showIframe ? "Hide Document Viewer" : "View Document"}
-                </button>
+                {article.file && (
+                  <button
+                    className="btn-sage-outline"
+                    onClick={() => navigate(`/articles/${slug}/pdf`)}
+                  >
+                    <FaEye /> View PDF
+                  </button>
+                )}
               </div>
 
               <div className="section-title-tag">Abstract</div>
@@ -239,32 +237,6 @@ const ArticleDetails = () => {
                   <div className="section-title-tag">Full Text</div>
                   <ArticleContent content={article.content} />
                 </>
-              )}
-
-              {showIframe && article.file && (
-                <div className="document-viewer-wrapper">
-                  <div className="viewer-header">
-                    <span>
-                      <FaFileAlt style={{ marginRight: "8px" }} /> Embedded
-                      Document Preview
-                    </span>
-                    <a
-                      href={article.file}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ color: "#a8d5b5", textDecoration: "none" }}
-                    >
-                      Open Original File &rarr;
-                    </a>
-                  </div>
-                  <iframe
-                    src={`https://docs.google.com/viewer?url=${encodeURIComponent(
-                      article.file,
-                    )}&embedded=true`}
-                    title="Manuscript Document Viewer"
-                    className="document-iframe"
-                  />
-                </div>
               )}
 
               {/* Social Share Section */}
