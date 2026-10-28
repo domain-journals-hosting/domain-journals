@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
+    "postinstall": "npx puppeteer browsers install chrome",
     "prebuild": "node scripts/generate-sitemap.js",
     "build": "vite build",
     "postbuild": "node scripts/prerender.js"
