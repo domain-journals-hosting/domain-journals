@@ -32,7 +32,7 @@ const ArticlePdfViewer = () => {
     description: article?.abstract
       ? `PDF document viewer for ${article.title}`
       : "",
-    robots: "noindex, follow", // Prevents Google from indexing the viewer shell over the main article
+    robots: "noindex, follow", 
   });
 
   useHead({

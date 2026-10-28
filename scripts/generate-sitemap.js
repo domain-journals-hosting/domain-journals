@@ -6,7 +6,7 @@ import { getRoutesToPrerender } from "./generate-routes.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const DOMAIN = "https://domainjournals.com";
+const DOMAIN = "https://www.domainjournals.com";
 
 async function buildSitemap() {
   const routes = await getRoutesToPrerender();
@@ -26,8 +26,11 @@ async function buildSitemap() {
         priority = "0.8";
       }
 
+      // Ensure clean URL construction without double slashes
+      const cleanRoute = route.startsWith("/") ? route : `/${route}`;
+
       return `  <url>
-    <loc>${DOMAIN}${route}</loc>
+    <loc>${DOMAIN}${cleanRoute}</loc>
     <lastmod>${new Date().toISOString().split("T")[0]}</lastmod>
     <changefreq>${changefreq}</changefreq>
     <priority>${priority}</priority>
@@ -40,13 +43,23 @@ async function buildSitemap() {
 ${xmlUrls}
 </urlset>`;
 
+  // Write to both public/ (source) and dist/ (production build output)
   const publicDir = path.resolve(__dirname, "../public");
+  const distDir = path.resolve(__dirname, "../dist");
+
   if (!fs.existsSync(publicDir)) {
     fs.mkdirSync(publicDir, { recursive: true });
   }
-
   fs.writeFileSync(path.join(publicDir, "sitemap.xml"), sitemapXml, "utf8");
-  console.log(`✅ sitemap.xml generated with ${routes.length} routes.`);
+
+  if (fs.existsSync(distDir)) {
+    fs.writeFileSync(path.join(distDir, "sitemap.xml"), sitemapXml, "utf8");
+    console.log(
+      `✅ sitemap.xml updated in both public/ and dist/ (${routes.length} routes).`,
+    );
+  } else {
+    console.log(`✅ sitemap.xml saved to public/ (${routes.length} routes).`);
+  }
 }
 
 buildSitemap();
