@@ -23,6 +23,8 @@ import journals from "../data/journals.json";
 import { getDownloadUrl } from "../utils/fileHelpers";
 import "../styles/articles.css";
 
+const SITE_URL = "https://www.domainjournals.com";
+
 const formatScholarDate = (dateString, fallbackYear) => {
   if (!dateString) return fallbackYear ? `${fallbackYear}/01/01` : "";
   const d = new Date(dateString);
@@ -92,7 +94,9 @@ const ArticleDetails = () => {
     setTimeout(() => setCopied(false), 2500);
   };
 
-  const shareUrl = window.location.href;
+  // Strip trailing slashes to guarantee exact match with production routing
+  const cleanSlug = slug ? slug.replace(/\/+$/, "") : "";
+  const canonicalUrl = `${SITE_URL}/articles/${cleanSlug}`;
 
   useSeoMeta({
     title: article
@@ -102,7 +106,7 @@ const ArticleDetails = () => {
   });
 
   useHead({
-    link: article ? [{ rel: "canonical", href: shareUrl }] : [],
+    link: article ? [{ rel: "canonical", href: canonicalUrl }] : [],
     meta: article
       ? [
           { name: "citation_title", content: article.title },
@@ -118,7 +122,7 @@ const ArticleDetails = () => {
           { name: "citation_journal_title", content: journalDisplayTitle },
           { name: "citation_pdf_url", content: getDownloadUrl(article.file) },
           ...(article.content
-            ? [{ name: "citation_fulltext_html_url", content: shareUrl }]
+            ? [{ name: "citation_fulltext_html_url", content: canonicalUrl }]
             : []),
         ]
       : [],
@@ -249,7 +253,7 @@ const ArticleDetails = () => {
                   <a
                     href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
                       article.title,
-                    )}&url=${encodeURIComponent(shareUrl)}`}
+                    )}&url=${encodeURIComponent(canonicalUrl)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="share-btn"
@@ -259,7 +263,7 @@ const ArticleDetails = () => {
 
                   <a
                     href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-                      shareUrl,
+                      canonicalUrl,
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -270,7 +274,7 @@ const ArticleDetails = () => {
 
                   <a
                     href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-                      shareUrl,
+                      canonicalUrl,
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -281,7 +285,7 @@ const ArticleDetails = () => {
 
                   <a
                     href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
-                      `${article.title} - ${shareUrl}`,
+                      `${article.title} - ${canonicalUrl}`,
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
