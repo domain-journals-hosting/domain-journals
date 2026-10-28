@@ -6,6 +6,8 @@ import { useSeoMeta, useHead } from "@unhead/react";
 import { getViewerUrl, getDownloadUrl } from "../utils/fileHelpers";
 import "../styles/articles.css";
 
+const SITE_URL = "https://www.domainjournals.com";
+
 const ArticlePdfViewer = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -20,10 +22,8 @@ const ArticlePdfViewer = () => {
       .finally(() => setLoading(false));
   }, [slug]);
 
-  const primaryArticleUrl =
-    typeof window !== "undefined"
-      ? `${window.location.origin}/articles/${slug}`
-      : `https://domainjournals.com/articles/${slug}`;
+  const cleanSlug = slug ? slug.replace(/\/+$/, "") : "";
+  const primaryArticleUrl = `${SITE_URL}/articles/${cleanSlug}`;
 
   useSeoMeta({
     title: article
