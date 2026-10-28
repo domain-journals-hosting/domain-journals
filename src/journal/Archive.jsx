@@ -5,13 +5,30 @@ import "../styles/archive.css";
 import JournalHeader from "./JournalHeader";
 import ArchiveDetails from "../components/ArchiveDetails";
 import journals from "../data/journals";
-import { Helmet } from "react-helmet";
+import { useSeoMeta, useHead } from "@unhead/react";
 
 const Archive = () => {
   const { slug } = useParams();
   const [grouped, setGrouped] = useState([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState(null);
+
+  const journal = journals.find((j) => j.slug === slug);
+  const journalTitle = journal?.title || "Journal";
+
+  useSeoMeta({
+    title: `${journalTitle} Archive - Domain Journals`,
+    description: `Browse the archive of published issues and articles from ${journalTitle}.`,
+  });
+
+  useHead({
+    link: [
+      {
+        rel: "canonical",
+        href: `https://www.domainjournals.com/journals/${slug}/archive`,
+      },
+    ],
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -92,86 +109,67 @@ const Archive = () => {
     fetchData();
   }, [slug]);
 
-  const journal = journals.find((j) => j.slug === slug);
-  const journalTitle = journal?.title || "Journal";
-
   return (
-    <>
-      <Helmet>
-        <title>{journalTitle} Archive - Domain Journals</title>
-        <meta
-          name="description"
-          content={`Browse the archive of published issues and articles from ${journalTitle}.`}
-        />
-        <link
-          rel="canonical"
-          href={`https://www.domainjournals.com/journals/${slug}/archive`}
-        />
-      </Helmet>
-
+    <div className="archive-page">
       <JournalHeader slug={slug} />
 
-      <div className="archive-page">
-        <h1>Journal Archive</h1>
+      <h1>Journal Archive</h1>
 
-        {loading && <p className="archive__status">Loading...</p>}
-        {err && <p className="archive__error">{err}</p>}
-        {!loading && !err && grouped.length === 0 && (
-          <p className="archive__status">No archived issues yet.</p>
-        )}
+      {loading && <p className="archive__status">Loading...</p>}
+      {err && <p className="archive__error">{err}</p>}
+      {!loading && !err && grouped.length === 0 && (
+        <p className="archive__status">No archived issues yet.</p>
+      )}
 
-        {!loading &&
-          !err &&
-          grouped.map(({ group, items, file, fileUrl }) => (
-            <div key={group} className="archive-group">
-              <h2 className="archive-group__title">{group}</h2>
+      {!loading &&
+        !err &&
+        grouped.map(({ group, items, file, fileUrl }) => (
+          <div key={group} className="archive-group">
+            <h2 className="archive-group__title">{group}</h2>
 
-              {file && <ArchiveDetails file={file} fileUrl={fileUrl} />}
+            {file && <ArchiveDetails file={file} fileUrl={fileUrl} />}
 
-              {items.length === 0 ? (
-                <p className="archive-group__empty">
-                  No articles in this issue.
-                </p>
-              ) : (
-                <ul className="archive-list">
-                  {items.map((m) => {
-                    const names = [m.author, ...m.coAuthors.map((a) => a.name)];
-                    const authorsDisplay =
-                      names.length > 10
-                        ? `${m.author.trim().split(" ").slice(-1)[0]} et al.`
-                        : names.join(", ");
-                    return (
-                      <li key={m._id} className="archive-item">
-                        <div className="archive-item__meta">
-                          <span className="archive-item__type">
-                            {m.articleType || "Editorial"}
-                          </span>
-                        </div>
-                        <h3 className="archive-item__title">{m.title}</h3>
-                        <p className="archive-item__id">ID: {m.customId}</p>
-                        <p
-                          className="archive-item__authors"
-                          title={names.join(", ")}
+            {items.length === 0 ? (
+              <p className="archive-group__empty">No articles in this issue.</p>
+            ) : (
+              <ul className="archive-list">
+                {items.map((m) => {
+                  const names = [m.author, ...m.coAuthors.map((a) => a.name)];
+                  const authorsDisplay =
+                    names.length > 10
+                      ? `${m.author.trim().split(" ").slice(-1)[0]} et al.`
+                      : names.join(", ");
+                  return (
+                    <li key={m._id} className="archive-item">
+                      <div className="archive-item__meta">
+                        <span className="archive-item__type">
+                          {m.articleType || "Editorial"}
+                        </span>
+                      </div>
+                      <h3 className="archive-item__title">{m.title}</h3>
+                      <p className="archive-item__id">ID: {m.customId}</p>
+                      <p
+                        className="archive-item__authors"
+                        title={names.join(", ")}
+                      >
+                        <span>Author(s):</span> {authorsDisplay}
+                      </p>
+                      <div className="archive-item__actions">
+                        <Link
+                          to={`/articles/${m.slug}`}
+                          className="btn-outline"
                         >
-                          <span>Author(s):</span> {authorsDisplay}
-                        </p>
-                        <div className="archive-item__actions">
-                          <Link
-                            to={`/articles/${m.slug}`}
-                            className="btn-outline"
-                          >
-                            View Abstract
-                          </Link>
-                        </div>
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-            </div>
-          ))}
-      </div>
-    </>
+                          View Abstract
+                        </Link>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
+        ))}
+    </div>
   );
 };
 

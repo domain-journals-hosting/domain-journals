@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import axios from "../api/axios";
 import { useAuth } from "../hooks/useAuthor";
+import { useSeoMeta, useHead } from "@unhead/react";
 import "../styles/auth.css";
 
 const Login = () => {
@@ -13,6 +14,16 @@ const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useSeoMeta({
+    title: "Sign In - Domain Journals",
+    description:
+      "Log into your Domain Journals author account to track submissions, view manuscript status, and manage profile settings.",
+  });
+
+  useHead({
+    link: [{ rel: "canonical", href: "https://domainjournals.com/login" }],
+  });
 
   const handleChange = (e) =>
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));

@@ -1,8 +1,16 @@
 import { Link } from "react-router-dom";
 import { FaCompass, FaHome, FaUser } from "react-icons/fa";
+import { useSeoMeta } from "@unhead/react";
 import "../styles/404.css";
 
 const Missing = () => {
+  useSeoMeta({
+    title: "404 - Page Not Found | Domain Journals",
+    description:
+      "The requested resource could not be found on Domain Journals.",
+    robots: "noindex, nofollow",
+  });
+
   return (
     <div className="missing-wrapper">
       <div className="missing-card">

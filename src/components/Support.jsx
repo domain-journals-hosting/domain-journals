@@ -1,16 +1,20 @@
-import { Helmet } from "react-helmet";
+import { useSeoMeta, useHead } from "@unhead/react";
 
 const Support = () => {
+  useSeoMeta({
+    title: "Support Domain Journals",
+    description:
+      "Support Domain Journals and help us continue providing free open access publishing for researchers worldwide.",
+  });
+
+  useHead({
+    link: [
+      { rel: "canonical", href: "https://www.domainjournals.com/support" },
+    ],
+  });
+
   return (
     <div style={{ padding: "20px" }}>
-      <Helmet>
-        <title>Support Domain Journals</title>
-        <meta
-          name="description"
-          content="Support Domain Journals and help us continue providing free open access publishing for researchers worldwide."
-        />
-        <link rel="canonical" href="https://www.domainjournals.com/support" />
-      </Helmet>
       <h1>Support</h1>
       <p>Sources of support for the journal include:</p>
 

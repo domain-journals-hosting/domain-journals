@@ -1,19 +1,24 @@
-import { Helmet } from "react-helmet";
+import { useSeoMeta, useHead } from "@unhead/react";
 import "../styles/publicationEthics.css";
+
 const PublicationEthics = () => {
+  useSeoMeta({
+    title: "Publication Ethics | Domain Journals",
+    description:
+      "Read about Domain Journals' publication ethics policy and standards for authors, reviewers, and editors.",
+  });
+
+  useHead({
+    link: [
+      {
+        rel: "canonical",
+        href: "https://www.domainjournals.com/publication-ethics",
+      },
+    ],
+  });
+
   return (
     <div style={{ padding: "20px" }}>
-      <Helmet>
-        <title>Publication Ethics | Domain Journals</title>
-        <meta
-          name="description"
-          content="Read about Domain Journals' publication ethics policy and standards for authors, reviewers, and editors."
-        />
-        <link
-          rel="canonical"
-          href="https://www.domainjournals.com/publication-ethics"
-        />
-      </Helmet>
       <h1>Publication Ethics</h1>
 
       <h2>Author Responsibilities</h2>
