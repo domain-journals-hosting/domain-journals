@@ -1,4 +1,9 @@
-User-Agent: *
+User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /admins/
+Disallow: /author
+Disallow: /pay/
+Disallow: /status/
 
 Sitemap: https://domainjournals.com/sitemap.xml

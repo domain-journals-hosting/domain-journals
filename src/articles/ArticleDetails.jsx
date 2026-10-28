@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Helmet } from "react-helmet";
+import { useSeoMeta, useHead } from "@unhead/react";
 import {
   FaArrowLeft,
   FaDownload,
@@ -97,313 +97,310 @@ const ArticleDetails = () => {
 
   const shareUrl = window.location.href;
 
-  return (
-    <>
-      {article && (
-        <Helmet>
-          <title>{`${article.title} - ${journalDisplayTitle}`}</title>
-          <meta
-            name="description"
-            content={article.abstract.substring(0, 160)}
-          />
-          <link rel="canonical" href={shareUrl} />
+  useSeoMeta({
+    title: article
+      ? `${article.title} - ${journalDisplayTitle}`
+      : "Article Details",
+    description: article?.abstract ? article.abstract.substring(0, 160) : "",
+  });
 
-          <meta name="citation_title" content={article.title} />
-          <meta name="citation_author" content={article.author} />
-          {article.coAuthors.map((co) => (
-            <meta key={co.email} name="citation_author" content={co.name} />
-          ))}
-          <meta
-            name="citation_publication_date"
-            content={formatScholarDate(article.createdAt, article.year)}
-          />
-          <meta name="citation_journal_title" content={journalDisplayTitle} />
-          <meta name="citation_pdf_url" content={article.file} />
-          {article.content && (
-            <meta name="citation_fulltext_html_url" content={shareUrl} />
-          )}
-        </Helmet>
+  useHead({
+    link: article ? [{ rel: "canonical", href: shareUrl }] : [],
+    meta: article
+      ? [
+          { name: "citation_title", content: article.title },
+          { name: "citation_author", content: article.author },
+          ...article.coAuthors.map((co) => ({
+            name: "citation_author",
+            content: co.name,
+          })),
+          {
+            name: "citation_publication_date",
+            content: formatScholarDate(article.createdAt, article.year),
+          },
+          { name: "citation_journal_title", content: journalDisplayTitle },
+          { name: "citation_pdf_url", content: article.file },
+          ...(article.content
+            ? [{ name: "citation_fulltext_html_url", content: shareUrl }]
+            : []),
+        ]
+      : [],
+  });
+
+  return (
+    <div className="articles-page">
+      {copied && (
+        <Toast
+          message="Citation copied to clipboard!"
+          onClose={() => setCopied(false)}
+        />
       )}
 
-      <div className="articles-page">
-        {copied && (
-          <Toast
-            message="Citation copied to clipboard!"
-            onClose={() => setCopied(false)}
-          />
+      <div className="articles-container">
+        <button className="back-btn" onClick={() => navigate("/articles")}>
+          <FaArrowLeft /> Back to Articles
+        </button>
+
+        {/* SKELETON LOADING STATE */}
+        {loading && (
+          <div className="article-detail-layout">
+            <div className="article-main-card">
+              <div className="badge-group" style={{ marginBottom: "16px" }}>
+                <div className="skeleton skeleton-badge" />
+                <div className="skeleton skeleton-badge" />
+              </div>
+              <div
+                className="skeleton skeleton-title"
+                style={{ height: "36px", width: "90%" }}
+              />
+              <div
+                className="skeleton skeleton-title"
+                style={{ height: "36px", width: "65%" }}
+              />
+              <div
+                className="skeleton"
+                style={{ height: "160px", marginTop: "24px" }}
+              />
+            </div>
+
+            <aside className="article-sidebar">
+              <div className="sidebar-box">
+                <div
+                  className="skeleton skeleton-title"
+                  style={{ width: "60%", height: "20px" }}
+                />
+                <div className="skeleton skeleton-text" />
+                <div className="skeleton skeleton-text" />
+              </div>
+            </aside>
+          </div>
         )}
 
-        <div className="articles-container">
-          <button className="back-btn" onClick={() => navigate("/articles")}>
-            <FaArrowLeft /> Back to Articles
-          </button>
+        {/* ERROR / NOT FOUND STATE */}
+        {!loading && (error || !article) && (
+          <div className="state-box">
+            <h3>Article Unavailable</h3>
+            <p>{error || "We couldn't locate this manuscript."}</p>
+            <button
+              className="btn-sage-primary"
+              onClick={() => navigate("/articles")}
+            >
+              Browse All Articles
+            </button>
+          </div>
+        )}
 
-          {/* SKELETON LOADING STATE */}
-          {loading && (
-            <div className="article-detail-layout">
-              <div className="article-main-card">
-                <div className="badge-group" style={{ marginBottom: "16px" }}>
-                  <div className="skeleton skeleton-badge" />
-                  <div className="skeleton skeleton-badge" />
-                </div>
-                <div
-                  className="skeleton skeleton-title"
-                  style={{ height: "36px", width: "90%" }}
-                />
-                <div
-                  className="skeleton skeleton-title"
-                  style={{ height: "36px", width: "65%" }}
-                />
-                <div
-                  className="skeleton"
-                  style={{ height: "160px", marginTop: "24px" }}
-                />
+        {/* MAIN ARTICLE VIEW */}
+        {!loading && !error && article && (
+          <div className="article-detail-layout">
+            <main className="article-main-card">
+              <div className="badge-group">
+                <span className="badge-pill journal">
+                  {journalDisplayTitle}
+                </span>
+                <span className="badge-pill type">{article.articleType}</span>
               </div>
 
-              <aside className="article-sidebar">
-                <div className="sidebar-box">
-                  <div
-                    className="skeleton skeleton-title"
-                    style={{ width: "60%", height: "20px" }}
+              <h1 className="article-detail-title">{article.title}</h1>
+
+              {/* Primary Action Buttons */}
+              <div className="article-actions-bar">
+                <a
+                  href={article.file}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-sage-primary"
+                >
+                  <FaDownload /> Download Manuscript
+                </a>
+
+                <button
+                  className="btn-sage-outline"
+                  onClick={handleCopyCitation}
+                >
+                  {copied ? <FaCheck /> : <FaCopy />}
+                  {copied ? "Citation Copied!" : "Cite Article"}
+                </button>
+
+                <button
+                  className="btn-sage-outline"
+                  onClick={() => setShowIframe(!showIframe)}
+                >
+                  <FaEye />{" "}
+                  {showIframe ? "Hide Document Viewer" : "View Document"}
+                </button>
+              </div>
+
+              <div className="section-title-tag">Abstract</div>
+              <div className="abstract-container">{article.abstract}</div>
+
+              {article.content && (
+                <>
+                  <div className="section-title-tag">Full Text</div>
+                  <ArticleContent content={article.content} />
+                </>
+              )}
+
+              {showIframe && article.file && (
+                <div className="document-viewer-wrapper">
+                  <div className="viewer-header">
+                    <span>
+                      <FaFileAlt style={{ marginRight: "8px" }} /> Embedded
+                      Document Preview
+                    </span>
+                    <a
+                      href={article.file}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: "#a8d5b5", textDecoration: "none" }}
+                    >
+                      Open Original File &rarr;
+                    </a>
+                  </div>
+                  <iframe
+                    src={`https://docs.google.com/viewer?url=${encodeURIComponent(
+                      article.file,
+                    )}&embedded=true`}
+                    title="Manuscript Document Viewer"
+                    className="document-iframe"
                   />
-                  <div className="skeleton skeleton-text" />
-                  <div className="skeleton skeleton-text" />
                 </div>
-              </aside>
-            </div>
-          )}
+              )}
 
-          {/* ERROR / NOT FOUND STATE */}
-          {!loading && (error || !article) && (
-            <div className="state-box">
-              <h3>Article Unavailable</h3>
-              <p>{error || "We couldn't locate this manuscript."}</p>
-              <button
-                className="btn-sage-primary"
-                onClick={() => navigate("/articles")}
-              >
-                Browse All Articles
-              </button>
-            </div>
-          )}
-
-          {/* MAIN ARTICLE VIEW */}
-          {!loading && !error && article && (
-            <div className="article-detail-layout">
-              <main className="article-main-card">
-                <div className="badge-group">
-                  <span className="badge-pill journal">
-                    {journalDisplayTitle}
-                  </span>
-                  <span className="badge-pill type">{article.articleType}</span>
+              {/* Social Share Section */}
+              <div className="share-panel">
+                <div className="section-title-tag">
+                  <FaShareAlt style={{ marginRight: "6px" }} /> Share This
+                  Research
                 </div>
-
-                <h1 className="article-detail-title">{article.title}</h1>
-
-                {/* Primary Action Buttons */}
-                <div className="article-actions-bar">
+                <div className="share-buttons-row">
                   <a
-                    href={article.file}
+                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                      article.title,
+                    )}&url=${encodeURIComponent(shareUrl)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-sage-primary"
+                    className="share-btn"
                   >
-                    <FaDownload /> Download Manuscript
+                    <FaTwitter color="#1DA1F2" /> Twitter / X
                   </a>
 
-                  <button
-                    className="btn-sage-outline"
-                    onClick={handleCopyCitation}
+                  <a
+                    href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+                      shareUrl,
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="share-btn"
                   >
-                    {copied ? <FaCheck /> : <FaCopy />}
-                    {copied ? "Citation Copied!" : "Cite Article"}
-                  </button>
+                    <FaLinkedin color="#0A66C2" /> LinkedIn
+                  </a>
 
-                  <button
-                    className="btn-sage-outline"
-                    onClick={() => setShowIframe(!showIframe)}
+                  <a
+                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                      shareUrl,
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="share-btn"
                   >
-                    <FaEye />{" "}
-                    {showIframe ? "Hide Document Viewer" : "View Document"}
-                  </button>
+                    <FaFacebook color="#1877F2" /> Facebook
+                  </a>
+
+                  <a
+                    href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
+                      `${article.title} - ${shareUrl}`,
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="share-btn"
+                  >
+                    <FaWhatsapp color="#25D366" /> WhatsApp
+                  </a>
+                </div>
+              </div>
+            </main>
+
+            <aside className="article-sidebar">
+              <div className="sidebar-box">
+                <h3 className="sidebar-box-title">Author Information</h3>
+
+                <div className="author-entry">
+                  <span className="author-entry-name">{article.author}</span>
+                  <a
+                    href={`mailto:${article.email}`}
+                    className="author-entry-email"
+                  >
+                    <FaEnvelope style={{ marginRight: "4px" }} />{" "}
+                    {article.email}
+                  </a>
                 </div>
 
-                <div className="section-title-tag">Abstract</div>
-                <div className="abstract-container">{article.abstract}</div>
-
-                {article.content && (
-                  <>
-                    <div className="section-title-tag">Full Text</div>
-                    <ArticleContent content={article.content} />
-                  </>
+                {article.coAuthors.length > 0 && (
+                  <div style={{ marginTop: "18px" }}>
+                    <div
+                      className="info-item-label"
+                      style={{ marginBottom: "8px" }}
+                    >
+                      Co-Authors ({article.coAuthors.length})
+                    </div>
+                    {article.coAuthors.map((co) => (
+                      <div key={co.email} className="author-entry">
+                        <span className="author-entry-name">{co.name}</span>
+                        <a
+                          href={`mailto:${co.email}`}
+                          className="author-entry-email"
+                        >
+                          <FaEnvelope style={{ marginRight: "4px" }} />{" "}
+                          {co.email}
+                        </a>
+                      </div>
+                    ))}
+                  </div>
                 )}
+              </div>
 
-                {showIframe && article.file && (
-                  <div className="document-viewer-wrapper">
-                    <div className="viewer-header">
-                      <span>
-                        <FaFileAlt style={{ marginRight: "8px" }} /> Embedded
-                        Document Preview
-                      </span>
-                      <a
-                        href={article.file}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ color: "#a8d5b5", textDecoration: "none" }}
-                      >
-                        Open Original File &rarr;
-                      </a>
-                    </div>
-                    <iframe
-                      src={`https://docs.google.com/viewer?url=${encodeURIComponent(
-                        article.file,
-                      )}&embedded=true`}
-                      title="Manuscript Document Viewer"
-                      className="document-iframe"
-                    />
-                  </div>
-                )}
+              <div className="sidebar-box">
+                <h3 className="sidebar-box-title">Publication Details</h3>
 
-                {/* Social Share Section */}
-                <div className="share-panel">
-                  <div className="section-title-tag">
-                    <FaShareAlt style={{ marginRight: "6px" }} /> Share This
-                    Research
-                  </div>
-                  <div className="share-buttons-row">
-                    <a
-                      href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
-                        article.title,
-                      )}&url=${encodeURIComponent(shareUrl)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="share-btn"
-                    >
-                      <FaTwitter color="#1DA1F2" /> Twitter / X
-                    </a>
-
-                    <a
-                      href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-                        shareUrl,
-                      )}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="share-btn"
-                    >
-                      <FaLinkedin color="#0A66C2" /> LinkedIn
-                    </a>
-
-                    <a
-                      href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-                        shareUrl,
-                      )}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="share-btn"
-                    >
-                      <FaFacebook color="#1877F2" /> Facebook
-                    </a>
-
-                    <a
-                      href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
-                        `${article.title} - ${shareUrl}`,
-                      )}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="share-btn"
-                    >
-                      <FaWhatsapp color="#25D366" /> WhatsApp
-                    </a>
-                  </div>
-                </div>
-              </main>
-
-              <aside className="article-sidebar">
-                <div className="sidebar-box">
-                  <h3 className="sidebar-box-title">Author Information</h3>
-
-                  <div className="author-entry">
-                    <span className="author-entry-name">{article.author}</span>
-                    <a
-                      href={`mailto:${article.email}`}
-                      className="author-entry-email"
-                    >
-                      <FaEnvelope style={{ marginRight: "4px" }} />{" "}
-                      {article.email}
-                    </a>
+                <div className="info-list">
+                  <div className="info-item">
+                    <div className="info-item-label">Manuscript ID</div>
+                    <div className="info-item-val">{article.customId}</div>
                   </div>
 
-                  {article.coAuthors.length > 0 && (
-                    <div style={{ marginTop: "18px" }}>
-                      <div
-                        className="info-item-label"
-                        style={{ marginBottom: "8px" }}
-                      >
-                        Co-Authors ({article.coAuthors.length})
-                      </div>
-                      {article.coAuthors.map((co) => (
-                        <div key={co.email} className="author-entry">
-                          <span className="author-entry-name">{co.name}</span>
-                          <a
-                            href={`mailto:${co.email}`}
-                            className="author-entry-email"
-                          >
-                            <FaEnvelope style={{ marginRight: "4px" }} />{" "}
-                            {co.email}
-                          </a>
-                        </div>
-                      ))}
+                  <div className="info-item">
+                    <div className="info-item-label">Published Date</div>
+                    <div className="info-item-val" style={{ fontWeight: 600 }}>
+                      <FaCalendarAlt
+                        style={{
+                          marginRight: "6px",
+                          color: "var(--color-sage, #659377)",
+                        }}
+                      />
+                      {formatFullDate(article.createdAt, article.year)}
                     </div>
-                  )}
-                </div>
+                  </div>
 
-                <div className="sidebar-box">
-                  <h3 className="sidebar-box-title">Publication Details</h3>
+                  <div className="info-item">
+                    <div className="info-item-label">Issue</div>
+                    <div className="info-item-val">Issue #{article.issue}</div>
+                  </div>
 
-                  <div className="info-list">
-                    <div className="info-item">
-                      <div className="info-item-label">Manuscript ID</div>
-                      <div className="info-item-val">{article.customId}</div>
-                    </div>
-
-                    <div className="info-item">
-                      <div className="info-item-label">Published Date</div>
-                      <div
-                        className="info-item-val"
-                        style={{ fontWeight: 600 }}
-                      >
-                        <FaCalendarAlt
-                          style={{
-                            marginRight: "6px",
-                            color: "var(--color-sage, #659377)",
-                          }}
-                        />
-                        {formatFullDate(article.createdAt, article.year)}
-                      </div>
-                    </div>
-
-                    <div className="info-item">
-                      <div className="info-item-label">Issue</div>
-                      <div className="info-item-val">
-                        Issue #{article.issue}
-                      </div>
-                    </div>
-
-                    <div className="info-item">
-                      <div className="info-item-label">Country</div>
-                      <div className="info-item-val">
-                        <FaGlobe style={{ marginRight: "4px" }} />{" "}
-                        {article.country}
-                      </div>
+                  <div className="info-item">
+                    <div className="info-item-label">Country</div>
+                    <div className="info-item-val">
+                      <FaGlobe style={{ marginRight: "4px" }} />{" "}
+                      {article.country}
                     </div>
                   </div>
                 </div>
-              </aside>
-            </div>
-          )}
-        </div>
+              </div>
+            </aside>
+          </div>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 

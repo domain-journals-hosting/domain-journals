@@ -2,7 +2,7 @@ import { useState } from "react";
 import "../styles/contact.css";
 import axios from "../api/axios";
 import NewsletterSubscription from "./NewsLetterSubscription";
-import { Helmet } from "react-helmet";
+import { useSeoMeta, useHead } from "@unhead/react";
 
 const Contact = ({ home = false }) => {
   const [msg, setMsg] = useState("");
@@ -12,6 +12,19 @@ const Contact = ({ home = false }) => {
   const [email, setEMail] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useSeoMeta({
+    title: !home ? "Contact Us - Domain Journals" : undefined,
+    description: !home
+      ? "Reach out to the Domain Journals editorial team for inquiries, submissions, or support."
+      : undefined,
+  });
+
+  useHead({
+    link: !home
+      ? [{ rel: "canonical", href: "https://domainjournals.com/contact" }]
+      : [],
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,17 +52,6 @@ const Contact = ({ home = false }) => {
 
   return (
     <>
-      {!home && (
-        <Helmet>
-          <title>Contact Us - Domain Journals</title>
-          <meta
-            name="description"
-            content="Reach out to the Domain Journals editorial team for inquiries, submissions, or support."
-          />
-          <link rel="canonical" href="https://domainjournals.com/contact" />
-        </Helmet>
-      )}
-
       <section
         className={`contact-section${home ? " contact-section--home" : ""}`}
       >

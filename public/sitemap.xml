@@ -1,58 +1,213 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset
-  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-  xmlns:xhtml="http://www.w3.org/1999/xhtml">
-
-  <!-- Root -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://domainjournals.com/</loc>
-    <lastmod>2025-07-05</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
-
-  <!-- Core pages -->
-  <url>
-    <loc>https://domainjournals.com/submit</loc>
-    <lastmod>2025-07-05</lastmod>
-    <changefreq>monthly</changefreq>
-  </url>
-
-  <url>
-    <loc>https://domainjournals.com/contact</loc>
-    <lastmod>2025-07-05</lastmod>
-    <changefreq>yearly</changefreq>
-  </url>
-
   <url>
     <loc>https://domainjournals.com/journals</loc>
-    <lastmod>2025-07-05</lastmod>
+    <lastmod>2026-10-28</lastmod>
     <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
-
-  <!-- Individual journal pages -->
+  <url>
+    <loc>https://domainjournals.com/articles</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://domainjournals.com/contact</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://domainjournals.com/publication-ethics</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://domainjournals.com/review-process</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://domainjournals.com/support</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://domainjournals.com/submit</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://domainjournals.com/signup</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://domainjournals.com/login</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
   <url>
     <loc>https://domainjournals.com/journals/domain-health-journal</loc>
-    <lastmod>2025-07-05</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
-
+  <url>
+    <loc>https://domainjournals.com/journals/domain-health-journal/current-issue</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://domainjournals.com/journals/domain-health-journal/editorial-board</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://domainjournals.com/journals/domain-health-journal/guidelines</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://domainjournals.com/journals/domain-health-journal/archive</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <url>
     <loc>https://domainjournals.com/journals/domain-journal-of-science-and-technology</loc>
-    <lastmod>2025-07-05</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
-
   <url>
-    <loc>https://domainjournals.com/journals/domain-journal-of-biological-sciences</loc>
-    <lastmod>2025-07-05</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://domainjournals.com/journals/domain-journal-of-science-and-technology/current-issue</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
-
+  <url>
+    <loc>https://domainjournals.com/journals/domain-journal-of-science-and-technology/editorial-board</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://domainjournals.com/journals/domain-journal-of-science-and-technology/guidelines</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://domainjournals.com/journals/domain-journal-of-science-and-technology/archive</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <url>
     <loc>https://domainjournals.com/journals/domain-multidisciplinary-journal</loc>
-    <lastmod>2025-07-05</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
-
+  <url>
+    <loc>https://domainjournals.com/journals/domain-multidisciplinary-journal/current-issue</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://domainjournals.com/journals/domain-multidisciplinary-journal/editorial-board</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://domainjournals.com/journals/domain-multidisciplinary-journal/guidelines</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://domainjournals.com/journals/domain-multidisciplinary-journal/archive</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://domainjournals.com/journals/domain-journal-of-biological-sciences</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://domainjournals.com/journals/domain-journal-of-biological-sciences/current-issue</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://domainjournals.com/journals/domain-journal-of-biological-sciences/editorial-board</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://domainjournals.com/journals/domain-journal-of-biological-sciences/guidelines</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://domainjournals.com/journals/domain-journal-of-biological-sciences/archive</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://domainjournals.com/articles/naso-facial-anthropometry-a-study-of-the-correlation-between-the-nasal-and-facial-dimensions-among-urhobos-in-delta-state-university-nigeria</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://domainjournals.com/articles/prevalence-of-preauricular-sinus-among-the-urhobos-in-abraka-delta-state-nigeria</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://domainjournals.com/articles/anthropometric-analysis-of-the-lips-of-ndokwa-females-in-delta-state-nigeria</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://domainjournals.com/articles/philtral-column-and-nostril-shape-morphology-and-their-association-among-isoko-adults-in-delta-state-nigeria</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://domainjournals.com/articles/lip-morphometry-and-morphologic-pattern-variation-among-ethnic-groups-in-delta-state-nigeria</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
 </urlset>

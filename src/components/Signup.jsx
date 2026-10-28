@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "../api/axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useSeoMeta, useHead } from "@unhead/react";
 import "../styles/auth.css";
 
 const departments = [
@@ -30,6 +31,16 @@ const Signup = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
+
+  useSeoMeta({
+    title: "Create an Account - Domain Journals",
+    description:
+      "Sign up as an author on Domain Journals to submit and manage your scientific manuscripts.",
+  });
+
+  useHead({
+    link: [{ rel: "canonical", href: "https://domainjournals.com/signup" }],
+  });
 
   const handleChange = (e) =>
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));

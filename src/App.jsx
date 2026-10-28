@@ -111,8 +111,8 @@ function App() {
           />
 
           <Route path="/signup" element={<Signup />} />
-          <Route path="/forgot" element={<ForgotPw />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/forgot" element={<ForgotPw />} />
           <Route path="/reset" element={<ResetPassword />} />
           <Route path="/journals/:slug/guidelines" element={<Guidelines />} />
           <Route path="/journals/:slug/archive" element={<Archive />} />

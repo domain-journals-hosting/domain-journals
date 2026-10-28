@@ -4,13 +4,30 @@ import axios from "../api/axios";
 import "../styles/currentIssue.css";
 import JournalHeader from "./JournalHeader";
 import journals from "../data/journals.json";
-import { Helmet } from "react-helmet";
+import { useSeoMeta, useHead } from "@unhead/react";
 
 export const CurrentIssue = () => {
   const { slug } = useParams();
   const [manuscripts, setManuscripts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState(null);
+
+  const journal = journals.find((j) => j.slug === slug);
+  const journalTitle = journal?.title || "Journal";
+
+  useSeoMeta({
+    title: `${journalTitle} - Current Issue | Domain Journals`,
+    description: `Read the latest published articles and research from the current issue of ${journalTitle}.`,
+  });
+
+  useHead({
+    link: [
+      {
+        rel: "canonical",
+        href: `https://www.domainjournals.com/journals/${slug}/current-issue`,
+      },
+    ],
+  });
 
   useEffect(() => {
     const fetchAccepted = async () => {
@@ -29,23 +46,8 @@ export const CurrentIssue = () => {
     fetchAccepted();
   }, [slug]);
 
-  const journal = journals.find((j) => j.slug === slug);
-  const journalTitle = journal?.title || "Journal";
-
   return (
     <div className="current-issue-page">
-      <Helmet>
-        <title>{journalTitle} - Current Issue | Domain Journals</title>
-        <meta
-          name="description"
-          content={`Read the latest published articles and research from the current issue of ${journalTitle}.`}
-        />
-        <link
-          rel="canonical"
-          href={`https://www.domainjournals.com/journals/${slug}/current-issue`}
-        />
-      </Helmet>
-
       <JournalHeader slug={slug} />
 
       <div className="current-issue">
