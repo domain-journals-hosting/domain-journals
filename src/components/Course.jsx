@@ -4,37 +4,55 @@ import "../styles/courses.css";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
 import ConfirmDialog from "./ConfirmDialog";
+import {
+  FaLock,
+  FaUnlock,
+  FaFileDownload,
+  FaExternalLinkAlt,
+  FaBookOpen,
+  FaGraduationCap,
+  FaEdit,
+  FaTrashAlt,
+  FaTimes,
+  FaYoutube,
+  FaArrowLeft,
+} from "react-icons/fa";
+
+// Helper to convert YouTube URLs into embeddable player URLs
+const getYouTubeEmbedUrl = (url = "") => {
+  const regExp =
+    /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+  return match && match[2].length === 11
+    ? `https://www.youtube.com/embed/${match[2]}`
+    : null;
+};
 
 const Course = () => {
   const { courseId } = useParams();
-  console.log(courseId);
-  const [course, setCourse] = useState([]);
+  const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [activeTextDrawer, setActiveTextDrawer] = useState(null);
+
   const backendBase = import.meta.env.VITE_API_BASE_URL;
   const navigate = useNavigate();
+  const { user } = useUser();
+  const isAdmin = user?.role === "admin";
+
   const downloadLink = (file) => {
-    console.log(file);
     return file.endsWith(".doc")
       ? file
       : `${backendBase}/file?url=${encodeURIComponent(file)}`;
   };
-  const { user } = useUser();
-  const isAdmin = user?.role === "admin";
+
   const deleteCourse = async () => {
-    const deleteCourseURL = `/course/${courseId}`;
-    const response = await axios.delete(deleteCourseURL);
-    console.log(response);
-    navigate("/courses");
-  };
-  const handleOpenText = (item) => {
-    navigate("/content", {
-      state: {
-        heading: course.title,
-        title: item.text,
-        text: item.text || "",
-      },
-    });
+    try {
+      await axios.delete(`/course/${courseId}`);
+      navigate("/courses");
+    } catch (err) {
+      console.error("Failed to delete course:", err);
+    }
   };
 
   useEffect(() => {
@@ -42,7 +60,6 @@ const Course = () => {
       try {
         const response = await axios.get(`/course/${courseId}`);
         setCourse(response.data);
-        console.log(response.data.exams);
       } catch (err) {
         console.error("Error fetching course:", err);
       } finally {
@@ -51,26 +68,38 @@ const Course = () => {
     };
     getCourse();
   }, [courseId]);
-  if (!courseId)
-    return <p className="loading">There was a problem loading this</p>;
-  if (!loading && !course)
-    <p className="loading">There was a problem loading this</p>;
-  if (loading) return <p className="loading">Loading course...</p>;
+
+  if (loading)
+    return <p className="courses-loading">Loading course contents...</p>;
+  if (!course)
+    return <p className="courses-loading">Unable to load requested course.</p>;
 
   return (
-    <div className="course-container">
-      <ConfirmDialog
-        open={showModal}
-        onClose={() => setShowModal(false)}
-        onConfirm={() => deleteCourse(courseId)}
-        message={"Are you sure you want to delete this message?"}
-      />
-      <div className="course-grid">
-        <div key={course._id} className="course-card">
-          <h3>{course.title}</h3>
-          <p>{course.description}</p>
-          {/* Price Section */}
-          <div className="course-price">
+    <div className="courses-container">
+      {/* Back Navigation */}
+      <button
+        type="button"
+        className="back-to-courses-btn"
+        onClick={() => navigate("/courses")}
+      >
+        <FaArrowLeft /> Back to Courses
+      </button>
+
+      <div className="single-course-card">
+        {/* Header Header */}
+        <div className="course-card__header">
+          <div className="course-title-row">
+            <h1>{course.title}</h1>
+            <span
+              className={`access-pill ${course.paid ? "unlocked" : "locked"}`}
+            >
+              {course.paid ? <FaUnlock /> : <FaLock />}
+              {course.paid ? "Full Access" : "Preview Mode"}
+            </span>
+          </div>
+          <p className="course-description">{course.description}</p>
+
+          <div className="course-price-banner">
             {course.originalPrice ? (
               <>
                 <span className="original-price">₦{course.originalPrice}</span>
@@ -85,99 +114,217 @@ const Course = () => {
               <span className="discounted-price">₦{course.price}</span>
             )}
           </div>
-          {/* Outline Section */}
-          <h3>{course.outlineHeading || "Outline"}</h3>
-          {!course.outline.length
-            ? "Nothing to show"
-            : course.outline.map((item, i) => (
-                <div key={i}>
-                  {course.paid ? (
-                    <a href={downloadLink(item.file)} download>
-                      {item.title}
-                    </a>
-                  ) : (
-                    <p style={{ color: "gray" }}>{item.title}</p>
-                  )}
-                </div>
-              ))}
-          <h3 style={{ marginTop: "30px" }}>
-            {course.materialsHeading || "Materials"}
-          </h3>
-          {!course.materials.length
-            ? "Nothing to show"
-            : course.materials.map((item, i) => (
-                <div key={i}>
-                  {course.paid ? (
-                    <a href={item.link} target="_blank">
-                      {item.text}
-                    </a>
-                  ) : (
-                    <p style={{ color: "gray" }}>{item.text}</p>
-                  )}
-                </div>
-              ))}
-          <div>
-            <h3 style={{ marginTop: "30px" }}>
-              {course.textsHeading || "Texts"}
-            </h3>
-            {!course.texts.length ? (
-              <p>Nothing to show</p>
-            ) : (
-              course.texts.map((item, i) => (
-                <div key={i}>
-                  {course.paid ? (
-                    <a
-                      onClick={() => handleOpenText(item)}
-                      style={{
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        textDecoration: "underline",
-                        padding: 0,
-                        fontSize: "16px",
-                      }}
-                    >
-                      {item.title}
-                    </a>
-                  ) : (
-                    <p style={{ color: "gray" }}>{item.title}</p>
-                  )}
-                </div>
-              ))
-            )}
-          </div>
-          <div>
-            <br />
-            <h4>Exams</h4>
-            {course.paid && course.exams.length ? (
-              course.exams.map((exam) => (
-                <Link
-                  key={exam._id}
-                  style={{ marginTop: "20px", display: "block" }}
-                  to={`/exam/${exam._id}`}
-                >
-                  {exam.description}
-                </Link>
-              ))
-            ) : (
-              <p>No exams yet </p>
-            )}
-          </div>
-          <div className="actions">
-            {isAdmin && (
-              <>
-                <Link to={`/editCourse/${course._id}`}>Edit Course</Link>
-                <p
-                  style={{ color: "crimson" }}
-                  onClick={() => setShowModal(true)}
-                >
-                  Delete Course
-                </p>
-              </>
-            )}
-          </div>{" "}
         </div>
+
+        <div className="course-card__body">
+          {/* Outline Section */}
+          <div className="course-section-block">
+            <h3 className="section-label">
+              <FaBookOpen className="section-icon" />
+              {course.outlineHeading || "Course Outline"}
+            </h3>
+            {!course.outline?.length ? (
+              <p className="empty-text">No outline modules uploaded yet.</p>
+            ) : (
+              <ul className="content-list">
+                {course.outline.map((item, i) => (
+                  <li key={i} className="content-item">
+                    {course.paid ? (
+                      <a
+                        href={downloadLink(item.file)}
+                        download
+                        className="active-link"
+                      >
+                        <FaFileDownload className="item-icon" /> {item.title}
+                      </a>
+                    ) : (
+                      <span className="locked-text">
+                        <FaLock className="item-icon" /> {item.title}
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          {/* Materials & Embedded Videos Section */}
+          <div className="course-section-block">
+            <h3 className="section-label">
+              <FaExternalLinkAlt className="section-icon" />
+              {course.materialsHeading || "Study Materials & Video Lectures"}
+            </h3>
+            {!course.materials?.length ? (
+              <p className="empty-text">
+                No supplementary materials uploaded yet.
+              </p>
+            ) : (
+              <div className="materials-wrapper">
+                {course.materials.map((item, i) => {
+                  const embedUrl = getYouTubeEmbedUrl(item.link);
+
+                  return (
+                    <div key={i} className="material-entry">
+                      {embedUrl && course.paid ? (
+                        /* Embedded YouTube Player for Paid Users */
+                        <div className="video-player-card">
+                          <p className="video-title">
+                            <FaYoutube className="yt-icon" /> {item.text}
+                          </p>
+                          <div className="video-embed-container">
+                            <iframe
+                              src={embedUrl}
+                              title={item.text}
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                            ></iframe>
+                          </div>
+                        </div>
+                      ) : course.paid ? (
+                        /* External Link */
+                        <a
+                          href={item.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="active-link"
+                        >
+                          <FaExternalLinkAlt className="item-icon" />{" "}
+                          {item.text}
+                        </a>
+                      ) : (
+                        /* Locked Material Indicator */
+                        <span className="locked-text">
+                          <FaLock className="item-icon" /> {item.text}
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* Reading Texts Section */}
+          <div className="course-section-block">
+            <h3 className="section-label">
+              <FaBookOpen className="section-icon" />
+              {course.textsHeading || "Course Texts"}
+            </h3>
+            {!course.texts?.length ? (
+              <p className="empty-text">No text modules uploaded yet.</p>
+            ) : (
+              <ul className="content-list">
+                {course.texts.map((item, i) => (
+                  <li key={i} className="content-item">
+                    {course.paid ? (
+                      <button
+                        type="button"
+                        onClick={() => setActiveTextDrawer(item)}
+                        className="active-text-btn"
+                      >
+                        <FaBookOpen className="item-icon" /> {item.title}
+                      </button>
+                    ) : (
+                      <span className="locked-text">
+                        <FaLock className="item-icon" /> {item.title}
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          {/* Examinations Section */}
+          <div className="course-section-block">
+            <h3 className="section-label">
+              <FaGraduationCap className="section-icon" />
+              Linked Examinations
+            </h3>
+            {course.paid && course.exams?.length ? (
+              <ul className="content-list">
+                {course.exams.map((exam) => (
+                  <li key={exam._id} className="content-item">
+                    <Link to={`/exam/${exam._id}`} className="exam-link">
+                      <FaGraduationCap className="item-icon" />{" "}
+                      {exam.description}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="empty-text">
+                {course.paid
+                  ? "No active examinations assigned to this course."
+                  : "Unlock course to view assigned examinations."}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Footer Admin Actions */}
+        {isAdmin && (
+          <div className="course-card__footer">
+            <div className="admin-actions">
+              <Link to={`/editCourse/${course._id}`} className="admin-btn edit">
+                <FaEdit /> Edit Course Structure
+              </Link>
+              <button
+                type="button"
+                className="admin-btn delete"
+                onClick={() => setShowModal(true)}
+              >
+                <FaTrashAlt /> Delete Course
+              </button>
+            </div>
+          </div>
+        )}
       </div>
+
+      {/* Delete Confirmation */}
+      <ConfirmDialog
+        open={showModal}
+        onClose={() => setShowModal(false)}
+        onConfirm={deleteCourse}
+        title="Delete Course"
+        message={`Are you sure you want to delete "${course.title}"? This operation cannot be undone.`}
+      />
+
+      {/* Inline Sliding Reader Drawer */}
+      {activeTextDrawer && (
+        <div
+          className="text-drawer-backdrop"
+          onClick={() => setActiveTextDrawer(null)}
+        >
+          <div
+            className="text-drawer-panel"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="text-drawer-header">
+              <div className="text-drawer-title-group">
+                <span className="drawer-course-tag">{course.title}</span>
+                <h2>{activeTextDrawer.title}</h2>
+              </div>
+              <button
+                type="button"
+                className="text-drawer-close"
+                onClick={() => setActiveTextDrawer(null)}
+                aria-label="Close reader"
+              >
+                <FaTimes />
+              </button>
+            </div>
+
+            <div className="text-drawer-body">
+              <div className="text-reader-content">
+                {activeTextDrawer.text ||
+                  activeTextDrawer.content ||
+                  "No text body available."}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

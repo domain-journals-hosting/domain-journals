@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { slug } from "../data/journals";
 import "../styles/carousel.css";
@@ -15,35 +15,62 @@ const imageMap = {
   science: scienceImg,
 };
 
-const JournalCarousel = ({ journals }) => {
+const JournalCarousel = ({ journals = [] }) => {
   const isMobile = useScreenSize(600);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [fading, setFading] = useState(false);
   const navigate = useNavigate();
   const isPaused = useRef(false);
+  const touchStartX = useRef(null);
 
-  const goTo = (index) => {
+  const goTo = useCallback((index) => {
     setFading(true);
     setTimeout(() => {
       setCurrentIndex(index);
       setFading(false);
     }, 250);
+  }, []);
+
+  const prevJournal = useCallback(() => {
+    goTo(currentIndex === 0 ? journals.length - 1 : currentIndex - 1);
+  }, [currentIndex, journals.length, goTo]);
+
+  const nextJournal = useCallback(() => {
+    goTo((currentIndex + 1) % journals.length);
+  }, [currentIndex, journals.length, goTo]);
+
+  // Touch Swipe Handlers for Mobile
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.changedTouches[0].clientX;
   };
 
-  const prevJournal = () =>
-    goTo(currentIndex === 0 ? journals.length - 1 : currentIndex - 1);
-
-  const nextJournal = () => goTo((currentIndex + 1) % journals.length);
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const distance = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(distance) > 40) {
+      if (distance > 0) nextJournal();
+      else prevJournal();
+    }
+    touchStartX.current = null;
+  };
 
   useEffect(() => {
+    if (journals.length <= 1) return;
     const interval = setInterval(() => {
       if (!isPaused.current) goTo((currentIndex + 1) % journals.length);
-    }, 4000);
+    }, 4500);
     return () => clearInterval(interval);
-  }, [currentIndex, journals.length]);
+  }, [currentIndex, journals.length, goTo]);
 
   if (!journals.length) return null;
   const currentJournal = journals[currentIndex];
+
+  const handleKeyDown = (e, action) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      action();
+    }
+  };
 
   return (
     <div className="carousel-wrapper">
@@ -51,6 +78,8 @@ const JournalCarousel = ({ journals }) => {
         className="journal-carousel"
         onMouseEnter={() => (isPaused.current = true)}
         onMouseLeave={() => (isPaused.current = false)}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
       >
         {!isMobile && (
           <button
@@ -65,6 +94,11 @@ const JournalCarousel = ({ journals }) => {
         <div
           className={`journal-frame${fading ? " fading" : ""}`}
           onClick={() => navigate(`/journals/${slug(currentJournal.title)}`)}
+          onKeyDown={(e) =>
+            handleKeyDown(e, () =>
+              navigate(`/journals/${slug(currentJournal.title)}`),
+            )
+          }
           role="button"
           tabIndex={0}
         >
@@ -93,6 +127,7 @@ const JournalCarousel = ({ journals }) => {
             key={idx}
             className={`dot${idx === currentIndex ? " active" : ""}`}
             onClick={() => goTo(idx)}
+            onKeyDown={(e) => handleKeyDown(e, () => goTo(idx))}
             role="button"
             tabIndex={0}
             aria-label={`Go to journal ${idx + 1}`}

@@ -1,5 +1,18 @@
 import { useRef, useState } from "react";
-import { FaBars, FaTimes } from "react-icons/fa";
+import {
+  FaBars,
+  FaTimes,
+  FaHome,
+  FaBook,
+  FaFileAlt,
+  FaPaperPlane,
+  FaEnvelope,
+  FaTachometerAlt,
+  FaUserPlus,
+  FaSignInAlt,
+  FaUser,
+  FaGraduationCap,
+} from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../styles/nav.css";
 import useScreenSize from "../hooks/useScreenSize";
@@ -8,16 +21,16 @@ import { useUser } from "../hooks/useUser";
 import logo from "../assets/logo.png";
 
 const navIcons = {
-  "/": "ti-home",
-  "/journals": "ti-books",
-  "/articles": "ti-file-text",
-  "/submit": "ti-file-upload",
-  "/contact": "ti-mail",
-  "/admin/dashboard": "ti-layout-dashboard",
-  "/signup": "ti-user-plus",
-  "/login": "ti-login",
-  "/author": "ti-user",
-  "/courses": "ti-school",
+  "/": FaHome,
+  "/journals": FaBook,
+  "/articles": FaFileAlt,
+  "/submit": FaPaperPlane,
+  "/contact": FaEnvelope,
+  "/admin/dashboard": FaTachometerAlt,
+  "/signup": FaUserPlus,
+  "/login": FaSignInAlt,
+  "/author": FaUser,
+  "/courses": FaGraduationCap,
 };
 
 const Nav = ({ isHeroVisible }) => {
@@ -39,8 +52,9 @@ const Nav = ({ isHeroVisible }) => {
     { to: "/contact", label: "Contact us" },
   ];
 
-  if (admin.user && admin.checked)
+  if (admin.user && admin.checked) {
     links.push({ to: "/admin/dashboard", label: "Dashboard" });
+  }
   if (!user && !admin.user && checked && admin.checked) {
     links.push({ to: "/signup", label: "Sign up" });
     links.push({ to: "/login", label: "Log in" });
@@ -75,7 +89,13 @@ const Nav = ({ isHeroVisible }) => {
     }
   };
 
-  if (location.pathname.startsWith("/journals/")) return null;
+  // Hide nav bar on specific sub-pages like journal details and active exam sessions
+  if (
+    location.pathname.startsWith("/journals/") ||
+    location.pathname.startsWith("/take-exam")
+  ) {
+    return null;
+  }
 
   const isActive = (to) =>
     to === "/" ? location.pathname === "/" : location.pathname.startsWith(to);
@@ -100,7 +120,9 @@ const Nav = ({ isHeroVisible }) => {
               <Link
                 to={item.to}
                 key={item.to}
-                className={`nav-link${item.to === "/submit" ? " nav-link--cta" : ""}${isActive(item.to) ? " nav-link--active" : ""}`}
+                className={`nav-link${
+                  item.to === "/submit" ? " nav-link--cta" : ""
+                }${isActive(item.to) ? " nav-link--active" : ""}`}
               >
                 {item.label}
               </Link>
@@ -115,23 +137,25 @@ const Nav = ({ isHeroVisible }) => {
 
       {isMobile && isOpened && (
         <nav className={`mobile show${isHeroVisible ? " mobile-hero" : ""}`}>
-          {visibleLinks.map((item) => (
-            <Link
-              to={item.to}
-              key={item.to}
-              className={`mobile-link${isActive(item.to) ? " mobile-link--active" : ""}`}
-              onClick={() => {
-                setIsOpened(false);
-                setVisibleLinks([]);
-              }}
-            >
-              <i
-                className={`ti ${navIcons[item.to] || "ti-circle"}`}
-                aria-hidden="true"
-              />
-              {item.label}
-            </Link>
-          ))}
+          {visibleLinks.map((item) => {
+            const IconComponent = navIcons[item.to] || FaFileAlt;
+            return (
+              <Link
+                to={item.to}
+                key={item.to}
+                className={`mobile-link${
+                  isActive(item.to) ? " mobile-link--active" : ""
+                }`}
+                onClick={() => {
+                  setIsOpened(false);
+                  setVisibleLinks([]);
+                }}
+              >
+                <IconComponent className="mobile-link-icon" />
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
       )}
     </>

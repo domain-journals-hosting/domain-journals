@@ -1,5 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "../api/axios";
+import { useNavigate } from "react-router-dom";
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -7,30 +9,44 @@ export const AuthProvider = ({ children }) => {
   const [checked, setChecked] = useState(false);
   const [error, setError] = useState(null);
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleUnauthorized = () => {
+      setUser(null);
+      setChecked(true);
+      const currentPath = window.location.pathname + window.location.search;
+      navigate("/login", { state: { from: currentPath }, replace: true });
+    };
+
+    window.addEventListener("author:unauthorized", handleUnauthorized);
+    return () =>
+      window.removeEventListener("author:unauthorized", handleUnauthorized);
+  }, [navigate]);
+
   const login = (userData) => {
     setUser(userData);
     setChecked(true);
   };
+
   const logout = () => {
     setUser(null);
     setChecked(true);
   };
+
   useEffect(() => {
     const checkUser = async () => {
       try {
         const response = await axios.get("author/me", {
           withCredentials: true,
         });
-
-        console.log(response);
         setUser(response.data);
       } catch (err) {
-        console.log(err);
-        if (!err.response) setError("No server response");
-        else {
+        if (!err.response) {
+          setError("No server response");
+        } else {
           setError(err.message);
         }
-        console.log(err.message);
         setUser(null);
       } finally {
         setChecked(true);
@@ -39,16 +55,12 @@ export const AuthProvider = ({ children }) => {
     checkUser();
   }, []);
 
-  const sendResetMail = async (email = user.email) => {
+  const sendResetMail = async (email = user?.email) => {
     try {
-      const response = await axios.post("/author/reset", {
-        email,
-      });
-      console.log(response.data);
+      const response = await axios.post("/author/reset", { email });
       setUser((prev) => ({ ...prev, _id: response.data.userId }));
       return response.data;
     } catch (error) {
-      console.log(error);
       throw error.response?.data || { error: "Something went wrong" };
     }
   };

@@ -1,47 +1,30 @@
 import React from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import "../styles/examFooter.css";
 
-const ExamFooter = ({
-  currentPage,
-  totalPages,
-  onPrev,
-  onNext,
-  onSaveDraft,
-}) => {
-  const handlePrev = () => {
-    if (currentPage > 0) {
-      onSaveDraft();
-      onPrev();
-    }
-  };
-
-  const handleNext = () => {
-    if (currentPage < totalPages - 1) {
-      onSaveDraft();
-      onNext();
-    }
-  };
-
+const ExamFooter = ({ currentPage, totalPages, onPrev, onNext }) => {
   return (
     <div className="exam-footer">
       <button
+        type="button"
         className="nav-btn"
-        onClick={handlePrev}
+        onClick={onPrev}
         disabled={currentPage === 0}
       >
-        Prev
+        <FaChevronLeft /> Previous
       </button>
 
       <span className="page-indicator">
-        Page {currentPage + 1} of {totalPages}
+        Page <strong>{currentPage + 1}</strong> of <strong>{totalPages}</strong>
       </span>
 
       <button
+        type="button"
         className="nav-btn"
-        onClick={handleNext}
+        onClick={onNext}
         disabled={currentPage === totalPages - 1}
       >
-        Next
+        Next <FaChevronRight />
       </button>
     </div>
   );

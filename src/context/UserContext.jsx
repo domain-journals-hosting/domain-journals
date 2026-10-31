@@ -1,5 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "../api/axios";
+import { useNavigate } from "react-router-dom";
+
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
@@ -7,14 +9,31 @@ export const UserProvider = ({ children }) => {
   const [checked, setChecked] = useState(false);
   const [error, setError] = useState(null);
 
+  const navigate = useNavigate();
+
   const login = (userData) => {
     setUser(userData);
     setChecked(true);
   };
+
   const logout = () => {
     setUser(null);
     setChecked(true);
   };
+
+  useEffect(() => {
+    const handleAdminUnauthorized = () => {
+      setUser(null);
+      setChecked(true);
+      const currentPath = window.location.pathname + window.location.search;
+      navigate("/admin/login", { state: { from: currentPath }, replace: true });
+    };
+
+    window.addEventListener("admin:unauthorized", handleAdminUnauthorized);
+    return () =>
+      window.removeEventListener("admin:unauthorized", handleAdminUnauthorized);
+  }, [navigate]);
+
   useEffect(() => {
     const checkUser = async () => {
       try {
@@ -22,37 +41,26 @@ export const UserProvider = ({ children }) => {
           withCredentials: true,
         });
         setUser(response.data);
-        console.log(response);
       } catch (err) {
-        if (!err.response) setError("No server response");
-        else {
+        if (!err.response) {
+          setError("No server response");
+        } else {
           setError(err?.response?.data?.error || "Something went wrong");
         }
-        console.log(err.message);
         setUser(null);
       } finally {
-        console.log("Setting checked");
         setChecked(true);
       }
     };
     checkUser();
   }, []);
 
-  useEffect(() => {
-    console.log(checked);
-  }, [checked]);
-
-  const sendResetMail = async (email = user.email) => {
+  const sendResetMail = async (email = user?.email) => {
     try {
-      console.log(email);
-      const response = await axios.post("/admin/reset", {
-        email,
-      });
-      console.log(response.data);
+      const response = await axios.post("/admin/reset", { email });
       setUser((prev) => ({ ...prev, _id: response.data.userId }));
       return response.data;
     } catch (error) {
-      console.log(error?.response?.data);
       throw error.response?.data || { error: "Something went wrong" };
     }
   };

@@ -1,13 +1,13 @@
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { useLocation, Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../hooks/useAuthor";
 
 const RequireAuth = () => {
-  const { user, checked, error } = useAuth();
+  const { user, checked } = useAuth();
   const location = useLocation();
-  console.log(user?.name, checked, error);
-  return !checked ? (
-    <p className="loading"> Loading...</p>
-  ) : user?.name ? (
+
+  if (!checked) return null;
+
+  return user ? (
     <Outlet />
   ) : (
     <Navigate to="/login" state={{ from: location }} replace />

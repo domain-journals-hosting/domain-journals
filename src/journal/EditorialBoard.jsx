@@ -27,26 +27,30 @@ const EditorialBoard = () => {
     <div className="editorial-page">
       <JournalHeader slug={slug} />
 
-      <div className="editorial-page__header">
-        <h1>{journal?.title}</h1>
-        <h2>Editorial Board</h2>
-      </div>
+      <div className="editorial-container">
+        <div className="editorial-page__header">
+          <h1>{journalTitle}</h1>
+          <h2>Editorial Board</h2>
+        </div>
 
-      <div className="editorial-grid">
-        {journal?.editorialBoard?.map((member, index) => (
-          <div key={index} className="editor-card">
-            <div className="editor-card__avatar">{member.name.charAt(0)}</div>
-            <div className="editor-card__body">
-              <span className="editor-card__role">{member.role}</span>
-              <h3 className="editor-card__name">{member.name}</h3>
-              <div className="editor-card__address">
-                {member.address.map((line, i) => (
-                  <p key={i}>{line}</p>
-                ))}
+        <div className="editorial-grid">
+          {journal?.editorialBoard?.map((member, index) => (
+            <div key={index} className="editor-card">
+              <div className="editor-card__avatar">
+                {member.name ? member.name.charAt(0) : "E"}
+              </div>
+              <div className="editor-card__body">
+                <span className="editor-card__role">{member.role}</span>
+                <h3 className="editor-card__name">{member.name}</h3>
+                <div className="editor-card__address">
+                  {member.address?.map((line, i) => (
+                    <p key={i}>{line}</p>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

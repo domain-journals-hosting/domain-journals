@@ -34,7 +34,7 @@ const Archive = () => {
     const fetchData = async () => {
       try {
         const res = await axios.get(`accepted/${slug}`);
-        const { archive, manuscripts } = res.data;
+        const { archive = [], manuscripts = [] } = res.data;
 
         const allYears = [
           ...new Set([
@@ -101,7 +101,7 @@ const Archive = () => {
         setGrouped(sortedGroups);
       } catch (error) {
         console.error(error);
-        setErr("Failed to load archive.");
+        setErr("Failed to load journal archive.");
       } finally {
         setLoading(false);
       }
@@ -113,62 +113,78 @@ const Archive = () => {
     <div className="archive-page">
       <JournalHeader slug={slug} />
 
-      <h1>Journal Archive</h1>
+      <div className="archive-container">
+        <div className="archive-header">
+          <h1>Journal Archive</h1>
+          <p className="archive-subtitle">
+            Explore past volumes, special issues, and peer-reviewed manuscript
+            collections for {journalTitle}.
+          </p>
+        </div>
 
-      {loading && <p className="archive__status">Loading...</p>}
-      {err && <p className="archive__error">{err}</p>}
-      {!loading && !err && grouped.length === 0 && (
-        <p className="archive__status">No archived issues yet.</p>
-      )}
+        {loading && (
+          <p className="archive__status">Loading archive issues...</p>
+        )}
+        {err && <p className="archive__error">{err}</p>}
+        {!loading && !err && grouped.length === 0 && (
+          <p className="archive__status">No archived issues available yet.</p>
+        )}
 
-      {!loading &&
-        !err &&
-        grouped.map(({ group, items, file, fileUrl }) => (
-          <div key={group} className="archive-group">
-            <h2 className="archive-group__title">{group}</h2>
+        {!loading &&
+          !err &&
+          grouped.map(({ group, items, file, fileUrl }) => (
+            <div key={group} className="archive-group">
+              <div className="archive-group__header">
+                <h2 className="archive-group__title">{group}</h2>
+              </div>
 
-            {file && <ArchiveDetails file={file} fileUrl={fileUrl} />}
+              {file && <ArchiveDetails file={file} fileUrl={fileUrl} />}
 
-            {items.length === 0 ? (
-              <p className="archive-group__empty">No articles in this issue.</p>
-            ) : (
-              <ul className="archive-list">
-                {items.map((m) => {
-                  const names = [m.author, ...m.coAuthors.map((a) => a.name)];
-                  const authorsDisplay =
-                    names.length > 10
-                      ? `${m.author.trim().split(" ").slice(-1)[0]} et al.`
-                      : names.join(", ");
-                  return (
-                    <li key={m._id} className="archive-item">
-                      <div className="archive-item__meta">
-                        <span className="archive-item__type">
-                          {m.articleType || "Editorial"}
-                        </span>
-                      </div>
-                      <h3 className="archive-item__title">{m.title}</h3>
-                      <p className="archive-item__id">ID: {m.customId}</p>
-                      <p
-                        className="archive-item__authors"
-                        title={names.join(", ")}
-                      >
-                        <span>Author(s):</span> {authorsDisplay}
-                      </p>
-                      <div className="archive-item__actions">
-                        <Link
-                          to={`/articles/${m.slug}`}
-                          className="btn-outline"
+              {items.length === 0 ? (
+                <p className="archive-group__empty">
+                  No individual articles listed in this issue file.
+                </p>
+              ) : (
+                <ul className="archive-list">
+                  {items.map((m) => {
+                    const names = [m.author, ...m.coAuthors.map((a) => a.name)];
+                    const authorsDisplay =
+                      names.length > 10
+                        ? `${m.author.trim().split(" ").slice(-1)[0]} et al.`
+                        : names.join(", ");
+                    return (
+                      <li key={m._id} className="archive-item">
+                        <div className="archive-item__meta">
+                          <span className="archive-item__type">
+                            {m.articleType || "Research Article"}
+                          </span>
+                          <span className="archive-item__id">
+                            ID: {m.customId}
+                          </span>
+                        </div>
+                        <h3 className="archive-item__title">{m.title}</h3>
+                        <p
+                          className="archive-item__authors"
+                          title={names.join(", ")}
                         >
-                          View Abstract
-                        </Link>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-          </div>
-        ))}
+                          <span>Author(s):</span> {authorsDisplay}
+                        </p>
+                        <div className="archive-item__actions">
+                          <Link
+                            to={`/articles/${m.slug}`}
+                            className="btn-outline"
+                          >
+                            View Abstract
+                          </Link>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </div>
+          ))}
+      </div>
     </div>
   );
 };

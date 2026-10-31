@@ -1,8 +1,8 @@
 .confirm-backdrop {
   position: fixed;
   inset: 0;
-  background-color: rgba(9, 50, 56, 0.55);
-  backdrop-filter: blur(3px);
+  background-color: rgba(9, 50, 56, 0.65);
+  backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -11,28 +11,28 @@
 }
 
 .confirm-dialog {
-  background-color: var(--color-card-bg);
+  background-color: var(--color-card-bg, #ffffff);
   width: 100%;
   max-width: 460px;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-md, 10px);
   padding: 24px;
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-md, 0 10px 25px rgba(0, 0, 0, 0.15));
+  border: 1px solid var(--color-border, #e2e8f0);
   box-sizing: border-box;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: inherit;
 }
 
 .confirm-dialog h2 {
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: 700;
-  color: var(--color-teal-dark);
+  color: var(--color-teal-dark, #093238);
   margin: 0 0 10px 0;
 }
 
 .confirm-message {
   font-size: 0.92rem;
   line-height: 1.5;
-  color: var(--color-text-muted);
+  color: var(--color-text-muted, #64748b);
   margin-bottom: 12px;
 }
 
@@ -44,7 +44,7 @@
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-  margin-top: 16px;
+  margin-top: 18px;
 }
 
 .confirm-actions .btn {
@@ -52,29 +52,29 @@
   font-size: 0.88rem;
   font-weight: 600;
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-sm, 8px);
   cursor: pointer;
-  transition:
-    background-color 0.2s ease,
-    transform 0.1s ease;
+  transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .confirm-actions .btn.cancel {
-  background-color: #6c757d;
-  color: #ffffff;
+  background-color: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
 }
 
 .confirm-actions .btn.cancel:hover {
-  background-color: #5a6268;
+  background-color: #e2e8f0;
+  color: #1e293b;
 }
 
 .confirm-actions .btn.confirm {
-  background-color: var(--color-sage);
+  background-color: var(--color-sage, #659377);
   color: #ffffff;
 }
 
 .confirm-actions .btn.confirm:hover {
-  background-color: var(--color-sage-dark);
+  background-color: var(--color-sage-dark, #537a62);
 }
 
 @media (max-width: 600px) {

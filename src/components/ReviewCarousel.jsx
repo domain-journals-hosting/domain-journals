@@ -10,9 +10,10 @@ const ReviewCarousel = () => {
   const [current, setCurrent] = useState(0);
   const [fading, setFading] = useState(false);
   const isPaused = useRef(false);
+  const touchStartX = useRef(null);
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchReviews = async () => {
       try {
         const res = await axios.get("/review");
         setReviews(res.data);
@@ -20,7 +21,7 @@ const ReviewCarousel = () => {
         console.error("Failed to fetch reviews", err);
       }
     };
-    fetch();
+    fetchReviews();
   }, []);
 
   const goTo = useCallback((index) => {
@@ -31,30 +32,34 @@ const ReviewCarousel = () => {
     }, 250);
   }, []);
 
-  const prev = () => goTo(current === 0 ? reviews.length - 1 : current - 1);
+  const prev = useCallback(() => {
+    goTo(current === 0 ? reviews.length - 1 : current - 1);
+  }, [current, reviews.length, goTo]);
 
-  const next = useCallback(
-    () => goTo((current + 1) % reviews.length),
-    [current, reviews.length, goTo],
-  );
+  const next = useCallback(() => {
+    goTo((current + 1) % reviews.length);
+  }, [current, reviews.length, goTo]);
 
   useEffect(() => {
     if (reviews.length <= 1) return;
     const interval = setInterval(() => {
       if (!isPaused.current) next();
-    }, 10000);
+    }, 8000);
     return () => clearInterval(interval);
   }, [next, reviews.length]);
 
-  const handleTouchStart = useRef(null);
-
   const onTouchStart = (e) => {
-    handleTouchStart.current = e.changedTouches[0].clientX;
+    touchStartX.current = e.changedTouches[0].clientX;
   };
 
   const onTouchEnd = (e) => {
-    const distance = handleTouchStart.current - e.changedTouches[0].clientX;
-    if (Math.abs(distance) > 50) distance > 0 ? next() : prev();
+    if (touchStartX.current === null) return;
+    const distance = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(distance) > 50) {
+      if (distance > 0) next();
+      else prev();
+    }
+    touchStartX.current = null;
   };
 
   if (!reviews.length) return null;

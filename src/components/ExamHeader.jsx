@@ -1,3 +1,13 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  FaRegClock,
+  FaCheckCircle,
+  FaSpinner,
+  FaExclamationCircle,
+  FaArrowLeft,
+} from "react-icons/fa";
+import ConfirmDialog from "./ConfirmDialog";
 import "../styles/examHeader.css";
 
 const formatTime = (ms) => {
@@ -10,49 +20,93 @@ const formatTime = (ms) => {
   return `${minutes}:${seconds}`;
 };
 
-const ExamHeader = ({ title = "Exam", timeLeft, onSubmit, saveStatus }) => {
-  const handleSubmit = () => {
-    const ok = window.confirm(
-      "Are you sure you want to submit your exam now? You won't be able to change answers after submitting."
-    );
-    if (!ok) return;
-    onSubmit();
+const ExamHeader = ({
+  title = "Exam",
+  timeLeft,
+  onSubmit,
+  saveStatus,
+  answeredCount = 0,
+  totalQuestions = 0,
+}) => {
+  const navigate = useNavigate();
+  const [confirmType, setConfirmType] = useState(null); // 'submit' | 'exit' | null
+
+  const handleConfirmAction = () => {
+    if (confirmType === "submit") {
+      onSubmit();
+    } else if (confirmType === "exit") {
+      navigate("/author");
+    }
+    setConfirmType(null);
   };
 
   return (
-    <header className="exam-header">
-      <div className="exam-title">
-        <h2>{title}</h2>
-      </div>
-
-      <div className="exam-controls">
-        <div className={`timer ${timeLeft <= 60000 ? "warning" : ""}`}>
-          <span className="label">Time left</span>
-          <span className="time">{formatTime(timeLeft)}</span>
+    <>
+      <header className="exam-header">
+        <div className="exam-header-left">
+          <button
+            type="button"
+            className="exit-exam-btn"
+            onClick={() => setConfirmType("exit")}
+            title="Exit to Profile"
+          >
+            <FaArrowLeft /> Exit to Profile
+          </button>
+          <h2 className="exam-header-title">{title}</h2>
         </div>
 
-        <div className="save-status">
-          {saveStatus === "saving" && (
-            <span className="saving">Saving draft...</span>
-          )}
-          {saveStatus === "saved" && (
-            <span className="saved">Draft saved ✓</span>
-          )}
-          {saveStatus === "error" && (
-            <span className="error">Save failed ✗</span>
-          )}
-        </div>
+        <div className="exam-controls">
+          <div className={`timer ${timeLeft <= 60000 ? "warning" : ""}`}>
+            <div className="timer-label">
+              <FaRegClock /> Time left
+            </div>
+            <span className="time">{formatTime(timeLeft)}</span>
+          </div>
 
-        <button
-          className="submit-btn"
-          onClick={handleSubmit}
-          disabled={timeLeft <= 0}
-          aria-disabled={timeLeft <= 0}
-        >
-          Submit
-        </button>
-      </div>
-    </header>
+          <div className="save-status">
+            {saveStatus === "saving" && (
+              <span className="saving">
+                <FaSpinner className="spin-icon" /> Saving...
+              </span>
+            )}
+            {saveStatus === "saved" && (
+              <span className="saved">
+                <FaCheckCircle /> Saved {answeredCount}/{totalQuestions}
+              </span>
+            )}
+            {saveStatus === "error" && (
+              <span className="error">
+                <FaExclamationCircle /> Save failed
+              </span>
+            )}
+          </div>
+
+          <button
+            className="submit-btn"
+            onClick={() => setConfirmType("submit")}
+            disabled={timeLeft <= 0}
+          >
+            Submit Exam
+          </button>
+        </div>
+      </header>
+
+      <ConfirmDialog
+        open={Boolean(confirmType)}
+        onClose={() => setConfirmType(null)}
+        onConfirm={handleConfirmAction}
+        title={
+          confirmType === "submit"
+            ? "Submit Examination?"
+            : "Exit Examination?"
+        }
+        message={
+          confirmType === "submit"
+            ? "Are you sure you want to submit your exam now? You won't be able to change answers after submitting."
+            : "Leave exam session? Your current answers are automatically saved as a draft."
+        }
+      />
+    </>
   );
 };
 
