@@ -1,89 +1,88 @@
+import React from "react";
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import "../styles/displayResult.css";
+
 const DisplayResult = ({ result, isRevising = false }) => {
   const getOption = (index, options) => {
     return options?.[index] ?? "Not answered";
   };
 
+  const percentage = Math.round((result.score / result.totalScore) * 100);
+
   return (
-    <div style={styles.container}>
+    <div className="display-result-card">
       {!isRevising && (
-        <h2 style={styles.score}>
-          Score: {result.score} / {result.totalScore} (
-          {Math.round((result.score / result.totalScore) * 100)}%)
-        </h2>
+        <div className="score-banner">
+          <h2 className="score-title">
+            Overall Score: {result.score} / {result.totalScore} ({percentage}%)
+          </h2>
+          {result.isSample && (
+            <span className="sample-badge">Practice Sample Attempt</span>
+          )}
+        </div>
       )}
 
       {result.questions ? (
-        <div>
+        <div className="result-questions-list">
           {result.questions.map((q, i) => {
             const isCorrect = isRevising ? true : q.answer === q.correctAnswer;
 
             return (
-              <div key={q._id} style={styles.questionCard(isCorrect)}>
-                <p style={styles.questionText}>
+              <div
+                key={q._id || i}
+                className={`result-question-card ${
+                  isCorrect ? "correct" : "incorrect"
+                }`}
+              >
+                <p className="result-question-text">
                   <strong>Q{i + 1}:</strong> {q.text}
                 </p>
 
                 {!isRevising && (
-                  <p>
-                    Your answer: <span>{getOption(q.answer, q.options)}</span>
+                  <p className="result-answer-row">
+                    <strong>Your Answer:</strong>{" "}
+                    <span className="result-answer-val">
+                      {getOption(q.answer, q.options)}
+                    </span>
                   </p>
                 )}
-                <p>
-                  Correct answer:{" "}
-                  <span>{getOption(q.correctAnswer, q.options)}</span>
+
+                <p className="result-answer-row">
+                  <strong>Correct Answer:</strong>{" "}
+                  <span className="result-answer-val correct-text">
+                    {getOption(q.correctAnswer, q.options)}
+                  </span>
                 </p>
 
                 {!isRevising && (
-                  <p style={styles.status(isCorrect)}>
-                    {isCorrect ? "✔ Correct" : "✗ Incorrect"}
-                  </p>
+                  <div
+                    className={`result-status-pill ${
+                      isCorrect ? "correct" : "incorrect"
+                    }`}
+                  >
+                    {isCorrect ? <FaCheckCircle /> : <FaTimesCircle />}
+                    <span>{isCorrect ? "Correct" : "Incorrect"}</span>
+                  </div>
                 )}
 
                 {q.explanation && (
-                  <p style={styles.explanation}>Explanation: {q.explanation}</p>
+                  <div className="result-explanation-box">
+                    <strong>Explanation:</strong> {q.explanation}
+                  </div>
                 )}
               </div>
             );
           })}
         </div>
       ) : (
-        <div>
-          <p>Review for this exam</p>
-          <p>You can check here for a review later</p>
-          <p>Review will show the questions, your and the correct answer</p>
+        <div className="result-empty-box">
+          <p>
+            Review details for this examination are not currently available.
+          </p>
         </div>
       )}
     </div>
   );
-};
-
-const styles = {
-  container: {
-    marginTop: 20,
-  },
-  score: {
-    marginBottom: 20,
-  },
-  questionCard: (isCorrect) => ({
-    padding: "15px",
-    marginBottom: "15px",
-    borderRadius: "8px",
-    border: "1px solid",
-    borderColor: isCorrect ? "#4caf50" : "#f44336",
-    backgroundColor: isCorrect ? "#e8f5e9" : "#fdecea",
-  }),
-  questionText: {
-    fontWeight: "500",
-    marginBottom: 8,
-  },
-  status: (isCorrect) => ({
-    fontWeight: "bold",
-    color: isCorrect ? "#2e7d32" : "#c62828",
-  }),
-  explanation: {
-    marginTop: 8,
-    fontStyle: "italic",
-  },
 };
 
 export default DisplayResult;

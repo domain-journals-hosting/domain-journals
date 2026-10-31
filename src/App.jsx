@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Home from "./components/Home";
 import Nav from "./components/Nav";
@@ -41,7 +42,6 @@ import Messages from "./admins/Messages";
 import Footer from "./components/Footer";
 import NewsletterSender from "./admins/NewsLetterSender";
 import AuditReviews from "./admins/AuditReviews";
-import { useEffect, useState } from "react";
 import ManuscriptView from "./manuscript/ManuscriptView";
 import Courses from "./components/Courses";
 import NewCourse from "./admins/NewCourse";
@@ -70,17 +70,19 @@ import ArticlePdfViewer from "./articles/ArticlePdfViewer";
 function App() {
   const location = useLocation();
   const [isHeroVisible, setIsHeroVisible] = useState(true);
+
   const isJournalsPage = location.pathname.startsWith("/journals/");
   const isHomePage = location.pathname === "/";
-  const showNav = !isJournalsPage && !isHomePage;
+  const isExamPage = location.pathname.startsWith("/take-exam");
+  const showNav = !isJournalsPage && !isHomePage && !isExamPage;
 
   useEffect(() => {
     const isHomepage = location.pathname === "/";
-
     if (!isHomepage) {
       setIsHeroVisible(false);
     }
   }, [location.pathname]);
+
   return (
     <div className="App">
       <ScrollToTop />
@@ -137,7 +139,7 @@ function App() {
             <Route path="/edit-exam/:examId" element={<EditExamForm />} />
           </Route>
 
-          {/* Unauthenticated routes  */}
+          {/* Unauthenticated routes */}
           <Route path="/admin/forgot" element={<AdminForgotPW />} />
           <Route path="/admin/reset" element={<ResetAdminPW />} />
 
@@ -162,6 +164,10 @@ function App() {
           {/* Basic authentication */}
           <Route element={<RequireAuth />}>
             <Route path="/complete/:token" element={<CompleteReset />} />
+            <Route
+              path="/take-exam/sample"
+              element={<TakeExam isSample={true} />}
+            />
             <Route path="/take-exam/:examId" element={<TakeExam />} />
             <Route path="/revise-exam/:examId" element={<ReviseExam />} />
             <Route path="/exam/:examId" element={<Exam />} />
@@ -177,7 +183,6 @@ function App() {
 
             {/* Optional fallback for legacy token links */}
             <Route path="/edit/token/:token" element={<EditManuscript />} />
-
             <Route path="/delete/token/:token" element={<DeleteManuscript />} />
 
             <Route path="/results" element={<AllResults />} />

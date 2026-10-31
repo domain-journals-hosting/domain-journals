@@ -9,6 +9,8 @@ import {
   FaCreditCard,
   FaPlus,
   FaExclamationTriangle,
+  FaGraduationCap,
+  FaClipboardList,
 } from "react-icons/fa";
 import axios from "../api/axios";
 import { useAuth } from "../hooks/useAuthor";
@@ -401,6 +403,14 @@ const AuthorProfile = () => {
               flexWrap: "wrap",
             }}
           >
+            <button
+              className="btn-sage-primary"
+              onClick={() => navigate("/take-exam/sample")}
+              style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+            >
+              <FaGraduationCap /> Take Practice Sample Exam
+            </button>
+
             <button className="btn-sage-outline" onClick={handleReset}>
               Reset Password
             </button>
@@ -491,7 +501,6 @@ const AuthorProfile = () => {
                   Journal: <strong>{reverseSlug(m.journal)}</strong>
                 </div>
 
-                {/* Rejection comment display */}
                 {m.status === "rejected" && m.comment && (
                   <div
                     style={{
@@ -518,7 +527,6 @@ const AuthorProfile = () => {
                   </div>
                 )}
 
-                {/* ACTION BUTTONS */}
                 <div className="card-bottom-row" style={{ paddingTop: "14px" }}>
                   <div
                     style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}
@@ -530,7 +538,6 @@ const AuthorProfile = () => {
                       <FaEye /> Track Status
                     </button>
 
-                    {/* Only show edit if not paid or published */}
                     {!["paid", "published"].includes(m.status) && (
                       <button
                         className="share-btn"
@@ -540,7 +547,6 @@ const AuthorProfile = () => {
                       </button>
                     )}
 
-                    {/* Show Pay Now if approved */}
                     {m.status === "approved" && (
                       <Link
                         to={`/pay/${m._id}`}
@@ -555,7 +561,6 @@ const AuthorProfile = () => {
                       </Link>
                     )}
 
-                    {/* Show Delete if not published */}
                     {m.status !== "published" && (
                       <button
                         className="share-btn"
@@ -610,7 +615,7 @@ const AuthorProfile = () => {
                       fontSize: "0.88rem",
                     }}
                   >
-                    View in Issue Archive →
+                    View in Issue Archive &rarr;
                   </Link>
                 </div>
               ))}
@@ -630,15 +635,27 @@ const AuthorProfile = () => {
         >
           <Link
             to="/results"
-            style={{ color: "var(--color-teal-dark)", fontWeight: 600 }}
+            style={{
+              color: "var(--color-teal-dark)",
+              fontWeight: 600,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+            }}
           >
-            🎓 My Exam Results
+            <FaClipboardList /> My Exam Results
           </Link>
           <Link
             to="/review"
-            style={{ color: "var(--color-sage)", fontWeight: 600 }}
+            style={{
+              color: "var(--color-sage)",
+              fontWeight: 600,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+            }}
           >
-            💬 Leave a Review
+            Leave a Review
           </Link>
         </div>
       </div>

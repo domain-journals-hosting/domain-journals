@@ -1,0 +1,85 @@
+.exam-guard-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(9, 50, 56, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.exam-guard-modal {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px 28px;
+  max-width: 440px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  border: 1px solid #e2e8f0;
+}
+
+.guard-icon-container {
+  width: 52px;
+  height: 52px;
+  background: #fef3c7;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px auto;
+}
+
+.warning-icon {
+  font-size: 1.6rem;
+  color: #d97706;
+}
+
+.exam-guard-modal h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.15rem;
+  color: var(--color-teal-dark, #093238);
+  font-weight: 700;
+}
+
+.guard-message {
+  font-size: 0.92rem;
+  color: #334155;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.guard-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #b45309;
+  background: #fffbe3;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid #fef08a;
+  margin-bottom: 20px;
+}
+
+.guard-dismiss-btn {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: var(--color-sage, #659377);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.guard-dismiss-btn:hover {
+  background: #537a62;
+}

@@ -1,6 +1,6 @@
 .nav-wrapper {
-  background-color: #659377;
-  border-bottom: 3px solid #093238;
+  background-color: var(--color-sage, #659377);
+  border-bottom: 3px solid var(--color-teal-dark, #093238);
   color: #f1f8e9;
   display: flex;
   align-items: center;
@@ -31,7 +31,7 @@
 
 .nav-brand {
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 600;
   color: #f1f8e9;
   white-space: nowrap;
   letter-spacing: 0.01em;
@@ -66,15 +66,15 @@
 
 .nav-link--active {
   color: #f1f8e9;
-  font-weight: 500;
-  border-bottom: 2px solid #a8d5b5;
+  font-weight: 600;
+  border-bottom: 2px solid var(--color-sage-light, #a8d5b5);
 }
 
 .nav-link--cta {
   background-color: rgba(255, 255, 255, 0.15);
   border: 1px solid rgba(255, 255, 255, 0.25);
   color: #f1f8e9;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .nav-link--cta:hover {
@@ -82,10 +82,13 @@
 }
 
 .icon-wrapper {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   cursor: pointer;
   margin-left: auto;
   color: #f1f8e9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: transform 0.3s ease;
 }
 
@@ -94,18 +97,19 @@
 }
 
 nav.mobile {
-  background-color: #659377;
+  background-color: var(--color-sage, #659377);
   padding: 8px 0;
   position: fixed;
   top: 60px;
   left: 0;
   right: 0;
   z-index: 998;
-  border-bottom: 2px solid #093238;
+  border-bottom: 2px solid var(--color-teal-dark, #093238);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 nav.mobile.mobile-hero {
-  background-color: rgba(0, 0, 0, 0.85);
+  background-color: rgba(9, 50, 56, 0.95);
   border-bottom-color: transparent;
 }
 
@@ -133,20 +137,21 @@ nav.mobile.mobile-hero {
 }
 
 .mobile-link--active {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.12);
   color: #f1f8e9;
-  font-weight: 500;
-  border-left-color: #a8d5b5;
+  font-weight: 600;
+  border-left-color: var(--color-sage-light, #a8d5b5);
 }
 
-.mobile-link i {
-  font-size: 16px;
-  opacity: 0.75;
+.mobile-link-icon {
+  font-size: 15px;
+  opacity: 0.85;
   flex-shrink: 0;
 }
 
-.mobile-link--active i {
+.mobile-link--active .mobile-link-icon {
   opacity: 1;
+  color: var(--color-sage-light, #a8d5b5);
 }
 
 .nav-hidden {

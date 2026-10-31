@@ -1,82 +1,95 @@
 .guidelines-page {
-  background-color: #f1f8f4;
+  background-color: #f8faf9;
   min-height: 100vh;
-  padding: 48px 24px 80px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.guidelines-content {
-  max-width: 760px;
+.guidelines-container {
+  max-width: 860px;
   margin: 0 auto;
+  padding: 32px 20px 60px;
+  box-sizing: border-box;
 }
 
-.guidelines-content h1 {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #093238;
-  margin-bottom: 1.2rem;
-  padding-bottom: 16px;
-  border-bottom: 2px solid #e8f5e9;
+.guidelines-header h1 {
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: 800;
+  color: var(--color-teal-dark, #093238);
+  margin: 0 0 16px 0;
 }
 
 .guidelines-intro {
-  font-size: 1rem;
-  color: #1b5e20;
-  line-height: 1.8;
-  margin-bottom: 2.5rem;
-  padding: 1.2rem 1.5rem;
-  background-color: #e8f5e9;
-  border-left: 4px solid #659377;
+  font-size: 0.98rem;
+  color: #334155;
+  line-height: 1.75;
+  margin: 0 0 28px 0;
+  padding: 18px 20px;
+  background-color: rgba(101, 147, 119, 0.08);
+  border-left: 4px solid var(--color-sage, #659377);
   border-radius: 0 8px 8px 0;
 }
 
+.guidelines-card {
+  background: #ffffff;
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 12px);
+  padding: 32px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+}
+
 .guidelines-section {
-  margin-bottom: 2.5rem;
+  margin-bottom: 32px;
+}
+
+.guidelines-section:last-child {
+  margin-bottom: 0;
 }
 
 .guidelines-section h2 {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #093238;
-  margin-bottom: 12px;
+  color: var(--color-teal-dark, #093238);
+  margin: 0 0 12px 0;
   padding-bottom: 8px;
-  border-bottom: 1px solid #c8e6c9;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .guidelines-section p {
   font-size: 0.95rem;
-  color: #1b5e20;
-  line-height: 1.8;
+  color: #475569;
+  line-height: 1.75;
+  margin: 0;
 }
 
 .guidelines-subsection {
-  margin: 1.5rem 0 1.5rem 1rem;
-  padding-left: 1rem;
-  border-left: 2px solid #c8e6c9;
+  margin: 20px 0 20px 12px;
+  padding-left: 16px;
+  border-left: 2px solid rgba(101, 147, 119, 0.4);
 }
 
 .guidelines-subsection h3 {
   font-size: 1rem;
   font-weight: 700;
-  color: #093238;
-  margin-bottom: 8px;
+  color: var(--color-teal-dark, #093238);
+  margin: 0 0 6px 0;
 }
 
 .guidelines-subsection p {
   font-size: 0.92rem;
-  color: #1b5e20;
+  color: #475569;
   line-height: 1.7;
 }
 
 .guidelines-list {
-  margin: 12px 0 0 20px;
+  margin: 10px 0 0 20px;
   padding: 0;
 }
 
 .guidelines-list li {
   font-size: 0.92rem;
-  color: #1b5e20;
-  line-height: 1.7;
+  color: #475569;
+  line-height: 1.65;
   margin-bottom: 6px;
 }
 
@@ -85,7 +98,7 @@
   flex-direction: column;
   gap: 4px;
   padding: 12px 0;
-  border-bottom: 0.5px solid #c8e6c9;
+  border-bottom: 1px solid #f1f5f9;
   font-size: 0.92rem;
 }
 
@@ -94,18 +107,29 @@
 }
 
 .guidelines-entry strong {
-  color: #093238;
-  font-weight: 600;
+  color: var(--color-teal-dark, #093238);
+  font-weight: 700;
 }
 
 .guidelines-entry span {
-  color: #1b5e20;
-  line-height: 1.7;
+  color: #475569;
+  line-height: 1.65;
 }
 
-@media (max-width: 600px) {
-  .guidelines-page {
-    padding: 32px 16px 60px;
+.guidelines-not-found {
+  text-align: center;
+  padding: 60px 20px;
+  color: #64748b;
+  font-size: 1rem;
+}
+
+@media (max-width: 640px) {
+  .guidelines-container {
+    padding: 20px 12px 40px;
+  }
+
+  .guidelines-card {
+    padding: 20px;
   }
 
   .guidelines-subsection {

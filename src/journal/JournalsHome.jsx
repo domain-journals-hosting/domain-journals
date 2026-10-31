@@ -35,20 +35,30 @@ const JournalsHome = () => {
     ],
   });
 
-  if (!journal) return null;
+  if (!journal) {
+    return (
+      <div className="journal-home">
+        <p className="journal-not-found">Requested journal not found.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="journal-home">
       <JournalHeader slug={slug} />
 
-      <div className="journal-home__hero">
-        <img src={imageMap[journal.image]} alt={journal.title} />
-        <div className="journal-home__hero-text">
-          <h1>{journal.title}</h1>
-          <p>{journal.description}</p>
-          <Link to="archive" className="journal-home__archive-link">
-            <i className="ti ti-archive" aria-hidden="true" /> View archive
-          </Link>
+      <div className="journal-home__container">
+        <div className="journal-home__hero">
+          <div className="journal-home__image-wrapper">
+            <img src={imageMap[journal.image]} alt={journal.title} />
+          </div>
+          <div className="journal-home__hero-text">
+            <h1>{journal.title}</h1>
+            <p>{journal.description}</p>
+            <Link to="archive" className="journal-home__archive-link">
+              <i className="ti ti-archive" aria-hidden="true" /> View archive
+            </Link>
+          </div>
         </div>
       </div>
     </div>

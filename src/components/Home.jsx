@@ -37,8 +37,12 @@ const Home = ({ setIsHeroVisible }) => {
 
   return (
     <div className="home-wrapper">
-      <div className="hero-banner" ref={heroRef}>
-        <img src={welcome} alt="Welcome" className="hero-image" />
+      <section className="hero-banner" ref={heroRef}>
+        <img
+          src={welcome}
+          alt="Welcome to Domain Journals"
+          className="hero-image"
+        />
         <div className="hero-text">
           <h1 className="typing">Discover. Inspire. Innovate.</h1>
           <h2>Welcome to Domain Journals</h2>
@@ -53,7 +57,7 @@ const Home = ({ setIsHeroVisible }) => {
             Start Exploring ↓
           </Link>
         </div>
-      </div>
+      </section>
 
       <JournalCarousel journals={journals} />
 
@@ -83,7 +87,7 @@ const Home = ({ setIsHeroVisible }) => {
       </section>
 
       <section className="cards-section">
-        <div className="card" onClick={() => navigate("publication-ethics")}>
+        <div className="card" onClick={() => navigate("/publication-ethics")}>
           <h2>Publication ethics</h2>
           <p>
             Prior to submission, please visit the journal catalog and the
@@ -93,7 +97,7 @@ const Home = ({ setIsHeroVisible }) => {
             View more <FaArrowRight />
           </span>
         </div>
-        <div className="card" onClick={() => navigate("review-process")}>
+        <div className="card" onClick={() => navigate("/review-process")}>
           <h2>Review process</h2>
           <p>
             Peer review is a fundamental step towards ensuring the standards and
@@ -103,7 +107,7 @@ const Home = ({ setIsHeroVisible }) => {
             View more <FaArrowRight />
           </span>
         </div>
-        <div className="card" onClick={() => navigate("support")}>
+        <div className="card" onClick={() => navigate("/support")}>
           <h2>Support Domain Journals</h2>
           <p>
             We follow the Open Access Policy, allowing free online availability
