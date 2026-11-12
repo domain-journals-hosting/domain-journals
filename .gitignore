@@ -27,3 +27,4 @@ WORKLIST.md
 *.njsproj
 *.sln
 *.sw?
+.env
