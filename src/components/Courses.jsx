@@ -249,7 +249,7 @@ const Courses = () => {
               <div className="primary-actions">
                 {course.paid ? (
                   <Link
-                    to={`/course/${course._id}`}
+                    to={`/courses/${course._id}`}
                     className="course-btn primary"
                   >
                     View Course
