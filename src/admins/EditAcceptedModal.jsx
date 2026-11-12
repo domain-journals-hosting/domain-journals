@@ -37,6 +37,7 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
     file: "",
     content: "",
     coAuthors: [],
+    createdAt: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -61,6 +62,7 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
         abstract: manuscript.abstract || "",
         file: manuscript.file || "",
         content: manuscript.content || "",
+        createdAt: toLocalDateTimeInput(manuscript.createdAt),
         // Deep copy: editing a co-author must never mutate the original manuscript,
         // otherwise getChangedFields() can't see the change
         coAuthors: manuscript.coAuthors
@@ -108,6 +110,14 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
     }));
   };
 
+  const toLocalDateTimeInput = (isoString) => {
+    if (!isoString) return "";
+    const date = new Date(isoString);
+    if (Number.isNaN(date.getTime())) return "";
+    const pad = (n) => String(n).padStart(2, "0");
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+  };
+
   // Extract modified fields for PATCH payload
   const getChangedFields = () => {
     const changed = {};
@@ -126,6 +136,10 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
       } else if (key === "issue" || key === "year") {
         if (Number(currentVal) !== Number(originalVal)) {
           changed[key] = Number(currentVal);
+        }
+      } else if (key === "createdAt") {
+        if (currentVal && currentVal !== toLocalDateTimeInput(originalVal)) {
+          changed[key] = new Date(currentVal).toISOString();
         }
       } else if (currentVal !== originalVal) {
         changed[key] = currentVal;
@@ -173,7 +187,7 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
     <div className="modal-overlay">
       <div className="modal-container">
         <div className="modal-header">
-          <h2 className="modal-title">Edit Accepted Manuscript</h2>
+          <h2 className="modal-title">Edit Published Manuscript</h2>
           <button type="button" className="modal-close-btn" onClick={onClose}>
             &times;
           </button>
@@ -197,6 +211,19 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
                 onChange={handleChange}
                 required
                 placeholder="e.g. DHJ-2026-001"
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">
+                Publication Date <span className="required-star">*</span>
+              </label>
+              <input
+                type="datetime-local"
+                name="createdAt"
+                className="form-input"
+                value={formData.createdAt}
+                onChange={handleChange}
+                required
               />
             </div>
 
