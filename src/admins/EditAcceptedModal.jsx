@@ -32,6 +32,7 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
     issue: 1,
     year: new Date().getFullYear(),
     articleType: "",
+    affiliation: "",
     country: "",
     abstract: "",
     file: "",
@@ -58,6 +59,7 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
         issue: manuscript.issue || 1,
         year: manuscript.year || new Date().getFullYear(),
         articleType: manuscript.articleType || "",
+        affiliation: manuscript.affiliation || "",
         country: manuscript.country || "",
         abstract: manuscript.abstract || "",
         file: manuscript.file || "",
@@ -353,7 +355,7 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
             </div>
           </div>
 
-          {/* Article Type, Issue & Year */}
+          {/* Article Type, Affiliation,  Issue & Year */}
           <div className="form-grid-3">
             <div className="form-group">
               <label className="form-label">Article Type</label>
@@ -365,6 +367,18 @@ const EditManuscriptModal = ({ manuscript, onClose, onSuccess }) => {
                 onChange={handleChange}
                 required
                 placeholder="e.g. Research Article"
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Affiliation</label>
+              <input
+                type="text"
+                name="affiliation"
+                className="form-input"
+                value={formData.affiliation}
+                onChange={handleChange}
+                required
+                placeholder="e.g. Delta State University"
               />
             </div>
 

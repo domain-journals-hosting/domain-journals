@@ -93,11 +93,19 @@ const ArticleContent = ({ content, legacyHtml = false }) => {
                     vals.length > 0 && vals.every((v) => NUMERIC_RE.test(v))
                   );
                 });
+                const captionId = b.caption ? `table-cap-${i}-${j}` : undefined;
                 return (
-                  <div key={j} className="article-table">
+                  <figure key={j} className="article-table">
+                    {b.caption && (
+                      <figcaption
+                        id={captionId}
+                        className="article-table-caption"
+                      >
+                        {b.caption}
+                      </figcaption>
+                    )}
                     <div className="article-table-scroll">
-                      <table>
-                        {b.caption && <caption>{b.caption}</caption>}
+                      <table aria-labelledby={captionId}>
                         {hasHead && (
                           <thead>
                             <tr>
@@ -129,7 +137,7 @@ const ArticleContent = ({ content, legacyHtml = false }) => {
                         </tbody>
                       </table>
                     </div>
-                  </div>
+                  </figure>
                 );
               }
               if (b.type === "figure") {

@@ -200,6 +200,9 @@ const ArticleDetails = () => {
                   {journalDisplayTitle}
                 </span>
                 <span className="badge-pill type">{article.articleType}</span>
+                <span className="badge-pill affiliation">
+                  {article.affiliation}
+                </span>
               </div>
 
               <h1 className="article-detail-title">{article.title}</h1>
@@ -323,13 +326,6 @@ const ArticleDetails = () => {
                     {article.coAuthors.map((co) => (
                       <div key={co.email} className="author-entry">
                         <span className="author-entry-name">{co.name}</span>
-                        <a
-                          href={`mailto:${co.email}`}
-                          className="author-entry-email"
-                        >
-                          <FaEnvelope style={{ marginRight: "4px" }} />{" "}
-                          {co.email}
-                        </a>
                       </div>
                     ))}
                   </div>

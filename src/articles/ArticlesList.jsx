@@ -225,6 +225,9 @@ const ArticlesList = () => {
                     <div className="badge-group">
                       <span className="badge-pill journal">{journalTitle}</span>
                       <span className="badge-pill type">{a.articleType}</span>
+                      <span className="badge-pill affiliation">
+                        {a.affiliation}
+                      </span>
                     </div>
                     <span className="card-custom-id">{a.customId}</span>
                   </div>
